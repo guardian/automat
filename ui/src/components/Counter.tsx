@@ -3,6 +3,9 @@ import { body, headline } from '@guardian/src-foundations/typography';
 import { space } from '@guardian/src-foundations';
 import { css } from 'emotion';
 
+// This is a dummy/example component copied across from another repo.
+// TODO: delete this
+
 type Props = {
   startFrom?: number;
 };
