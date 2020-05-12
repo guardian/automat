@@ -1,6 +1,6 @@
 ## Automat UI
 
-A simple UI for configuring Automat at The Guardian
+A simple UI for configuring Automat.
 
 ## Notes
 
