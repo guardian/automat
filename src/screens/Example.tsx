@@ -7,7 +7,7 @@ export const Example = () => {
   return (
     <div>
       <h2>Example</h2>
-      <Counter name="Roberto" />
+      <Counter />
       <p>
         <button onClick={() => history.goBack()}>Go back</button>
       </p>

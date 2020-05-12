@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { withKnobs, text } from '@storybook/addon-knobs';
+import { withKnobs, number } from '@storybook/addon-knobs';
 import { Counter } from './Counter';
 
 export default {
@@ -9,7 +9,13 @@ export default {
 };
 
 export const defaultStory = (): ReactElement => {
-  return <Counter name={text('heading', 'Roberto')} />;
+  return <Counter startFrom={number('startFrom', 1)} />;
 };
 
 defaultStory.story = { name: 'Default Counter' };
+
+export const fromTenStory = (): ReactElement => {
+  return <Counter startFrom={number('startFrom', 525)} />;
+};
+
+fromTenStory.story = { name: 'Counter starting from 525' };
