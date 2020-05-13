@@ -3,7 +3,7 @@
   "author": "The Guardian",
   "description": "A simple UI to configure Automat at The Guardian",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "dependencies": {
     "@emotion/core": "^10.0.27",
     "@emotion/css": "^10.0.27",
