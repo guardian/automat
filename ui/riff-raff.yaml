@@ -7,3 +7,4 @@ deployments:
         app: automat-ui
         parameters:
             bucket: aws-frontend-automat-ui
+            cacheControl: no-cache
