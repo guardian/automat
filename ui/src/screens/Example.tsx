@@ -4,9 +4,12 @@ import { useHistory } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { headline } from '@guardian/src-foundations/typography/cjs';
 import { css } from 'emotion';
+import { Button } from '../components/Button';
 
 const headlineStyles = css`
   ${headline.small()}
+  margin: 0;
+  margin-bottom: 20px;
 `;
 
 export const Example = () => {
@@ -19,7 +22,9 @@ export const Example = () => {
       <h2 className={headlineStyles}>Example</h2>
       <Counter />
       <p>
-        <button onClick={() => history.goBack()}>Go back</button>
+        <Button onClickAction={() => history.goBack()} priority="secondary">
+          Go back
+        </Button>
       </p>
     </div>
   );
