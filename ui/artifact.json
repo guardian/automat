@@ -1,0 +1,16 @@
+{
+  "projectName": "dotcom:automat-ui",
+  "vcsURL": "https://github.com/guardian/automat",
+  "actions": [
+    {
+      "action": "aws-s3",
+      "path": "build",
+      "compress": "zip"
+    },
+    {
+      "action": "cloudformation",
+      "path": "cloudformation.yaml",
+      "compress": false
+    }
+  ]
+}
