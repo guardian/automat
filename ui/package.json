@@ -26,6 +26,7 @@
     "typescript": "~3.7.2"
   },
   "devDependencies": {
+    "@guardian/node-riffraff-artifact": "^0.1.8",
     "@storybook/addon-actions": "^5.3.18",
     "@storybook/addon-knobs": "^5.3.18",
     "@storybook/addon-links": "^5.3.18",
@@ -37,8 +38,8 @@
     "@types/node": "^12.0.0",
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
-    "@types/react-router-dom": "^5.1.5",
     "@types/react-helmet": "^5.0.15",
+    "@types/react-router-dom": "^5.1.5",
     "prettier": "2.0.5"
   },
   "scripts": {
@@ -47,7 +48,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 9009 -s public",
-    "build-storybook": "build-storybook -s public"
+    "build-storybook": "build-storybook -s public",
+    "upload-artifact": "node-riffraff-artifact"
   },
   "eslintConfig": {
     "extends": "react-app"
