@@ -5,7 +5,7 @@
     {
       "action": "s3",
       "path": "build",
-      "compress": "false"
+      "compress": "zip"
     }
   ]
 }
