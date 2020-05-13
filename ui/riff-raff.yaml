@@ -1,0 +1,9 @@
+stacks: [frontend]
+regions: [eu-west-1]
+
+deployments:
+    s3:
+        type: aws-s3
+        app: automat-ui
+        parameters:
+            bucket: aws-frontend-automat-ui
