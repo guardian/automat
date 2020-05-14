@@ -27,7 +27,7 @@
     "typescript": "~3.7.2"
   },
   "devDependencies": {
-    "@guardian/node-riffraff-artifact": "^0.1.8",
+    "@guardian/node-riffraff-artifact": "^0.1.9",
     "@storybook/addon-actions": "^5.3.18",
     "@storybook/addon-knobs": "^5.3.18",
     "@storybook/addon-links": "^5.3.18",

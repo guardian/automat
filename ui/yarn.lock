@@ -1203,10 +1203,10 @@
   resolved "https://registry.yarnpkg.com/@emotion/weak-memoize/-/weak-memoize-0.2.5.tgz#8eed982e2ee6f7f4e44c253e12962980791efd46"
   integrity sha512-6U71C2Wp7r5XtFtQzYrW5iKFT67OixrSxjI4MptCHzdSVlgabczzqLe0ZSgnub/5Kp4hSbpDB1tMytZY9pwxxA==
 
-"@guardian/node-riffraff-artifact@^0.1.8":
-  version "0.1.8"
-  resolved "https://registry.yarnpkg.com/@guardian/node-riffraff-artifact/-/node-riffraff-artifact-0.1.8.tgz#6ea0ce47de94fb43e461cabd5f32c55a4148b2c4"
-  integrity sha512-jWX7X4DYgTDikiWcIE76qfEGIB4rT6mHr6VpxVh/PAoSOiR3qnfGNlzTtCj9YjQE6bGg8QlZJfkGUxqbTgUwrw==
+"@guardian/node-riffraff-artifact@^0.1.9":
+  version "0.1.9"
+  resolved "https://registry.yarnpkg.com/@guardian/node-riffraff-artifact/-/node-riffraff-artifact-0.1.9.tgz#aeb0b8d3a929c0af6e8b809539243ad313689843"
+  integrity sha512-rMZyyI8jFHoH3pNgysytw0vyg5vYOv46m7jvdion7gRe2dKNOnVJHK4zTfweD1DnydTk5NP9czYCu4Ruqj4pig==
   dependencies:
     "@mojotech/json-type-validation" "^3.1.0"
     "@types/temp" "^0.8.34"
