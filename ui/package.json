@@ -20,6 +20,7 @@
     "emotion": "^10.0.27",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-google-login": "^5.1.19",
     "react-helmet": "^6.0.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",

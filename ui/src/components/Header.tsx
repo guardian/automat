@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { palette } from '@guardian/src-foundations';
 import { css } from 'emotion';
 import { Link } from 'react-router-dom';
 import { Button } from '@guardian/src-button';
 import { ThemeProvider } from 'emotion-theming';
+
+import { GoogleLogin, GoogleLogout } from 'react-google-login';
 
 // TODO: abstract into our own Button component
 const buttonStyles = {
@@ -51,6 +53,8 @@ const loginStyles = css`
 `;
 
 export const Header: React.FC = () => {
+  const [isSignedIn, setIsSignedIn] = useState(false);
+
   return (
     <ThemeProvider theme={contributionsTheme}>
       <header className={headerStyles}>
@@ -58,7 +62,49 @@ export const Header: React.FC = () => {
           <img src="/automat-logo.png" alt="Automat logo" className={autoLogoStyles} />
         </Link>
         <div className={loginStyles}>
-          <Button priority="primary">Sign In</Button>
+          {!isSignedIn && (
+            <GoogleLogin
+              clientId="831915016487-plnb057inq29g9t4rp409l5f3495217e.apps.googleusercontent.com"
+              buttonText="Login"
+              onSuccess={(response) => {
+                console.log('onSuccess:');
+                console.log(response);
+                setIsSignedIn(true);
+              }}
+              onFailure={(response) => {
+                console.log('onFailure:');
+                console.log(response);
+                setIsSignedIn(false);
+              }}
+              cookiePolicy={'single_host_origin'}
+              isSignedIn={true}
+              onAutoLoadFinished={(isLoggedIn) => {
+                console.log('onAutoLoadFinished:');
+                console.log(isLoggedIn);
+                setIsSignedIn(isLoggedIn);
+              }}
+              render={(renderProps) => (
+                <Button onClick={renderProps.onClick} disabled={renderProps.disabled} priority="primary">
+                  Log In
+                </Button>
+              )}
+            />
+          )}
+          {isSignedIn && (
+            <GoogleLogout
+              clientId="831915016487-plnb057inq29g9t4rp409l5f3495217e.apps.googleusercontent.com"
+              buttonText="Logout"
+              onLogoutSuccess={() => {
+                console.log('onLogoutSuccess');
+                setIsSignedIn(false);
+              }}
+              render={(renderProps) => (
+                <Button onClick={renderProps.onClick} disabled={renderProps.disabled} priority="secondary">
+                  Logout
+                </Button>
+              )}
+            ></GoogleLogout>
+          )}
           <img src="/guardian-logo.png" alt="The Guardian logo" className={guLogoStyles} />
         </div>
       </header>
