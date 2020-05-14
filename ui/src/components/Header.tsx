@@ -78,7 +78,8 @@ export const Header: React.FC<Props> = ({ isSignedIn, onUserProfileUpdated, onAc
                 onUserProfileUpdated(userProfile);
                 onAccessTokenUpdated(accessToken);
               }}
-              onFailure={(response) => {
+              onFailure={(error) => {
+                console.error(error);
                 onUserProfileUpdated(null);
                 onAccessTokenUpdated(null);
               }}
