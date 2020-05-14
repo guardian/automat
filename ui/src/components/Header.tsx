@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { palette } from '@guardian/src-foundations';
 import { css } from 'emotion';
 import { Link } from 'react-router-dom';
 import { Button } from '@guardian/src-button';
 import { ThemeProvider } from 'emotion-theming';
-
 import { GoogleLogin, GoogleLogout } from 'react-google-login';
 
 // TODO: abstract into our own Button component
@@ -52,9 +51,16 @@ const loginStyles = css`
   align-items: center;
 `;
 
-export const Header: React.FC = () => {
-  const [isSignedIn, setIsSignedIn] = useState(false);
+// TODO: doesn't belong here. Env variable? Or app config somewhere
+const clientId = '831915016487-plnb057inq29g9t4rp409l5f3495217e.apps.googleusercontent.com';
 
+type Props = {
+  isSignedIn: boolean;
+  onUserProfileUpdated: Function;
+  onAccessTokenUpdated: Function;
+};
+
+export const Header: React.FC<Props> = ({ isSignedIn, onUserProfileUpdated, onAccessTokenUpdated }: Props) => {
   return (
     <ThemeProvider theme={contributionsTheme}>
       <header className={headerStyles}>
@@ -64,25 +70,19 @@ export const Header: React.FC = () => {
         <div className={loginStyles}>
           {!isSignedIn && (
             <GoogleLogin
-              clientId="831915016487-plnb057inq29g9t4rp409l5f3495217e.apps.googleusercontent.com"
-              buttonText="Login"
-              onSuccess={(response) => {
-                console.log('onSuccess:');
-                console.log(response);
-                setIsSignedIn(true);
-              }}
-              onFailure={(response) => {
-                console.log('onFailure:');
-                console.log(response);
-                setIsSignedIn(false);
-              }}
+              clientId={clientId}
               cookiePolicy={'single_host_origin'}
               isSignedIn={true}
-              onAutoLoadFinished={(isLoggedIn) => {
-                console.log('onAutoLoadFinished:');
-                console.log(isLoggedIn);
-                setIsSignedIn(isLoggedIn);
+              onSuccess={(response: any) => {
+                const { profileObj: userProfile, accessToken } = response;
+                onUserProfileUpdated(userProfile);
+                onAccessTokenUpdated(accessToken);
               }}
+              onFailure={(response) => {
+                onUserProfileUpdated(null);
+                onAccessTokenUpdated(null);
+              }}
+              onAutoLoadFinished={() => {}}
               render={(renderProps) => (
                 <Button onClick={renderProps.onClick} disabled={renderProps.disabled} priority="primary">
                   Log In
@@ -92,11 +92,10 @@ export const Header: React.FC = () => {
           )}
           {isSignedIn && (
             <GoogleLogout
-              clientId="831915016487-plnb057inq29g9t4rp409l5f3495217e.apps.googleusercontent.com"
-              buttonText="Logout"
+              clientId={clientId}
               onLogoutSuccess={() => {
-                console.log('onLogoutSuccess');
-                setIsSignedIn(false);
+                onUserProfileUpdated(null);
+                onAccessTokenUpdated(null);
               }}
               render={(renderProps) => (
                 <Button onClick={renderProps.onClick} disabled={renderProps.disabled} priority="secondary">

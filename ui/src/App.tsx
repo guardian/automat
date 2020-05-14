@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { Home } from './screens/Home';
 import { Example } from './screens/Example';
@@ -15,15 +15,22 @@ const contentStyles = css`
 `;
 
 export const App = () => {
+  const [accessToken, setAccessToken] = useState(null);
+  const [userProfile, setUserProfile] = useState(null);
+
   return (
     <Router>
       <GlobalStyles />
       <div className={appStyles}>
-        <Header />
+        <Header
+          isSignedIn={!!accessToken}
+          onUserProfileUpdated={(userProfile: any) => setUserProfile(userProfile)}
+          onAccessTokenUpdated={(accessToken: any) => setAccessToken(accessToken)}
+        />
         <div className={contentStyles}>
           <Switch>
             <Route exact path="/">
-              <Home />
+              <Home userProfile={userProfile} accessToken={accessToken} />
             </Route>
             <Route exact path="/example">
               <Example />
