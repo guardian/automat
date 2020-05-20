@@ -1,0 +1,2 @@
+GET     /admin/tests         controllers.TestsController.index
+POST    /slots               controllers.SlotsController.create
