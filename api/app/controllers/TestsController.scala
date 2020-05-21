@@ -12,7 +12,7 @@ class TestsController @Inject() (val controllerComponents: ControllerComponents)
     extends BaseController {
 
   def index(slotId: String) = Action { implicit request: Request[AnyContent] =>
-    val resp = Json.toJson(TestsStore.getBySlotId(slotId))
+    val resp = Json.toJson(Map("tests" -> TestsStore.getBySlotId(slotId)))
     Ok(resp)
   }
 
