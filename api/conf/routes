@@ -1,2 +1,9 @@
-GET     /admin/tests         controllers.TestsController.index
-POST    /slots               controllers.SlotsController.create
+# Admin 
+GET     /admin/slots/:slotId/tests         controllers.TestsController.index(slotId)
+POST    /admin/slots/:slotId/tests         controllers.TestsController.create(slotId)
+
+PATCH   /admin/tests/:testId               controllers.TestsController.update(testId)
+DELETE  /admin/tests/:testId               controllers.TestsController.delete(testId)
+
+# Public
+POST    /slots                             controllers.SlotsController.create

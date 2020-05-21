@@ -5,7 +5,7 @@ import play.api._
 import play.api.mvc._
 import play.api.libs.json._
 
-import automat.models.{Targeting, Test}
+import automat.models.{Targeting, TestsStore}
 
 @Singleton
 class SlotsController @Inject() (val controllerComponents: ControllerComponents)
@@ -19,7 +19,7 @@ class SlotsController @Inject() (val controllerComponents: ControllerComponents)
 
     targeting match {
       case Some(targeting) =>
-        val matchingTests = Targeting.findMatches(targeting, Test.exampleTests)
+        val matchingTests = Targeting.findMatches(targeting, TestsStore.all)
         Ok(Json.toJson(matchingTests.headOption))
       case None => BadRequest("...")
     }
