@@ -66,4 +66,6 @@ object TestsStore {
   def all: List[Test] = tests.values.toList
 
   def delete(testId: String) = tests.remove(testId)
+
+  def save(test: Test) = tests(test.id) = test
 }
