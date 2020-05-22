@@ -1,16 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-import { headline, body } from '@guardian/src-foundations/typography/cjs';
+import { headline, textSans } from '@guardian/src-foundations/typography/cjs';
 import { css } from 'emotion';
+import { slots } from '../dummyData/slots';
 
 const headlineStyles = css`
   ${headline.small()}
   margin: 0;
 `;
 
-const dummyStyles = css`
-  ${body.medium()};
+const linkStyles = css`
+  ${textSans.small()}
+  margin: 0;
 `;
 
 export const Home = () => {
@@ -19,10 +21,16 @@ export const Home = () => {
       <Helmet>
         <title>Automat UI | Home</title>
       </Helmet>
-      <h2 className={headlineStyles}>Home</h2>
-      <p className={dummyStyles}>
-        Click here to go to the <Link to="/example">Example Page</Link>
-      </p>
+      <h2 className={headlineStyles}>Automat Slots</h2>
+      <ul>
+        {slots.map((slot) => (
+          <li key={slot.id}>
+            <Link to={`/slots/${slot.id}`} className={linkStyles}>
+              {slot.name}
+            </Link>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
