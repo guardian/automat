@@ -8,12 +8,35 @@ import { Link } from 'react-router-dom';
 
 const headlineStyles = css`
   ${headline.small()}
+  margin-top: 0;
+  margin-bottom: 40px;
+`;
+
+const subHeadlineStyles = css`
+  ${headline.xxsmall()}
+  margin-top: 0;
+  margin-bottom: 20px;
+`;
+
+const testListStyles = css`
   margin: 0;
+  padding: 0;
+`;
+
+const testItemStyles = css`
+  list-style: none;
+  margin-bottom: 20px;
+  border-bottom: 1px solid grey;
 `;
 
 const linkStyles = css`
-  ${textSans.small()}
+  ${textSans.medium({ fontWeight: 'bold' })}
   margin: 0;
+  text-decoration: none;
+`;
+
+const testTextStyles = css`
+  ${textSans.small()}
 `;
 
 const backStyles = css`
@@ -65,12 +88,16 @@ export const Tests = () => {
         <title>Automat UI | {slot?.name}</title>
       </Helmet>
       <h2 className={headlineStyles}>{slot?.name} Slot</h2>
-      <ul>
+
+      <h3 className={subHeadlineStyles}>Configured Tests</h3>
+      <ul className={testListStyles}>
         {tests.map((test: Test) => (
-          <li key={test.id}>
+          <li key={test.id} className={testItemStyles}>
             <Link to={`slots/${slotId}/test/${test.id}`} className={linkStyles}>
               {test.name}
             </Link>
+            <p className={testTextStyles}>{test.description}</p>
+            <p className={testTextStyles}>{test.enabled ? 'Active' : 'Inactive'}</p>
           </li>
         ))}
       </ul>
