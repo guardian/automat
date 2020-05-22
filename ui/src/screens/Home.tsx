@@ -24,8 +24,8 @@ export const Home = () => {
       <h2 className={headlineStyles}>Automat Slots</h2>
       <ul>
         {slots.map((slot) => (
-          <li>
-            <Link to={`slots/${slot.id}`} className={linkStyles}>
+          <li key={slot.id}>
+            <Link to={`/slots/${slot.id}`} className={linkStyles}>
               {slot.name}
             </Link>
           </li>

@@ -31,8 +31,8 @@ interface Test {
 export const Tests = () => {
   const { slotId } = useParams();
   const slot = slots.find((slot) => slot.id === slotId);
-  const [tests, setTests] = useState([]);
 
+  const [tests, setTests] = useState([]);
   useEffect(() => {
     fetch(`http://localhost:9000/admin/slots/${slotId}/tests`, {
       method: 'GET',
@@ -59,7 +59,7 @@ export const Tests = () => {
       <h2 className={headlineStyles}>{slot?.name} Slot</h2>
       <ul>
         {tests.map((test: Test) => (
-          <li>
+          <li key={test.id}>
             <Link to={`slots/${slotId}/test/${test.id}`} className={linkStyles}>
               {test.name}
             </Link>
