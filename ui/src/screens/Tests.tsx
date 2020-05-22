@@ -9,13 +9,6 @@ import { Link } from 'react-router-dom';
 const headlineStyles = css`
   ${headline.small()}
   margin: 0;
-  margin-bottom: 20px;
-`;
-
-const subHeadlineStyles = css`
-  ${textSans.small()}
-  margin: 0;
-  margin-bottom: 20px;
 `;
 
 const linkStyles = css`
