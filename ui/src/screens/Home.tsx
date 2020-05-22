@@ -20,9 +20,14 @@ export const Home = () => {
         <title>Automat UI | Home</title>
       </Helmet>
       <h2 className={headlineStyles}>Home</h2>
-      <p className={dummyStyles}>
+      {/* <p className={dummyStyles}>
         Click here to go to the <Link to="/example">Example Page</Link>
-      </p>
+      </p> */}
+      <ul>
+        <li>
+          <Link to="/slots">Slots</Link>
+        </li>
+      </ul>
     </div>
   );
 };
