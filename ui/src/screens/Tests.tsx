@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { headline, textSans } from '@guardian/src-foundations/typography/cjs';
 import { css } from 'emotion';
@@ -14,6 +14,13 @@ const headlineStyles = css`
 const linkStyles = css`
   ${textSans.small()}
   margin: 0;
+`;
+
+const backStyles = css`
+  ${textSans.small()}
+  margin: 0;
+  cursor: pointer;
+  text-decoration: underline;
 `;
 
 type Variant = string;
@@ -31,6 +38,7 @@ interface Test {
 export const Tests = () => {
   const { slotId } = useParams();
   const slot = slots.find((slot) => slot.id === slotId);
+  const history = useHistory();
 
   const [tests, setTests] = useState([]);
   useEffect(() => {
@@ -66,6 +74,9 @@ export const Tests = () => {
           </li>
         ))}
       </ul>
+      <p className={backStyles} onClick={() => history.goBack()}>
+        Go back
+      </p>
     </div>
   );
 };
