@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { Home } from './screens/Home';
-import { Slots } from './screens/Slots';
+import { Tests } from './screens/Tests';
 import { css } from 'emotion';
 import { Header } from './components/Header';
 import { GlobalStyles } from './utils/GlobalStyles';
@@ -25,8 +25,8 @@ export const App = () => {
             <Route exact path="/">
               <Home />
             </Route>
-            <Route exact path="/slots">
-              <Slots />
+            <Route exact path="/slots/:slotId">
+              <Tests />
             </Route>
           </Switch>
         </div>
