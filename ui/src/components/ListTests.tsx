@@ -67,7 +67,6 @@ export const ListTests = ({ tests, slot }: Props): JSX.Element => (
             </div>
             {test.enabled ? <VisibilityIcon /> : <VisibilityOffIcon />}
           </div>
-
           <p className={testInfoStyles}>{test.description}</p>
           <p className={testInfoStyles}>{test.variants.length} variants</p>
         </Card>
