@@ -22,7 +22,7 @@ object TestsStore {
       Test(
         id = "test1",
         name = "Test 1",
-        slotId = "bodyEnd",
+        slotId = SlotsStore.bodyEnd.id,
         description = "example test",
         enabled = true,
         variants = List("foo", "bar"),
@@ -31,7 +31,7 @@ object TestsStore {
     "test2" -> Test(
       id = "test2",
       name = "Test 2",
-      slotId = "bodyEnd",
+      slotId = SlotsStore.bodyEnd.id,
       description = "example test",
       enabled = true,
       variants = List("foo", "bar"),
@@ -40,8 +40,8 @@ object TestsStore {
     "test3" ->
       Test(
         id = "test3",
-        name = "Test 2",
-        slotId = "cmp",
+        name = "Test 3",
+        slotId = SlotsStore.mpu.id,
         description = "example test",
         enabled = true,
         variants = List("foo", "bar"),
@@ -50,7 +50,7 @@ object TestsStore {
     "test4" -> Test(
       id = "test4",
       name = "Test 4",
-      slotId = "cmp",
+      slotId = SlotsStore.mpu.id,
       description = "example test",
       enabled = true,
       variants = List("foo", "bar"),

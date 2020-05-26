@@ -1,9 +1,11 @@
 # Admin 
-GET     /admin/slots/:slotId/tests         controllers.TestsController.index(slotId)
-POST    /admin/slots/:slotId/tests         controllers.TestsController.create(slotId)
+GET     /admin/slots                       controllers.SlotsAdminController.index
 
-PATCH   /admin/tests/:testId               controllers.TestsController.update(testId)
-DELETE  /admin/tests/:testId               controllers.TestsController.delete(testId)
+GET     /admin/slots/:slotId/tests         controllers.TestsAdminController.index(slotId)
+POST    /admin/slots/:slotId/tests         controllers.TestsAdminController.create(slotId)
+
+PATCH   /admin/tests/:testId               controllers.TestsAdminController.update(testId)
+DELETE  /admin/tests/:testId               controllers.TestsAdminController.delete(testId)
 
 # Public
 POST    /slots                             controllers.SlotsController.create
