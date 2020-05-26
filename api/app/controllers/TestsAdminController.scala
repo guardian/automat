@@ -8,8 +8,9 @@ import play.api.libs.json._
 import automat.models.{TestsStore, Test}
 
 @Singleton
-class TestsController @Inject() (val controllerComponents: ControllerComponents)
-    extends BaseController {
+class TestsAdminController @Inject() (
+    val controllerComponents: ControllerComponents
+) extends BaseController {
 
   def index(slotId: String) = Action { implicit request: Request[AnyContent] =>
     val resp = Json.toJson(Map("tests" -> TestsStore.getBySlotId(slotId)))
