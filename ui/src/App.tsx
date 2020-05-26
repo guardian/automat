@@ -22,7 +22,7 @@ import {
 } from '@material-ui/core';
 import { Menu as MenuIcon, ChevronLeft as ChevronLeftIcon, Notifications as NotificationsIcon, Dashboard as DashboardIcon } from '@material-ui/icons';
 
-import { Home } from './screens/Home';
+import { Slots } from './screens/Slots';
 import { Tests } from './screens/Tests';
 
 const drawerWidth = 240;
@@ -128,12 +128,6 @@ const sidebarLinkStyles = css`
 export const App = () => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
 
   return (
     <Router>
@@ -146,7 +140,7 @@ export const App = () => {
                 edge="start"
                 color="inherit"
                 aria-label="open drawer"
-                onClick={handleDrawerOpen}
+                onClick={() => setOpen(true)}
                 className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
               >
                 <MenuIcon />
@@ -173,7 +167,7 @@ export const App = () => {
             open={open}
           >
             <div className={classes.toolbarIcon}>
-              <IconButton onClick={handleDrawerClose}>
+              <IconButton onClick={() => setOpen(false)}>
                 <ChevronLeftIcon />
               </IconButton>
             </div>
@@ -196,7 +190,7 @@ export const App = () => {
               <Grid container spacing={3}>
                 <Switch>
                   <Route exact path="/">
-                    <Home />
+                    <Slots />
                   </Route>
                   <Route exact path="/slots/:slotId">
                     <Tests />

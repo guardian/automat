@@ -4,6 +4,8 @@ import { Helmet } from 'react-helmet';
 import { css, cx } from 'emotion';
 import { Typography, Button } from '@material-ui/core';
 import { ListTests } from '../components/ListTests';
+import { useApi } from '../lib/useApi';
+import { Spinner } from '../components/Spinner';
 import { slots } from '../dummyData/slots';
 
 const headingStyles = css`
@@ -12,29 +14,13 @@ const headingStyles = css`
 `;
 
 export const Tests = () => {
-  const { slotId } = useParams();
-  const slot = slots.find((slot) => slot.id === slotId);
   const history = useHistory();
 
-  // TODO: abstract into lib file
-  const [tests, setTests] = useState([]);
-  useEffect(() => {
-    fetch(`http://localhost:9000/admin/slots/${slotId}/tests`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw Error(response.statusText);
-        }
-        return response;
-      })
-      .then((response) => response.json())
-      .then((data) => setTests(data.tests))
-      .catch((error): void => console.error(error));
-  }, [slotId]);
+  // TODO: make this dynamic
+  const { slotId } = useParams();
+  const slot = slots.find((slot) => slot.id === slotId);
+
+  const { data, loading } = useApi<any>(`http://localhost:9000/admin/slots/${slotId}/tests`);
 
   return (
     <div>
@@ -50,7 +36,9 @@ export const Tests = () => {
         Configured Tests
       </Typography>
 
-      <ListTests tests={tests} slot={slot} />
+      {loading && <Spinner />}
+
+      {data && <ListTests tests={data.tests} slot={slot} />}
 
       <Button variant="contained" onClick={() => history.goBack()}>
         Go Back
