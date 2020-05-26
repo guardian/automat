@@ -1,11 +1,8 @@
 import React from 'react';
 import { css, cx } from 'emotion';
 import { Link } from 'react-router-dom';
-import Paper from '@material-ui/core/Paper';
-import Grid from '@material-ui/core/Grid';
+import { Paper, Grid, Chip, Typography } from '@material-ui/core';
 import { slots } from '../dummyData/slots';
-import Chip from '@material-ui/core/Chip';
-import Typography from '@material-ui/core/Typography';
 
 const rootStyles = css`
   flex-grow: 1;

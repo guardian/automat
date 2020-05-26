@@ -1,8 +1,8 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import { css, cx } from 'emotion';
+import { Typography } from '@material-ui/core';
 import { ListSlots } from '../components/ListSlots';
-import Typography from '@material-ui/core/Typography';
 
 const headingStyles = css`
   font-weight: bold;

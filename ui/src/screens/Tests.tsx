@@ -2,10 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { css, cx } from 'emotion';
-import { slots } from '../dummyData/slots';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
+import { Typography, Button } from '@material-ui/core';
 import { ListTests } from '../components/ListTests';
+import { slots } from '../dummyData/slots';
 
 const headingStyles = css`
   font-weight: bold;
