@@ -3,13 +3,18 @@ import { Helmet } from 'react-helmet';
 import { css, cx } from 'emotion';
 import { Typography } from '@material-ui/core';
 import { ListSlots } from '../components/ListSlots';
+import { Slot } from '../types';
 
 const headingStyles = css`
   font-weight: bold;
   margin: 20px auto;
 `;
 
-export const Home = () => {
+type Props = {
+  slots: Slot[];
+};
+
+export const Slots = ({ slots }: Props) => {
   return (
     <div>
       <Helmet>
@@ -20,7 +25,7 @@ export const Home = () => {
         Slots
       </Typography>
 
-      <ListSlots />
+      {slots && <ListSlots slots={slots} />}
     </div>
   );
 };

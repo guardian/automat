@@ -2,7 +2,7 @@ import React from 'react';
 import { css, cx } from 'emotion';
 import { Link } from 'react-router-dom';
 import { Paper, Grid, Chip, Typography } from '@material-ui/core';
-import { slots } from '../dummyData/slots';
+import { Slot } from '../types';
 
 const rootStyles = css`
   flex-grow: 1;
@@ -34,7 +34,11 @@ const chipStyles = css`
   pointer-events: none;
 `;
 
-export const ListSlots = (): JSX.Element => (
+type Props = {
+  slots: Slot[];
+};
+
+export const ListSlots = ({ slots }: Props): JSX.Element => (
   <Grid container className={cx(rootStyles)} spacing={2}>
     <Grid item xs={12}>
       <Grid container justify="center" spacing={2}>
@@ -45,7 +49,7 @@ export const ListSlots = (): JSX.Element => (
                 <Typography component="h6" variant="h6" className={cx(slotNameStyles)}>
                   {slot.name}
                 </Typography>
-                <Chip label={`${slot.testCount} tests`} className={cx(chipStyles)} />
+                {slot.testCount !== undefined && <Chip label={`${slot.testCount} tests`} className={cx(chipStyles)} />}
               </Paper>
             </Link>
           </Grid>

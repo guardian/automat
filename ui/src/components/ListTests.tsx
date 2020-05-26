@@ -3,23 +3,7 @@ import { css, cx } from 'emotion';
 import { Link } from 'react-router-dom';
 import { Grid, Card, Typography } from '@material-ui/core';
 import { Visibility as VisibilityIcon, VisibilityOff as VisibilityOffIcon } from '@material-ui/icons';
-
-type Variant = string;
-type Section = string;
-
-interface Test {
-  id: string;
-  name: string;
-  description: string;
-  enabled: boolean;
-  variants: Variant[];
-  sections: Section[];
-}
-
-type Props = {
-  tests: Test[];
-  slot: any;
-};
+import { Slot, Test } from '../types';
 
 const rootStyles = css`
   flex-grow: 1;
@@ -51,6 +35,11 @@ const testHeaderStyles = css`
   align-items: center;
   justify-content: space-between;
 `;
+
+type Props = {
+  tests: Test[];
+  slot: Slot;
+};
 
 export const ListTests = ({ tests, slot }: Props): JSX.Element => (
   <Grid container className={cx(rootStyles)} spacing={2}>

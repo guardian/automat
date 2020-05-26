@@ -1,40 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { css, cx } from 'emotion';
 import { Typography, Button } from '@material-ui/core';
 import { ListTests } from '../components/ListTests';
-import { slots } from '../dummyData/slots';
+import { useApi } from '../lib/useApi';
+import { Spinner } from '../components/Spinner';
+import { Slot } from '../types';
 
 const headingStyles = css`
   font-weight: bold;
   margin: 20px auto;
 `;
 
-export const Tests = () => {
-  const { slotId } = useParams();
-  const slot = slots.find((slot) => slot.id === slotId);
+type Props = {
+  slots: Slot[];
+};
+
+export const Tests = ({ slots }: Props) => {
   const history = useHistory();
 
-  // TODO: abstract into lib file
-  const [tests, setTests] = useState([]);
-  useEffect(() => {
-    fetch(`http://localhost:9000/admin/slots/${slotId}/tests`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw Error(response.statusText);
-        }
-        return response;
-      })
-      .then((response) => response.json())
-      .then((data) => setTests(data.tests))
-      .catch((error): void => console.error(error));
-  }, [slotId]);
+  const { slotId } = useParams();
+  const slot = slots.find((slot) => slot.id === slotId);
+
+  const { data, loading } = useApi<any>(`http://localhost:9000/admin/slots/${slotId}/tests`);
 
   return (
     <div>
@@ -50,7 +39,9 @@ export const Tests = () => {
         Configured Tests
       </Typography>
 
-      <ListTests tests={tests} slot={slot} />
+      {loading && <Spinner />}
+
+      {data && data.tests && slot && <ListTests tests={data.tests} slot={slot} />}
 
       <Button variant="contained" onClick={() => history.goBack()}>
         Go Back
