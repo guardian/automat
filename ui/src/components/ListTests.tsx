@@ -1,10 +1,8 @@
 import React from 'react';
 import { css, cx } from 'emotion';
-import Grid from '@material-ui/core/Grid';
-import Card from '@material-ui/core/Card';
-import Typography from '@material-ui/core/Typography';
 import { Link } from 'react-router-dom';
-import { Visibility, VisibilityOff } from '@material-ui/icons';
+import { Grid, Card, Typography } from '@material-ui/core';
+import { Visibility as VisibilityIcon, VisibilityOff as VisibilityOffIcon } from '@material-ui/icons';
 
 type Variant = string;
 type Section = string;
@@ -58,7 +56,7 @@ export const ListTests = ({ tests, slot }: Props): JSX.Element => (
   <Grid container className={cx(rootStyles)} spacing={2}>
     <Grid item xs={12}>
       {tests.map((test: Test) => (
-        <Card className={cx(paperStyles)}>
+        <Card key={test.id} className={cx(paperStyles)}>
           <div className={testHeaderStyles}>
             <div>
               <Typography component="p" variant="h6">
@@ -67,7 +65,7 @@ export const ListTests = ({ tests, slot }: Props): JSX.Element => (
                 </Link>
               </Typography>
             </div>
-            {test.enabled ? <Visibility /> : <VisibilityOff />}
+            {test.enabled ? <VisibilityIcon /> : <VisibilityOffIcon />}
           </div>
 
           <p className={testInfoStyles}>{test.description}</p>
