@@ -3,17 +3,18 @@ import { Helmet } from 'react-helmet';
 import { css, cx } from 'emotion';
 import { Typography } from '@material-ui/core';
 import { ListSlots } from '../components/ListSlots';
-import { Spinner } from '../components/Spinner';
-import { useApi } from '../lib/useApi';
+import { Slot } from '../types';
 
 const headingStyles = css`
   font-weight: bold;
   margin: 20px auto;
 `;
 
-export const Slots = () => {
-  const { data, loading, error } = useApi<any>(`http://localhost:9000/admin/slots`);
+type Props = {
+  slots: Slot[];
+};
 
+export const Slots = ({ slots }: Props) => {
   return (
     <div>
       <Helmet>
@@ -24,9 +25,7 @@ export const Slots = () => {
         Slots
       </Typography>
 
-      {loading && <Spinner />}
-
-      {data && <ListSlots slots={data.slots} />}
+      {slots && <ListSlots slots={slots} />}
     </div>
   );
 };

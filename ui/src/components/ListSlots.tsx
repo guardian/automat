@@ -2,6 +2,7 @@ import React from 'react';
 import { css, cx } from 'emotion';
 import { Link } from 'react-router-dom';
 import { Paper, Grid, Chip, Typography } from '@material-ui/core';
+import { Slot } from '../types';
 
 const rootStyles = css`
   flex-grow: 1;
@@ -32,12 +33,6 @@ const chipStyles = css`
   cursor: pointer;
   pointer-events: none;
 `;
-
-interface Slot {
-  id: string;
-  name: string;
-  testCount?: number;
-}
 
 type Props = {
   slots: Slot[];

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { css, cx } from 'emotion';
@@ -6,17 +6,20 @@ import { Typography, Button } from '@material-ui/core';
 import { ListTests } from '../components/ListTests';
 import { useApi } from '../lib/useApi';
 import { Spinner } from '../components/Spinner';
-import { slots } from '../dummyData/slots';
+import { Slot } from '../types';
 
 const headingStyles = css`
   font-weight: bold;
   margin: 20px auto;
 `;
 
-export const Tests = () => {
+type Props = {
+  slots: Slot[];
+};
+
+export const Tests = ({ slots }: Props) => {
   const history = useHistory();
 
-  // TODO: make this dynamic
   const { slotId } = useParams();
   const slot = slots.find((slot) => slot.id === slotId);
 
@@ -38,7 +41,7 @@ export const Tests = () => {
 
       {loading && <Spinner />}
 
-      {data && <ListTests tests={data.tests} slot={slot} />}
+      {data && data.tests && slot && <ListTests tests={data.tests} slot={slot} />}
 
       <Button variant="contained" onClick={() => history.goBack()}>
         Go Back
