@@ -29,7 +29,7 @@ class TestsAdminController @Inject() (
         BadRequest(Json.obj("error" -> JsError.toJson(errors)))
       },
       test => {
-        TestsStore.save(test.copy(slotId = slotId))
+        TestsStore.save(test)
         Ok(Json.toJson(Map("test" -> test)))
       }
     )
