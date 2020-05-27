@@ -17,22 +17,35 @@ class TestsAdminController @Inject() (
     Ok(resp)
   }
 
-  def create(slotId: String) = Action(parse.json) { implicit request =>
-    val testWithSlotId =
-      request.body.as[JsObject] ++ JsObject(Seq("slotId" -> JsString(slotId)))
+  case class TestCreateParams(
+      id: String,
+      name: String,
+      description: String,
+      enabled: Boolean,
+      variants: List[String],
+      sections: List[String]
+  )
 
-    // TODO: consider whitelisting fields to protect against mass-assignment here
-    val testResult = testWithSlotId.validate[Test]
+  object TestCreateParams {
+    implicit val testFmt = Json.format[TestCreateParams]
 
-    testResult.fold(
-      errors => {
-        BadRequest(Json.obj("error" -> JsError.toJson(errors)))
-      },
-      test => {
-        TestsStore.save(test)
-        Ok(Json.toJson(Map("test" -> test)))
-      }
+    def toTest(params: TestCreateParams, slotId: String): Test = Test(
+      id = params.id,
+      name = params.name,
+      description = params.description,
+      enabled = params.enabled,
+      variants = params.variants,
+      sections = params.sections,
+      slotId = slotId
     )
+  }
+
+  def create(slotId: String) = Action(parse.json[TestCreateParams]) {
+    implicit request =>
+      val test = TestCreateParams.toTest(request.body, slotId)
+
+      TestsStore.save(test)
+      Ok(Json.toJson(Map("test" -> test)))
   }
 
   def update(testId: String) = Action { implicit request: Request[AnyContent] =>
