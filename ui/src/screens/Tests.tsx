@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useHistory, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { css, cx } from 'emotion';
@@ -39,11 +39,22 @@ export const Tests = ({ slots }: Props) => {
   const slot = slots.find((slot) => slot.id === slotId);
 
   const { data, loading } = useApi<any>(`http://localhost:9000/admin/slots/${slotId}/tests`);
+  const [tests, setTests] = useState([] as Test[]);
+  useEffect(() => {
+    if (data && data.tests) {
+      setTests(data.tests);
+    }
+  }, [data]);
 
   let test: Test | undefined;
-  if (data && data.tests) {
-    test = data.tests.find((test: Test) => test.id === testId);
+  if (tests) {
+    test = tests.find((test: Test) => test.id === testId);
   }
+
+  const handleTestUpdate = (updatedTest: Test) => {
+    const updatedTests = tests.map((test: Test) => (updatedTest.id === test.id ? updatedTest : test));
+    setTests([...updatedTests]);
+  };
 
   return (
     <div className={rootStyles}>
@@ -60,15 +71,11 @@ export const Tests = ({ slots }: Props) => {
 
       <Grid container spacing={4}>
         <Grid item xs={4}>
-          {data && data.tests && slot && <ListTests tests={data.tests} slot={slot} selectedTestId={test?.id} />}
+          {slot && tests && <ListTests tests={tests} slot={slot} selectedTestId={test?.id} />}
         </Grid>
         <Grid item xs>
-          {data && data.tests && test && (
-            <TestConfig
-              test={test}
-              onTestUpdated={(test: Test) => console.log('Test Updated: ', test)}
-              onTestDeleted={(test: Test) => console.log('Test Deleted: ', test)}
-            />
+          {slot && tests && test && (
+            <TestConfig test={test} onTestUpdated={handleTestUpdate} onTestDeleted={(deletedTest: Test) => console.log('Test Deleted: ', deletedTest)} />
           )}
         </Grid>
       </Grid>

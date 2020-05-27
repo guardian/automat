@@ -2,7 +2,7 @@ import React from 'react';
 import { css, cx } from 'emotion';
 import { Typography } from '@material-ui/core';
 import { Test } from '../types';
-import { Card } from '@material-ui/core';
+import { Card, Switch } from '@material-ui/core';
 
 const rootStyles = css`
   width: 100%;
@@ -29,12 +29,31 @@ type Props = {
 };
 
 export const TestConfig = ({ test, onTestUpdated, onTestDeleted }: Props) => {
+  // const [test, setTest] = useState(unmodifiedTest);
+
+  // useEffect(() => {
+  //   // TODO: confirm discard changes
+  //   setTest(unmodifiedTest);
+  // }, [unmodifiedTest]);
+
   return (
     <Card className={cx(cardStyles)}>
       <div className={rootStyles}>
         <Typography component="h4" variant="h6" align="left" className={cx(headingStyles)}>
           {test.name}
         </Typography>
+
+        <p>
+          Live on theguardian.com{' '}
+          <Switch
+            checked={test.enabled}
+            onChange={(e) => {
+              const enabled = e.currentTarget.checked;
+              onTestUpdated({ ...test, enabled });
+            }}
+            color="primary"
+          />
+        </p>
 
         <p>{test.description}</p>
       </div>
