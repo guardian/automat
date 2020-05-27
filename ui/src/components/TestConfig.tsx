@@ -29,13 +29,6 @@ type Props = {
 };
 
 export const TestConfig = ({ test, onTestUpdated, onTestDeleted }: Props) => {
-  // const [test, setTest] = useState(unmodifiedTest);
-
-  // useEffect(() => {
-  //   // TODO: confirm discard changes
-  //   setTest(unmodifiedTest);
-  // }, [unmodifiedTest]);
-
   return (
     <Card className={cx(cardStyles)}>
       <div className={rootStyles}>
@@ -54,7 +47,6 @@ export const TestConfig = ({ test, onTestUpdated, onTestDeleted }: Props) => {
             color="primary"
           />
         </p>
-
         <p>{test.description}</p>
       </div>
     </Card>
