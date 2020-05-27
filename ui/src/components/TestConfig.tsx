@@ -26,9 +26,10 @@ type Props = {
   test: Test;
   onTestUpdated: Function;
   onTestDeleted: Function;
+  isEditing: boolean;
 };
 
-export const TestConfig = ({ test, onTestUpdated, onTestDeleted }: Props) => {
+export const TestConfig = ({ test, onTestUpdated, onTestDeleted, isEditing }: Props) => {
   return (
     <Card className={cx(cardStyles)}>
       <div className={rootStyles}>
@@ -45,6 +46,7 @@ export const TestConfig = ({ test, onTestUpdated, onTestDeleted }: Props) => {
               onTestUpdated({ ...test, enabled });
             }}
             color="primary"
+            disabled={!isEditing}
           />
         </p>
         <p>{test.description}</p>
