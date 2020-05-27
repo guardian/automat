@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useHistory, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { css, cx } from 'emotion';
-import { Grid, Typography, Button } from '@material-ui/core';
-import { Add as AddIcon } from '@material-ui/icons';
+import { Grid, Typography, Button, ButtonGroup, Card } from '@material-ui/core';
+import { Add as AddIcon, Save as SaveIcon, Restore as RestoreIcon } from '@material-ui/icons';
 import { ListTests } from '../components/ListTests';
 import { useApi } from '../lib/useApi';
 import { Spinner } from '../components/Spinner';
@@ -26,6 +26,16 @@ const buttonBarStyles = css`
 const textLinkStyles = css`
   font-weight: bold;
   color: inherit;
+`;
+
+const desktopStyles = css`
+  padding: 12px;
+  border: 1px solid lightgray;
+  border-radius: 4px;
+`;
+
+const buttonGroupWrapper = css`
+  margin-top: 12px;
 `;
 
 type Props = {
@@ -59,7 +69,7 @@ export const Tests = ({ slots }: Props) => {
   return (
     <div className={rootStyles}>
       <Helmet>
-        <title>Automat UI | {slot?.name}</title>
+        <title>Automat UI | {slot?.name} Slot</title>
       </Helmet>
       <Typography component="h1" variant="h4" color="inherit" className={cx(headingStyles)}>
         {slot?.name} Slot
@@ -69,16 +79,29 @@ export const Tests = ({ slots }: Props) => {
       </Typography>
       {loading && <Spinner />}
 
-      <Grid container spacing={4}>
-        <Grid item xs={4}>
-          {slot && tests && <ListTests tests={tests} slot={slot} selectedTestId={test?.id} />}
+      <Card className={cx(desktopStyles)}>
+        <Grid container spacing={4}>
+          <Grid item xs={4}>
+            {slot && tests && <ListTests tests={tests} slot={slot} selectedTestId={test?.id} />}
+          </Grid>
+          <Grid item xs>
+            {slot && tests && test && (
+              <TestConfig test={test} onTestUpdated={handleTestUpdate} onTestDeleted={(deletedTest: Test) => console.log('Test Deleted: ', deletedTest)} />
+            )}
+          </Grid>
         </Grid>
-        <Grid item xs>
-          {slot && tests && test && (
-            <TestConfig test={test} onTestUpdated={handleTestUpdate} onTestDeleted={(deletedTest: Test) => console.log('Test Deleted: ', deletedTest)} />
-          )}
-        </Grid>
-      </Grid>
+
+        <div className={buttonGroupWrapper}>
+          <ButtonGroup color="primary" aria-label=" primary button group">
+            <Button startIcon={<SaveIcon />} color="primary" variant="contained">
+              Save All
+            </Button>
+            <Button startIcon={<RestoreIcon />} color="secondary" variant="contained">
+              Cancel
+            </Button>
+          </ButtonGroup>
+        </div>
+      </Card>
 
       <Grid container spacing={2} direction="row" alignItems="center" className={cx(buttonBarStyles)}>
         <Grid item>

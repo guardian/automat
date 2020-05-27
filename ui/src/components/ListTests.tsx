@@ -11,15 +11,15 @@ const rootStyles = css`
   flex-grow: 1;
 `;
 
-const getCardStyles = (isSelected: boolean) => css`
+const getCardStyles = (isSelected: boolean, isLast: boolean) => css`
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  margin-bottom: 16px;
   padding: 12px;
   background-color: ${isSelected ? 'lightgray' : 'white'};
+  margin-bottom: ${isLast ? 0 : '16px'};
 `;
 
 const testLinkStyles = css`
@@ -47,18 +47,23 @@ type Props = {
 
 export const ListTests = ({ tests, slot, selectedTestId }: Props): JSX.Element => (
   <div className={rootStyles}>
-    {tests.map((test: Test) => (
-      <Link key={test.id} to={`/slots/${slot.id}/tests/${test.id}`} className={testLinkStyles}>
-        <Card className={cx(getCardStyles(selectedTestId === test.id))}>
-          <div className={testHeaderStyles}>
-            <Typography component="p" variant="h6">
-              {test.name}
-            </Typography>
-            {test.enabled ? <VisibilityIcon /> : <VisibilityOffIcon />}
-          </div>
-          <p className={testInfoStyles}>{test.description}</p>
-        </Card>
-      </Link>
-    ))}
+    {tests.map((test: Test, index: number) => {
+      const isSelected = selectedTestId === test.id;
+      const isLast = index === tests.length - 1;
+
+      return (
+        <Link key={test.id} to={`/slots/${slot.id}/tests/${test.id}`} className={testLinkStyles}>
+          <Card className={cx(getCardStyles(isSelected, isLast))}>
+            <div className={testHeaderStyles}>
+              <Typography component="p" variant="h6">
+                {test.name}
+              </Typography>
+              {test.enabled ? <VisibilityIcon /> : <VisibilityOffIcon />}
+            </div>
+            <p className={testInfoStyles}>{test.description}</p>
+          </Card>
+        </Link>
+      );
+    })}
   </div>
 );
