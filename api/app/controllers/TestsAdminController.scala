@@ -48,8 +48,39 @@ class TestsAdminController @Inject() (
       Ok(Json.toJson(Map("test" -> test)))
   }
 
-  def update(testId: String) = Action { implicit request: Request[AnyContent] =>
-    ???
+  case class TestUpdateParams(
+      name: Option[String],
+      description: Option[String],
+      enabled: Option[Boolean],
+      variants: Option[List[String]],
+      sections: Option[List[String]]
+  )
+
+  object TestUpdateParams {
+    implicit val testFmt = Json.format[TestUpdateParams]
+
+    def toTest(params: TestUpdateParams, test: Test): Test = Test(
+      id = test.id,
+      slotId = test.slotId,
+      name = params.name.getOrElse(test.name),
+      description = params.description.getOrElse(test.description),
+      enabled = params.enabled.getOrElse(test.enabled),
+      variants = params.variants.getOrElse(test.variants),
+      sections = params.sections.getOrElse(test.sections)
+    )
+  }
+
+  def update(testId: String) = Action(parse.json[TestUpdateParams]) {
+    implicit request =>
+      val test = TestsStore.getById(testId)
+
+      test match {
+        case Some(test) =>
+          val updatedTest = TestUpdateParams.toTest(request.body, test)
+          TestsStore.save(updatedTest)
+          Ok(Json.toJson(Map("test" -> updatedTest)))
+        case None => NotFound
+      }
   }
 
   def delete(testId: String) = Action { implicit request: Request[AnyContent] =>
