@@ -1,22 +1,25 @@
 import React from 'react';
 import { css, cx } from 'emotion';
 import { Link } from 'react-router-dom';
-import { Grid, Card, Typography } from '@material-ui/core';
+import { Card, Typography } from '@material-ui/core';
 import { Visibility as VisibilityIcon, VisibilityOff as VisibilityOffIcon } from '@material-ui/icons';
 import { Slot, Test } from '../types';
 
 const rootStyles = css`
+  display: flex;
+  flex-direction: column;
   flex-grow: 1;
 `;
 
-const paperStyles = css`
-  width: 400px;
+const getCardStyles = (isSelected: boolean) => css`
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
   padding: 12px;
+  background-color: ${isSelected ? 'lightgray' : 'white'};
 `;
 
 const testLinkStyles = css`
@@ -26,7 +29,7 @@ const testLinkStyles = css`
 `;
 
 const testInfoStyles = css`
-  margin-top: 0;
+  margin: 0;
 `;
 
 const testHeaderStyles = css`
@@ -39,27 +42,23 @@ const testHeaderStyles = css`
 type Props = {
   tests: Test[];
   slot: Slot;
+  selectedTestId?: string;
 };
 
-export const ListTests = ({ tests, slot }: Props): JSX.Element => (
-  <Grid container className={cx(rootStyles)} spacing={2}>
-    <Grid item xs={12}>
-      {tests.map((test: Test) => (
-        <Card key={test.id} className={cx(paperStyles)}>
+export const ListTests = ({ tests, slot, selectedTestId }: Props): JSX.Element => (
+  <div className={rootStyles}>
+    {tests.map((test: Test) => (
+      <Link key={test.id} to={`/slots/${slot.id}/tests/${test.id}`} className={testLinkStyles}>
+        <Card className={cx(getCardStyles(selectedTestId === test.id))}>
           <div className={testHeaderStyles}>
-            <div>
-              <Typography component="p" variant="h6">
-                <Link to={`/slots/${slot.id}/tests/${test.id}`} className={testLinkStyles}>
-                  {test.name}
-                </Link>
-              </Typography>
-            </div>
+            <Typography component="p" variant="h6">
+              {test.name}
+            </Typography>
             {test.enabled ? <VisibilityIcon /> : <VisibilityOffIcon />}
           </div>
           <p className={testInfoStyles}>{test.description}</p>
-          <p className={testInfoStyles}>{test.variants.length} variants</p>
         </Card>
-      ))}
-    </Grid>
-  </Grid>
+      </Link>
+    ))}
+  </div>
 );

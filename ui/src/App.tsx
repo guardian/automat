@@ -8,6 +8,7 @@ import { FeedbackMessage } from './components/FeedbackMessage';
 import { Shell } from './Shell';
 import { Slots } from './screens/Slots';
 import { Tests } from './screens/Tests';
+import { CreateTest } from './screens/CreateTest';
 
 export const App = () => {
   const { data, loading, error } = useApi<any>(`http://localhost:9000/admin/slots`);
@@ -23,6 +24,12 @@ export const App = () => {
             </Route>
             <Route exact path="/slots/:slotId">
               <Tests slots={data.slots} />
+            </Route>
+            <Route exact path="/slots/:slotId/tests/:testId">
+              <Tests slots={data.slots} />
+            </Route>
+            <Route exact path="/slots/:slotId/create">
+              <CreateTest slots={data.slots} />
             </Route>
           </Switch>
         )}
