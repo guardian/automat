@@ -21,6 +21,7 @@ class TestsAdminController @Inject() (
     val testWithSlotId =
       request.body.as[JsObject] ++ JsObject(Seq("slotId" -> JsString(slotId)))
 
+    // TODO: consider whitelisting fields to protect against mass-assignment here
     val testResult = testWithSlotId.validate[Test]
 
     testResult.fold(
