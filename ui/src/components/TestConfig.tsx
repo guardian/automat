@@ -86,6 +86,7 @@ export const TestConfig = ({ test, onTestUpdated, onTestDeleted, isEditing }: Pr
           <TextField
             className={inputStyles}
             value={test.name}
+            disabled={!isEditing}
             onChange={(e) => onTestUpdated({ ...test, name: e.currentTarget.value })}
             label="Test Name"
             variant="outlined"
@@ -96,6 +97,7 @@ export const TestConfig = ({ test, onTestUpdated, onTestDeleted, isEditing }: Pr
           <TextField
             className={inputStyles}
             value={test.description}
+            disabled={!isEditing}
             onChange={(e) => onTestUpdated({ ...test, description: e.currentTarget.value })}
             label="Description"
             variant="outlined"
