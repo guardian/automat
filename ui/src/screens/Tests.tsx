@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useHistory, Link } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { css, cx } from 'emotion';
-import { Grid, Typography, Button, ButtonGroup, Card } from '@material-ui/core';
-import { Add as AddIcon, Save as SaveIcon, Close as CloseIcon, ArrowBack as ArrowBackIcon } from '@material-ui/icons';
+import { Card, Grid, Typography, Button } from '@material-ui/core';
+import { Add as AddIcon, ArrowBack as ArrowBackIcon } from '@material-ui/icons';
 import { ListTests } from '../components/ListTests';
 import { useApi } from '../lib/useApi';
 import { Spinner } from '../components/Spinner';
@@ -20,14 +20,18 @@ const headingStyles = css`
   margin: 20px auto;
 `;
 
-const backLinkStyles = css`
+const marginTop = css`
   margin-top: 16px;
+`;
+
+const marginBottom = css`
+  margin-bottom: 16px;
 `;
 
 const getDesktopStyles = (isEditing: boolean) => css`
   padding: 12px;
   border-radius: 4px;
-  background-color: ${isEditing ? '#fff59d' : 'white'};
+  border: 5px solid ${isEditing ? '#FFF59D' : 'white'};
 `;
 
 type Props = {
@@ -69,31 +73,30 @@ export const Tests = ({ slots }: Props) => {
         {slot?.name} Slot
       </Typography>
 
-      <EditModeToggle
-        isEditing={isEditing}
-        onStatusChanged={(newState: boolean) => setIsEditing(newState)}
-        onSave={() => setIsEditing(false)}
-        onCancel={() => setIsEditing(false)}
-      />
-
-      <Grid container spacing={2} direction="row" justify="space-between" alignItems="center">
-        <Grid item>
-          <Typography component="h1" variant="h6" className={cx(headingStyles)}>
-            Configured Tests
-          </Typography>
-        </Grid>
-        <Grid item>
-          <Button disabled={!isEditing} startIcon={<AddIcon />} color="primary" variant="contained" onClick={() => history.push(`/slots/${slot?.id}/create`)}>
-            Create Test
-          </Button>
-        </Grid>
-      </Grid>
+      <div className={marginBottom}>
+        <EditModeToggle
+          isEditing={isEditing}
+          onStatusChanged={(newState: boolean) => setIsEditing(newState)}
+          onSave={() => setIsEditing(false)}
+          onCancel={() => setIsEditing(false)}
+        />
+      </div>
 
       {loading && <Spinner />}
 
       <Card className={cx(getDesktopStyles(isEditing))}>
         <Grid container spacing={4}>
           <Grid item xs={4}>
+            <Button
+              className={marginBottom}
+              disabled={!isEditing}
+              startIcon={<AddIcon />}
+              color="primary"
+              variant="contained"
+              onClick={() => history.push(`/slots/${slot?.id}/create`)}
+            >
+              Create Test
+            </Button>
             {slot && tests && <ListTests tests={tests} slot={slot} selectedTestId={test?.id} />}
           </Grid>
           <Grid item xs>
@@ -109,7 +112,7 @@ export const Tests = ({ slots }: Props) => {
         </Grid>
       </Card>
 
-      <Button className={cx(backLinkStyles)} startIcon={<ArrowBackIcon />} color="primary" onClick={() => history.push(`/`)}>
+      <Button className={cx(marginTop)} startIcon={<ArrowBackIcon />} color="primary" onClick={() => history.push(`/`)}>
         Back to Slots
       </Button>
     </div>

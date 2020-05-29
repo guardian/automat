@@ -1,12 +1,12 @@
 import React from 'react';
 import { css, cx } from 'emotion';
 import { Grid, Chip, Paper, Button } from '@material-ui/core';
-import { Close as CloseIcon, LockOpen as LockOpenIcon, Lock as LockIcon } from '@material-ui/icons';
+import { LockOpen as LockOpenIcon, Backup as BackupIcon, SettingsBackupRestore as RevertIcon } from '@material-ui/icons';
 
 const getRootStyles = (isEditing: boolean) => css`
   width: 100%;
   padding: 12px;
-  background-color: ${isEditing ? '#fff59d' : 'white'};
+  border: 5px solid ${isEditing ? '#FFF59D' : 'white'};
 `;
 
 const statusStyles = css`
@@ -38,13 +38,13 @@ export const EditModeToggle = ({ isEditing = false, onStatusChanged, onSave, onC
           <Grid item>
             <Grid container spacing={2}>
               <Grid item>
-                <Button startIcon={<CloseIcon />} color="primary" variant="contained" onClick={() => onCancel()}>
+                <Button startIcon={<RevertIcon />} color="primary" variant="contained" onClick={() => onCancel()}>
                   Discard
                 </Button>
               </Grid>
               <Grid item>
-                <Button startIcon={<LockIcon />} color="primary" variant="contained" onClick={() => onSave()}>
-                  Save &amp; Lock
+                <Button startIcon={<BackupIcon />} color="primary" variant="contained" onClick={() => onSave()}>
+                  Save All
                 </Button>
               </Grid>
             </Grid>
@@ -59,7 +59,7 @@ export const EditModeToggle = ({ isEditing = false, onStatusChanged, onSave, onC
           </Grid>
           <Grid item>
             <Button startIcon={<LockOpenIcon />} color="primary" variant="contained" onClick={() => onStatusChanged(!isEditing)}>
-              Unlock
+              Unlock Editing Mode
             </Button>
           </Grid>
         </Grid>
