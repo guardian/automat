@@ -18,7 +18,8 @@ const getCardStyles = (isSelected: boolean, isLast: boolean) => css`
   align-items: flex-start;
   justify-content: center;
   padding: 12px;
-  background-color: ${isSelected ? '#eeeeee' : 'white'};
+  background-color: ${isSelected ? '#EEE' : '#FFF'};
+  border: 1px solid #bdbdbd;
   margin-bottom: ${isLast ? 0 : '16px'};
 `;
 
@@ -53,7 +54,7 @@ export const ListTests = ({ tests, slot, selectedTestId }: Props): JSX.Element =
 
       return (
         <Link key={test.id} to={`/slots/${slot.id}/tests/${test.id}`} className={testLinkStyles}>
-          <Card className={cx(getCardStyles(isSelected, isLast))} elevation={isSelected ? 2 : 1}>
+          <Card className={cx(getCardStyles(isSelected, isLast))} elevation={0}>
             <div className={testHeaderStyles}>
               <Typography component="p" variant="h6">
                 {test.name}

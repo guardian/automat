@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { css, cx } from 'emotion';
 import { Typography } from '@material-ui/core';
 import { Test } from '../types';
-import { Paper, TextField, Tabs, Tab, Grid, Card, Switch } from '@material-ui/core';
+import { Paper, TextField, Tabs, Tab, Grid, Card, Switch, InputLabel } from '@material-ui/core';
+import DateFnsUtils from '@date-io/date-fns';
+import { MuiPickersUtilsProvider, KeyboardTimePicker, KeyboardDatePicker } from '@material-ui/pickers';
 
 const rootStyles = css`
   width: 100%;
@@ -43,7 +45,10 @@ type Props = {
 };
 
 export const TestConfig = ({ test, onTestUpdated, onTestDeleted, isEditing }: Props) => {
-  const [activeTabIndex, setActiveTabIndex] = React.useState(0);
+  const now = new Date();
+  const [activeTabIndex, setActiveTabIndex] = useState(0);
+  const [startDate, setStartDate] = useState(new Date(now));
+  const [endDate, setEndDate] = useState(new Date(now.setMonth(now.getMonth() + 1)));
 
   const onTabClick = (event: any, newTabIndex: any) => {
     setActiveTabIndex(newTabIndex);
@@ -60,7 +65,7 @@ export const TestConfig = ({ test, onTestUpdated, onTestDeleted, isEditing }: Pr
           </Grid>
           <Grid item>
             <p className={switchLabelStyles}>
-              Live on theguardian.com{' '}
+              Live on <b>theguardian.com</b>{' '}
               <Switch
                 checked={test.enabled}
                 onChange={(e) => {
@@ -82,29 +87,53 @@ export const TestConfig = ({ test, onTestUpdated, onTestDeleted, isEditing }: Pr
           </Tabs>
         </Paper>
 
-        <p>
-          <TextField
-            className={inputStyles}
-            value={test.name}
-            disabled={!isEditing}
-            onChange={(e) => onTestUpdated({ ...test, name: e.currentTarget.value })}
-            label="Test Name"
-            variant="outlined"
-          />
-        </p>
+        {activeTabIndex === 0 && (
+          <div>
+            <p>
+              <TextField
+                className={inputStyles}
+                value={test.name}
+                disabled={!isEditing}
+                onChange={(e) => onTestUpdated({ ...test, name: e.currentTarget.value })}
+                label="Test Name"
+                variant="outlined"
+              />
+            </p>
+            <p>
+              <TextField
+                className={inputStyles}
+                value={test.description}
+                disabled={!isEditing}
+                onChange={(e) => onTestUpdated({ ...test, description: e.currentTarget.value })}
+                label="Description"
+                variant="outlined"
+                multiline
+                rows={4}
+              />
+            </p>
 
-        <p>
-          <TextField
-            className={inputStyles}
-            value={test.description}
-            disabled={!isEditing}
-            onChange={(e) => onTestUpdated({ ...test, description: e.currentTarget.value })}
-            label="Description"
-            variant="outlined"
-            multiline
-            rows={4}
-          />
-        </p>
+            <Grid container spacing={2}>
+              <Grid item>
+                <InputLabel>
+                  <b>Start Date</b>
+                </InputLabel>
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <KeyboardDatePicker disabled={!isEditing} margin="dense" format="dd/MM/yyyy" value={startDate} onChange={(date: any) => setStartDate(date)} />
+                  <KeyboardTimePicker disabled={!isEditing} margin="dense" value={startDate} onChange={(date: any) => setStartDate(date)} />
+                </MuiPickersUtilsProvider>
+              </Grid>
+              <Grid item>
+                <InputLabel>
+                  <b>End Date</b>
+                </InputLabel>
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <KeyboardDatePicker disabled={!isEditing} margin="dense" format="dd/MM/yyyy" value={endDate} onChange={(date: any) => setEndDate(date)} />
+                  <KeyboardTimePicker disabled={!isEditing} margin="dense" value={endDate} onChange={(date: any) => setEndDate(date)} />
+                </MuiPickersUtilsProvider>
+              </Grid>
+            </Grid>
+          </div>
+        )}
       </div>
     </Card>
   );
