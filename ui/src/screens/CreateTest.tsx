@@ -2,12 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 import { css, cx } from 'emotion';
 import { Typography } from '@material-ui/core';
-import { ListSlots } from '../components/ListSlots';
 import { Slot } from '../types';
-
-const rootStyles = css`
-  width: 100%;
-`;
 
 const headingStyles = css`
   font-weight: bold;
@@ -18,18 +13,18 @@ type Props = {
   slots: Slot[];
 };
 
-export const Slots = ({ slots }: Props) => {
+export const CreateTest = ({ slots }: Props) => {
   return (
-    <div className={rootStyles}>
+    <div>
       <Helmet>
-        <title>Automat UI | Slots</title>
+        <title>Automat UI | Create Test</title>
       </Helmet>
 
       <Typography component="h1" variant="h4" noWrap className={cx(headingStyles)}>
-        Slots
+        Create Test
       </Typography>
 
-      {slots && <ListSlots slots={slots} />}
+      <p>Coming Soon</p>
     </div>
   );
 };

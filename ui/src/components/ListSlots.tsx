@@ -4,24 +4,17 @@ import { Link } from 'react-router-dom';
 import { Paper, Grid, Chip, Typography } from '@material-ui/core';
 import { Slot } from '../types';
 
-const rootStyles = css`
-  flex-grow: 1;
-`;
-
 const paperStyles = css`
-  height: 180px;
-  width: 180px;
+  height: 160px;
+  width: 160px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 `;
 
-const itemStyles = css`
+const linkStyles = css`
   text-decoration: none;
-  color: inherit;
-  display: block;
-  text-align: center;
 `;
 
 const slotNameStyles = css`
@@ -39,22 +32,18 @@ type Props = {
 };
 
 export const ListSlots = ({ slots }: Props): JSX.Element => (
-  <Grid container className={cx(rootStyles)} spacing={2}>
-    <Grid item xs={12}>
-      <Grid container justify="center" spacing={2}>
-        {slots.map((slot) => (
-          <Grid key={slot.id} item>
-            <Link to={`/slots/${slot.id}`} className={cx(itemStyles)}>
-              <Paper className={cx(paperStyles)}>
-                <Typography component="h6" variant="h6" className={cx(slotNameStyles)}>
-                  {slot.name}
-                </Typography>
-                {slot.testCount !== undefined && <Chip label={`${slot.testCount} tests`} className={cx(chipStyles)} />}
-              </Paper>
-            </Link>
-          </Grid>
-        ))}
+  <Grid container spacing={2}>
+    {slots.map((slot) => (
+      <Grid key={slot.id} item>
+        <Link to={`/slots/${slot.id}`} className={cx(linkStyles)}>
+          <Paper className={cx(paperStyles)}>
+            <Typography component="h6" variant="h6" className={cx(slotNameStyles)}>
+              {slot.name}
+            </Typography>
+            {slot.testCount !== undefined && <Chip label={`${slot.testCount} tests`} className={cx(chipStyles)} />}
+          </Paper>
+        </Link>
       </Grid>
-    </Grid>
+    ))}
   </Grid>
 );
