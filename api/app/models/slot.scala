@@ -22,7 +22,7 @@ object SlotsStore {
           id = "test1",
           name = "Test 1",
           description = "example test",
-          enabled = true,
+          isEnabled = true,
           variants = List("foo", "bar"),
           sections = List("culture")
         ),
@@ -30,7 +30,7 @@ object SlotsStore {
           id = "test2",
           name = "Test 2",
           description = "example test",
-          enabled = true,
+          isEnabled = true,
           variants = List("foo", "bar"),
           sections = List("football")
         )
@@ -44,7 +44,7 @@ object SlotsStore {
           id = "test3",
           name = "Test 3",
           description = "example test",
-          enabled = true,
+          isEnabled = true,
           variants = List("foo", "bar"),
           sections = List("culture")
         ),
@@ -52,7 +52,7 @@ object SlotsStore {
           id = "test4",
           name = "Test 4",
           description = "example test",
-          enabled = true,
+          isEnabled = true,
           variants = List("foo", "bar"),
           sections = List("cricket")
         )

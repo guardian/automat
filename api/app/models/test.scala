@@ -6,7 +6,7 @@ case class Test(
     id: String,
     name: String,
     description: String,
-    enabled: Boolean,
+    isEnabled: Boolean,
     variants: List[String],
     sections: List[String]
 )

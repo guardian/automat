@@ -9,7 +9,7 @@ class TargetingSpec extends PlaySpec {
         id = "test1",
         name = "Test 1",
         description = "example test",
-        enabled = true,
+        isEnabled = true,
         variants = List("foo", "bar"),
         sections = List("culture")
       )
@@ -17,7 +17,7 @@ class TargetingSpec extends PlaySpec {
         id = "test2",
         name = "Test 2",
         description = "example test",
-        enabled = true,
+        isEnabled = true,
         variants = List("foo", "bar"),
         sections = List("football")
       )
@@ -32,7 +32,7 @@ class TargetingSpec extends PlaySpec {
         id = "test1",
         name = "Test 1",
         description = "example test",
-        enabled = true,
+        isEnabled = true,
         variants = List("foo", "bar"),
         sections = List("culture")
       )
@@ -40,7 +40,7 @@ class TargetingSpec extends PlaySpec {
         id = "test2",
         name = "Test 2",
         description = "example test",
-        enabled = true,
+        isEnabled = true,
         variants = List("foo", "bar"),
         sections = List("football")
       )
