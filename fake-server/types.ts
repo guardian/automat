@@ -4,7 +4,6 @@ type Slots = Slot[];
 export interface Slot {
   id: string;
   name: string;
-  tests: Test[];
 }
 
 // GET /admin/slots/:slotId/tests
@@ -19,11 +18,11 @@ export interface Test {
   created: Date;
   updated: Date;
   author: {
-    id: string; // Like to be email address
+    id: string; // Likely email address
     firstName: string;
     lastName: string;
   };
-  variants: string[]; // Array of component IDs
+  variants: string[]; // Array of variant IDs (components)
   filters: TestFilter[];
 }
 
@@ -39,7 +38,7 @@ interface Filter {
   name: string;
   helpText: string;
   options: FilterOption[];
-  allowMultiple: boolean; // Default to false
+  allowMultiple: boolean; // Default to false?
 }
 interface FilterOption {
   value: string;
