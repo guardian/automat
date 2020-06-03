@@ -1,0 +1,121 @@
+{
+  "slots": [
+    {
+      "id": "mpu",
+      "name": "Article MPU"
+    }
+  ],
+  "tests": [
+    {
+      "id": "abcde123",
+      "name": "Subscriptions A/B Test",
+      "description": "Testing different messages for a subset of users likely to subscribe.",
+      "isEnabled": true,
+      "created": "2020-02-14T16:30:00",
+      "updated": "2020-06-01T09:15:00",
+      "author": {
+        "id": "andre.silva.freelancer@guarian.co.uk",
+        "firstName": "Andre",
+        "lastName": "Silva"
+      },
+      "variants": ["subsmpu"],
+      "filters": [
+        {
+          "filterId": "authstatus",
+          "selectedOptionIds": ["loggedin"]
+        },
+        {
+          "filterId": "subspropensity",
+          "selectedOptionIds": ["hot", "warm"]
+        },
+        {
+          "filterId": "samplerate",
+          "selectedOptionIds": ["25"]
+        }
+      ]
+    }
+  ],
+  "variants": [
+    {
+      "id": "subsmpu",
+      "name": "Subscriptions MPU",
+      "description": "A Guardian subscriptions advert in MPU format.",
+      "thumbnailUrl": "https://via.placeholder.com/300"
+    }
+  ],
+  "filters": [
+    {
+      "id": "authstatus",
+      "name": "Authentication Status",
+      "helpText": "Restrict the test audience to logged-in or not logged-in users.",
+      "allowMultiple": false,
+      "options": [
+        {
+          "value": "loggedin",
+          "label": "Logged In users only"
+        },
+        {
+          "value": "notloggedin",
+          "label": "Not logged-in users only"
+        },
+        {
+          "value": "any",
+          "label": "Any (it doesn't matter)",
+          "selected": true
+        }
+      ]
+    },
+    {
+      "id": "subspropensity",
+      "name": "Propensity to Subscribe",
+      "helpText": "Restrict the test audience to users who fit into a given propensity level.",
+      "allowMultiple": true,
+      "options": [
+        {
+          "value": "hot",
+          "label": "Hot (very likely to subscribe)",
+          "selected": true
+        },
+        {
+          "value": "warm",
+          "label": "Warm (likely to subscribe)",
+          "selected": true
+        },
+        {
+          "value": "cold",
+          "label": "Cold (unlikely to subscribe)",
+          "selected": true
+        }
+      ]
+    },
+    {
+      "id": "samplerate",
+      "name": "Custom Sampling Rate",
+      "helpText": "Restrict the test audience to a percentage of users in the cohort.",
+      "allowMultiple": false,
+      "options": [
+        {
+          "value": "100",
+          "label": "100%",
+          "selected": true
+        },
+        {
+          "value": "50",
+          "label": "50%"
+        },
+        {
+          "value": "25",
+          "label": "25%"
+        },
+        {
+          "value": "10",
+          "label": "10%"
+        },
+        {
+          "value": "5",
+          "label": "5%"
+        }
+      ]
+    }
+  ]
+}
