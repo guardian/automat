@@ -31,8 +31,8 @@ export const EditModeToggle = ({ isEditing = false, onStatusChanged, onSave, onC
         <Grid container spacing={2} direction="row" justify="space-between" alignItems="center">
           <Grid item>
             <div>
-              You're in <Chip className={statusStyles} label="EDITING" /> mode. Your changes will be published as soon as you click{' '}
-              <span className={statusStyles}>Save &amp; Lock</span>.
+              You're in <Chip className={statusStyles} label="Editing" /> mode. Make your changes and click <span className={statusStyles}>Save All</span> to
+              publish.
             </div>
           </Grid>
           <Grid item>
@@ -47,12 +47,7 @@ export const EditModeToggle = ({ isEditing = false, onStatusChanged, onSave, onC
                     message="Are you sure you want revert your changes?"
                     buttons={
                       <>
-                        <Button
-                          onClick={() => {
-                            setRevertConfirmation(false);
-                          }}
-                          variant="contained"
-                        >
+                        <Button onClick={() => setRevertConfirmation(false)} variant="contained">
                           Cancel
                         </Button>
                         <Button
@@ -81,12 +76,7 @@ export const EditModeToggle = ({ isEditing = false, onStatusChanged, onSave, onC
                     message="Are you sure you want to save and publish your changes?"
                     buttons={
                       <>
-                        <Button
-                          onClick={() => {
-                            setSaveConfirmation(false);
-                          }}
-                          variant="contained"
-                        >
+                        <Button onClick={() => setSaveConfirmation(false)} variant="contained">
                           Cancel
                         </Button>
                         <Button
@@ -112,7 +102,7 @@ export const EditModeToggle = ({ isEditing = false, onStatusChanged, onSave, onC
         <Grid container spacing={2} direction="row" justify="space-between" alignItems="center">
           <Grid item>
             <div>
-              You're in <Chip className={statusStyles} label="READ ONLY" /> mode. Click the <span className={statusStyles}>Unlock</span> button to make changes.
+              You're in <Chip className={statusStyles} label="Read Only" /> mode. Click the <span className={statusStyles}>Unlock</span> button to make changes.
             </div>
           </Grid>
           <Grid item>
