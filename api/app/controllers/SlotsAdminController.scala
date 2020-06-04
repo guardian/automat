@@ -1,11 +1,11 @@
 package controllers
 
+import automat.models.{Slot, SlotStore, Test}
 import javax.inject._
-import play.api._
-import play.api.mvc._
 import play.api.libs.json._
+import play.api.mvc._
 
-import automat.models.{SlotsStore, Slot, Test}
+import scala.concurrent.ExecutionContext
 
 case class SlimSlot(
     id: String,
@@ -33,37 +33,46 @@ object SlotUpdateParams {
   )
 }
 
-@Singleton
-class SlotsAdminController @Inject() (
-    val controllerComponents: ControllerComponents
-) extends BaseController {
+class SlotsAdminController(
+  val controllerComponents: ControllerComponents,
+  val store: SlotStore
+)(implicit ec: ExecutionContext) extends BaseController {
 
-  def index = Action { implicit request: Request[AnyContent] =>
-    val resp =
-      Json.toJson(Map("slots" -> SlotsStore.all.map(SlimSlot.fromSlot)))
-    Ok(resp)
-  }
+  def index = Action.async { implicit request: Request[AnyContent] =>
+    val slots = store.getAll()
 
-  def show(slotId: String) = Action { implicit request =>
-    val slot = SlotsStore.getById(slotId)
-
-    slot match {
-      case Some(slot) =>
-        Ok(Json.toJson(Map("slot" -> slot)))
-      case None => NotFound
+    for {
+      slots <- slots
+    } yield {
+      val resp = Json.toJson(Map("slots" -> slots.map(SlimSlot.fromSlot)))
+      Ok(resp)
     }
   }
 
-  def update(slotId: String) = Action(parse.json[SlotUpdateParams]) {
-    implicit request =>
-      val slot = SlotsStore.getById(slotId)
+  def show(slotId: String) = Action.async { implicit request =>
+    val resp = store.get(slotId)
 
+    resp map { slot =>
       slot match {
         case Some(slot) =>
-          val updatedSlot = SlotUpdateParams.toSlot(request.body, slot)
-          SlotsStore.update(slotId, updatedSlot)
-          Ok(Json.toJson(Map("slot" -> updatedSlot)))
+          Ok(Json.toJson(Map("slot" -> slot)))
         case None => NotFound
+      }
+    }
+  }
+
+  def update(slotId: String) = Action.async(parse.json[SlotUpdateParams]) {
+    implicit request =>
+      val resp = store.get(slotId)
+
+      resp map { slot =>
+        slot match {
+          case Some(slot) =>
+            val updatedSlot = SlotUpdateParams.toSlot(request.body, slot)
+            store.update(slotId, updatedSlot)
+            Ok(Json.toJson(Map("slot" -> updatedSlot)))
+          case None => NotFound
+        }
       }
   }
 }
