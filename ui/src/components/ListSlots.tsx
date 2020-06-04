@@ -1,7 +1,7 @@
 import React from 'react';
 import { css, cx } from 'emotion';
 import { Link } from 'react-router-dom';
-import { Paper, Grid, Chip, Typography } from '@material-ui/core';
+import { Paper, Grid, Typography } from '@material-ui/core';
 import { Slot } from '../types';
 
 const paperStyles = css`
@@ -22,11 +22,6 @@ const slotNameStyles = css`
   margin-bottom: 12px;
 `;
 
-const chipStyles = css`
-  cursor: pointer;
-  pointer-events: none;
-`;
-
 type Props = {
   slots: Slot[];
 };
@@ -40,7 +35,6 @@ export const ListSlots = ({ slots }: Props): JSX.Element => (
             <Typography component="h6" variant="h6" className={cx(slotNameStyles)}>
               {slot.name}
             </Typography>
-            {slot.testCount !== undefined && <Chip label={`${slot.testCount} tests`} className={cx(chipStyles)} />}
           </Paper>
         </Link>
       </Grid>

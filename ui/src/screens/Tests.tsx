@@ -10,6 +10,7 @@ import { Spinner } from '../components/Spinner';
 import { Test, Slot } from '../types';
 import { TestConfig } from '../components/TestConfig';
 import { EditModeToggle } from '../components/EditModeToggle';
+import { createTest } from '../lib/testFactory';
 
 const rootStyles = css`
   width: 100%;
@@ -40,17 +41,17 @@ type Props = {
 
 export const Tests = ({ slots }: Props) => {
   const history = useHistory();
-
   const [isEditing, setIsEditing] = useState(false);
 
   const { slotId, testId } = useParams();
   const slot = slots.find((slot) => slot.id === slotId);
 
-  const { data, loading } = useApi<any>(`http://localhost:9000/admin/slots/${slotId}/tests`);
+  const { data, loading } = useApi<any>(`http://localhost:3004/tests`);
   const [tests, setTests] = useState([] as Test[]);
+
   useEffect(() => {
-    if (data && data.tests) {
-      setTests(data.tests);
+    if (data) {
+      setTests(data);
     }
   }, [data]);
 
@@ -59,8 +60,22 @@ export const Tests = ({ slots }: Props) => {
     test = tests.find((test: Test) => test.id === testId);
   }
 
+  const handleTestCreation = () => {
+    const newTest = createTest({});
+    setTests([newTest, ...tests]);
+  };
+
   const handleTestUpdate = (updatedTest: Test) => {
-    const updatedTests = tests.map((test: Test) => (updatedTest.id === test.id ? updatedTest : test));
+    const updatedTestWithDate = {
+      ...updatedTest,
+      update: new Date(),
+    };
+    const updatedTests = tests.map((test: Test) => (updatedTest.id === test.id ? updatedTestWithDate : test));
+    setTests([...updatedTests]);
+  };
+
+  const handleTestDelete = (deletedTestId: string) => {
+    const updatedTests = tests.filter((test: Test) => deletedTestId !== test.id);
     setTests([...updatedTests]);
   };
 
@@ -87,27 +102,13 @@ export const Tests = ({ slots }: Props) => {
       <Card className={cx(getDesktopStyles(isEditing))}>
         <Grid container spacing={4}>
           <Grid item xs={4}>
-            <Button
-              className={marginBottom}
-              disabled={!isEditing}
-              startIcon={<AddIcon />}
-              color="primary"
-              variant="contained"
-              onClick={() => history.push(`/slots/${slot?.id}/create`)}
-            >
+            <Button className={marginBottom} disabled={!isEditing} startIcon={<AddIcon />} color="primary" variant="contained" onClick={handleTestCreation}>
               Create Test
             </Button>
             {slot && tests && <ListTests tests={tests} slot={slot} selectedTestId={test?.id} />}
           </Grid>
           <Grid item xs>
-            {slot && tests && test && (
-              <TestConfig
-                test={test}
-                onTestUpdated={handleTestUpdate}
-                onTestDeleted={(deletedTest: Test) => console.log('Test Deleted: ', deletedTest)}
-                isEditing={isEditing}
-              />
-            )}
+            {slot && tests && test && <TestConfig test={test} onTestUpdated={handleTestUpdate} onTestDeleted={handleTestDelete} isEditing={isEditing} />}
           </Grid>
         </Grid>
       </Card>

@@ -13,10 +13,6 @@ const statusStyles = css`
   font-weight: bold;
 `;
 
-const infoTextStyles = css`
-  margin: 0;
-`;
-
 type Props = {
   isEditing: boolean;
   onStatusChanged: Function;
@@ -30,10 +26,10 @@ export const EditModeToggle = ({ isEditing = false, onStatusChanged, onSave, onC
       {isEditing ? (
         <Grid container spacing={2} direction="row" justify="space-between" alignItems="center">
           <Grid item>
-            <p className={infoTextStyles}>
+            <div>
               You're in <Chip className={statusStyles} label="EDITING" /> mode. Your changes will be published as soon as you click{' '}
               <span className={statusStyles}>Save &amp; Lock</span>.
-            </p>
+            </div>
           </Grid>
           <Grid item>
             <Grid container spacing={2}>
@@ -53,9 +49,9 @@ export const EditModeToggle = ({ isEditing = false, onStatusChanged, onSave, onC
       ) : (
         <Grid container spacing={2} direction="row" justify="space-between" alignItems="center">
           <Grid item>
-            <p className={infoTextStyles}>
+            <div>
               You're in <Chip className={statusStyles} label="READ ONLY" /> mode. Click the <span className={statusStyles}>Unlock</span> button to make changes.
-            </p>
+            </div>
           </Grid>
           <Grid item>
             <Button startIcon={<LockOpenIcon />} color="primary" variant="contained" onClick={() => onStatusChanged(!isEditing)}>
