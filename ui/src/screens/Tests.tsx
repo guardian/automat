@@ -60,12 +60,12 @@ export const Tests = ({ slots }: Props) => {
     test = tests.find((test: Test) => test.id === testId);
   }
 
-  const handleTestCreation = () => {
+  const onCreateTest = () => {
     const newTest = createTest({});
     setTests([newTest, ...tests]);
   };
 
-  const handleTestUpdate = (updatedTest: Test) => {
+  const onUpdateTest = (updatedTest: Test) => {
     const updatedTestWithDate = {
       ...updatedTest,
       update: new Date(),
@@ -74,9 +74,19 @@ export const Tests = ({ slots }: Props) => {
     setTests([...updatedTests]);
   };
 
-  const handleTestDelete = (deletedTestId: string) => {
+  const onDeleteTest = (deletedTestId: string) => {
     const updatedTests = tests.filter((test: Test) => deletedTestId !== test.id);
     setTests([...updatedTests]);
+  };
+
+  const onSaveChanges = () => {
+    // Revert changes
+    setIsEditing(false);
+  };
+
+  const onRevertChanges = () => {
+    // Revert changes
+    setIsEditing(false);
   };
 
   return (
@@ -92,8 +102,8 @@ export const Tests = ({ slots }: Props) => {
         <EditModeToggle
           isEditing={isEditing}
           onStatusChanged={(newState: boolean) => setIsEditing(newState)}
-          onSave={() => setIsEditing(false)}
-          onCancel={() => setIsEditing(false)}
+          onSave={onSaveChanges}
+          onCancel={onRevertChanges}
         />
       </div>
 
@@ -102,13 +112,13 @@ export const Tests = ({ slots }: Props) => {
       <Card className={cx(getDesktopStyles(isEditing))}>
         <Grid container spacing={4}>
           <Grid item xs={4}>
-            <Button className={marginBottom} disabled={!isEditing} startIcon={<AddIcon />} color="primary" variant="contained" onClick={handleTestCreation}>
+            <Button className={marginBottom} disabled={!isEditing} startIcon={<AddIcon />} color="primary" variant="contained" onClick={onCreateTest}>
               Create Test
             </Button>
             {slot && tests && <ListTests tests={tests} slot={slot} selectedTestId={test?.id} />}
           </Grid>
           <Grid item xs>
-            {slot && tests && test && <TestConfig test={test} onTestUpdated={handleTestUpdate} onTestDeleted={handleTestDelete} isEditing={isEditing} />}
+            {slot && tests && test && <TestConfig test={test} onTestUpdated={onUpdateTest} onTestDeleted={onDeleteTest} isEditing={isEditing} />}
           </Grid>
         </Grid>
       </Card>
