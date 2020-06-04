@@ -3,7 +3,7 @@ import { css, cx } from 'emotion';
 import { Link } from 'react-router-dom';
 import { Card, Typography, Chip } from '@material-ui/core';
 import { Visibility as VisibilityIcon, VisibilityOff as VisibilityOffIcon } from '@material-ui/icons';
-import { Slot, Test } from '../types';
+import { Slot, Test, SimpleTest } from '../types';
 import { getTestStatus } from '../lib/testStatusHelpers';
 
 const rootStyles = css`
@@ -53,9 +53,10 @@ type Props = {
   tests: Test[];
   slot: Slot;
   selectedTestId?: string;
+  simpleTests: SimpleTest[];
 };
 
-export const ListTests = ({ tests, slot, selectedTestId }: Props): JSX.Element => {
+export const ListTests = ({ tests, slot, selectedTestId, simpleTests }: Props): JSX.Element => {
   if (tests.length === 0) {
     return <p>There are currently no tests configured in this slot.</p>;
   }
@@ -66,17 +67,21 @@ export const ListTests = ({ tests, slot, selectedTestId }: Props): JSX.Element =
         const isLast = index === tests.length - 1;
         const status = getTestStatus(test);
 
+        const simpleTest = simpleTests.find((simpleTest: SimpleTest) => simpleTest.id === test.id);
+        const name = simpleTest?.name;
+        const description = simpleTest?.description;
+
         return (
           <Link key={test.id} to={`/slots/${slot.id}/tests/${test.id}`} className={testLinkStyles}>
             <Card className={cx(getCardStyles(isSelected, isLast))} elevation={0}>
               <div className={testHeaderStyles}>
                 <Typography component="p" variant="h6">
-                  {test.name}
+                  {name}
                 </Typography>
                 {test.isEnabled ? <VisibilityIcon /> : <VisibilityOffIcon />}
               </div>
               <Chip label={status.label} className={cx(getChipStyles(status.color))} />
-              <p className={testInfoStyles}>{test.description}</p>
+              <p className={testInfoStyles}>{description}</p>
             </Card>
           </Link>
         );

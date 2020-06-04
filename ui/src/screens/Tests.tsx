@@ -7,7 +7,7 @@ import { Add as AddIcon, ArrowBack as ArrowBackIcon } from '@material-ui/icons';
 import { ListTests } from '../components/ListTests';
 import { useApi } from '../lib/useApi';
 import { Spinner } from '../components/Spinner';
-import { Test, Slot } from '../types';
+import { Test, SimpleTest, Slot } from '../types';
 import { TestConfig } from '../components/TestConfig';
 import { EditModeToggle } from '../components/EditModeToggle';
 import { createTest } from '../lib/testFactory';
@@ -39,6 +39,10 @@ type Props = {
   slots: Slot[];
 };
 
+const getDerivedSimpleTest = (tests: Test[]): SimpleTest[] => {
+  return tests.map((test: Test) => ({ id: test.id, name: test.name, description: test.description }));
+};
+
 export const Tests = ({ slots }: Props) => {
   const history = useHistory();
   const [isEditing, setIsEditing] = useState(false);
@@ -48,10 +52,14 @@ export const Tests = ({ slots }: Props) => {
 
   const { data, loading } = useApi<any>(`http://localhost:3004/tests`);
   const [tests, setTests] = useState([] as Test[]);
+  const [originalTests, setOriginalTests] = useState([] as Test[]);
+  const [simpleTests, setSimpleTests] = useState([] as SimpleTest[]);
 
   useEffect(() => {
     if (data) {
+      setSimpleTests(getDerivedSimpleTest(data));
       setTests(data);
+      setOriginalTests(data);
     }
   }, [data]);
 
@@ -80,12 +88,14 @@ export const Tests = ({ slots }: Props) => {
   };
 
   const onSaveChanges = () => {
-    // Revert changes
+    // TODO: API WORK
+    setSimpleTests(getDerivedSimpleTest(tests));
+    setOriginalTests(tests);
     setIsEditing(false);
   };
 
   const onRevertChanges = () => {
-    // Revert changes
+    setTests(originalTests);
     setIsEditing(false);
   };
 
@@ -110,7 +120,7 @@ export const Tests = ({ slots }: Props) => {
             <Button className={marginBottom} disabled={!isEditing} startIcon={<AddIcon />} color="primary" variant="contained" onClick={onCreateTest}>
               Create Test
             </Button>
-            {slot && tests && <ListTests tests={tests} slot={slot} selectedTestId={test?.id} />}
+            {slot && tests && <ListTests tests={tests} simpleTests={simpleTests} slot={slot} selectedTestId={test?.id} />}
           </Grid>
           <Grid item xs>
             {slot && tests && test && <TestConfig test={test} onTestUpdated={onUpdateTest} onTestDeleted={onDeleteTest} isEditing={isEditing} />}
