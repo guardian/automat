@@ -71,7 +71,6 @@ export const Tests = ({ slots }: Props) => {
   const onCreateTest = () => {
     const newTest = createTest({});
     const updatedTestList = [newTest, ...tests];
-    setSimpleTests(getDerivedSimpleTest(updatedTestList));
     setTests(updatedTestList);
   };
 

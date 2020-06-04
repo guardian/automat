@@ -68,7 +68,7 @@ export const ListTests = ({ tests, slot, selectedTestId, simpleTests }: Props): 
         const status = getTestStatus(test);
 
         const simpleTest = simpleTests.find((simpleTest: SimpleTest) => simpleTest.id === test.id);
-        const name = simpleTest?.name;
+        const name = simpleTest?.name || 'Untitled Test';
         const description = simpleTest?.description;
 
         return (
