@@ -1,22 +1,14 @@
 package automat.models
 
-import play.api.libs.json._
-import scala.concurrent.{Future, Promise}
-import org.elasticsearch.client.{
-  RestHighLevelClient,
-  RestClientBuilder,
-  RestClient
-}
 import org.apache.http.HttpHost
-import org.elasticsearch.action.get.{GetRequest, GetRequestBuilder, GetResponse}
-import org.elasticsearch.action.search.{SearchResponse, SearchRequest}
 import org.elasticsearch.action.ActionListener
-import org.elasticsearch.client.RequestOptions
-import scala.concurrent.ExecutionContext
-import org.elasticsearch.action.search.SearchRequest
-import org.elasticsearch.action.search.SearchResponse
-import scala.collection.JavaConverters.asScala
-import org.elasticsearch.search.SearchHits
+import org.elasticsearch.action.get.{GetRequest, GetResponse}
+import org.elasticsearch.action.index.{IndexRequest, IndexResponse}
+import org.elasticsearch.action.search.{SearchRequest, SearchResponse}
+import org.elasticsearch.client.{RequestOptions, RestClient, RestHighLevelClient}
+import play.api.libs.json._
+
+import scala.concurrent.{ExecutionContext, Future, Promise}
 
 final case class Slot(
     id: String,
@@ -26,10 +18,14 @@ final case class Slot(
 
 object Slot {
   implicit val testFmt = Json.format[Slot]
+
+  def read(json: String): Option[Slot] = {
+    Json.fromJson[Slot](Json.parse(json)).asOpt
+  }
 }
 
 trait SlotStore {
-  def all: Future[List[Slot]]
+  def all(): Future[List[Slot]]
   def getById(id: String): Future[Option[Slot]]
   def update(slotId: String, updatedSlot: Slot): Future[Unit] // depends on insert case handling
 }
@@ -94,48 +90,49 @@ class MemoryStore()(implicit ex: ExecutionContext) extends SlotStore {
   }
 }
 
-// https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html
-// indices, documents, shards/nodes/replicas
 
-class Listener[A] extends ActionListener[A] {
-  val p = Promise[A]()
-  def onResponse(response: A): Unit = p.success(response)
-  def onFailure(e: Exception): Unit = p.failure(e)
-  def fut = p.future
-}
-
-// https://github.com/guardian/content-api/blob/master/concierge/src/main/scala/com.gu.contentapi.concierge/elasticsearch/Elasticsearch.scala
-// https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-index_.html
 class ElasticsearchStore(client: RestHighLevelClient, index: String = "slots")(
     implicit ec: ExecutionContext
 ) {
-  def listener[A](): Future[A] = {
-    val p = Promise[A]()
-    val listener = new ActionListener[A] {
-      def onResponse(response: A): Unit = p.success(response)
-      def onFailure(e: Exception): Unit = p.failure(e)
-    }
 
-    p.future
+  class Listener[A] extends ActionListener[A] {
+    val p = Promise[A]()
+    def onResponse(response: A): Unit = p.success(response)
+    def onFailure(e: Exception): Unit = p.failure(e)
+    def fut = p.future
+  }
+
+  private[this] def getAsync(request: GetRequest): Future[GetResponse] = {
+    val listener = new Listener[GetResponse]
+    client.getAsync(request, RequestOptions.DEFAULT, listener)
+    listener.fut
+  }
+
+  private[this] def searchAsync(request: SearchRequest): Future[SearchResponse] = {
+    val listener = new Listener[SearchResponse]
+    client.searchAsync(request, RequestOptions.DEFAULT, listener)
+    listener.fut
+  }
+
+  private[this] def indexAsync(request: IndexRequest): Future[IndexResponse] = {
+    val listener = new Listener[IndexResponse]
+    client.indexAsync(request, RequestOptions.DEFAULT, listener)
+    listener.fut
   }
 
   def all: Future[List[Slot]] = {
     val req = new SearchRequest(index)
-    val listener = new Listener[SearchResponse]
-    client.searchAsync(req, RequestOptions.DEFAULT, listener)
-    listener.fut.map(response => {
-      val docs = response.getHits().getHits().asScala
-      ???
+
+    searchAsync(req).map(r => {
+      val docs = r.getHits().getHits().toList.map(_.getSourceAsString)
+      docs.flatMap(Slot.read)
     })
   }
 
   def getById(id: String): Future[Option[Slot]] = {
     val req = new GetRequest(index, id)
 
-    val listener = new Listener[GetResponse]
-    client.getAsync(req, RequestOptions.DEFAULT, listener)
-
-    listener.fut.map(response => {
+    getAsync(req).map(response => {
       if (response.isExists()) {
         val json = response.getSourceAsString()
         Json.fromJson[Slot](Json.parse(json)).asOpt
@@ -146,10 +143,14 @@ class ElasticsearchStore(client: RestHighLevelClient, index: String = "slots")(
   }
 
   def update(slotId: String, updatedSlot: Slot): Future[Unit] = {
-    ???
+    val json = Json.toJson(updatedSlot)
+    val req = new IndexRequest(index).id(slotId).source(json)
+
+    indexAsync(req).map(_ => ())
   }
 }
 
+// TODO support PROD configuration
 object ElasticsearchStore {
   def apply(host: String = "localhost"): RestHighLevelClient = {
     val client = new RestHighLevelClient(

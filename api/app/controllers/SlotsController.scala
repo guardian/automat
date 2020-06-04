@@ -14,5 +14,5 @@ class SlotsController @Inject() (val controllerComponents: ControllerComponents)
 
   val store = new MemoryStore()
 
-  def create() = Action { implicit request: Request[AnyContent] => ??? }
+  def create() = Action.async { implicit request: Request[AnyContent] => ??? }
 }
