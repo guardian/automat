@@ -1,18 +1,13 @@
 package controllers
 
-import javax.inject._
-import play.api._
+import automat.models.SlotStore
 import play.api.mvc._
-import play.api.libs.json._
-import automat.models.{Targeting, MemoryStore, Test}
+
 import scala.concurrent.ExecutionContext
 
-@Singleton
-class SlotsController @Inject() (val controllerComponents: ControllerComponents)(
+class SlotsController(val controllerComponents: ControllerComponents, val store: SlotStore)(
     implicit ec: ExecutionContext
 ) extends BaseController {
-
-  val store = new MemoryStore()
 
   def create() = Action.async { implicit request: Request[AnyContent] => ??? }
 }

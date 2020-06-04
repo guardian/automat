@@ -6,9 +6,14 @@ import org.elasticsearch.action.get.{GetRequest, GetResponse}
 import org.elasticsearch.action.index.{IndexRequest, IndexResponse}
 import org.elasticsearch.action.search.{SearchRequest, SearchResponse}
 import org.elasticsearch.client.{RequestOptions, RestClient, RestHighLevelClient}
+import org.elasticsearch.common.xcontent.XContentType
+import org.elasticsearch.index.query.QueryBuilders
+import org.elasticsearch.search.builder.SearchSourceBuilder
+import play.api.inject.ApplicationLifecycle
 import play.api.libs.json._
 
 import scala.concurrent.{ExecutionContext, Future, Promise}
+import scala.util.{Failure, Success}
 
 final case class Slot(
     id: String,
@@ -20,18 +25,167 @@ object Slot {
   implicit val testFmt = Json.format[Slot]
 
   def read(json: String): Option[Slot] = {
-    Json.fromJson[Slot](Json.parse(json)).asOpt
+    Json.fromJson[Slot](Json.parse(json)) match {
+      case JsSuccess(slot, _) => Some(slot)
+      case JsError(errors) =>
+        println("unable to deserialise slot from JSON", errors, json)
+        None
+    }
   }
 }
 
 trait SlotStore {
-  def all(): Future[List[Slot]]
-  def getById(id: String): Future[Option[Slot]]
-  def update(slotId: String, updatedSlot: Slot): Future[Unit] // depends on insert case handling
+  def getAll(): Future[List[Slot]]
+  def get(id: String): Future[Option[Slot]]
+  def upsert(slotId: String, updatedSlot: Slot): Future[Unit] // depends on insert case handling
+
+  // DEV method to ensure index exists and has some dummy data
+  def populate(): Future[Unit]
+}
+
+object SlotStore {
+  def apply(lifecycle: ApplicationLifecycle)(implicit ec: ExecutionContext): SlotStore = {
+    val useRemoteStore = sys.env.get("USE_REMOTE_STORE").contains("true")
+
+    try {
+      val store = if (true) {
+        ElasticsearchStore(lifecycle)
+      } else {
+        MemoryStore()
+      }
+
+      store.populate()
+      store
+    } catch {
+      case e: Throwable =>
+        println("unable to start ES, falling back to MemoryStore", e.getMessage)
+        MemoryStore()
+    }
+  }
 }
 
 class MemoryStore()(implicit ex: ExecutionContext) extends SlotStore {
-  val slots = scala.collection.mutable.Map(
+  var slots = Map[String,Slot]() // obviously not threadsafe
+
+  def populate(): Future[Unit] = {
+    Future.successful({slots = TestData.slots})
+  }
+
+  def getAll: Future[List[Slot]] = Future.successful(slots.values.toList)
+
+  def get(id: String): Future[Option[Slot]] = {
+    Future.successful(slots.get(id))
+  }
+
+  def upsert(slotId: String, updatedSlot: Slot): Future[Unit] = {
+    slots = slots + (slotId -> updatedSlot)
+    Future.successful(())
+  }
+}
+
+object MemoryStore {
+  def apply()(implicit ec: ExecutionContext) = new MemoryStore()
+}
+
+
+class ElasticsearchStore(client: RestHighLevelClient, index: String = "slots") (
+    implicit ec: ExecutionContext
+) extends SlotStore {
+
+  class Listener[A] extends ActionListener[A] {
+    val p = Promise[A]()
+    def onResponse(response: A): Unit = p.success(response)
+    def onFailure(e: Exception): Unit = p.failure(e)
+    def fut = p.future
+  }
+
+  private[this] def getAsync(request: GetRequest): Future[GetResponse] = {
+    val listener = new Listener[GetResponse]
+    client.getAsync(request, RequestOptions.DEFAULT, listener)
+    listener.fut
+  }
+
+  private[this] def searchAsync(request: SearchRequest): Future[SearchResponse] = {
+    val listener = new Listener[SearchResponse]
+    client.searchAsync(request, RequestOptions.DEFAULT, listener)
+    listener.fut
+  }
+
+  private[this] def indexAsync(request: IndexRequest): Future[IndexResponse] = {
+    val listener = new Listener[IndexResponse]
+    client.indexAsync(request, RequestOptions.DEFAULT, listener)
+    listener.fut
+  }
+
+  def populate(): Future[Unit] = {
+    val responses = TestData.slots.map({ case (id, slot) => {
+      upsert(id, slot)
+    }})
+
+    val asFut = Future.sequence(responses)
+
+    asFut.onComplete {
+      case Success(_) => ()
+      case Failure(e) => println("populate failed", e.getMessage, e.getCause)
+    }
+
+    Future.successful(())
+  }
+
+  def getAll: Future[List[Slot]] = {
+    val req = new SearchRequest(index)
+    val query = new SearchSourceBuilder().query(QueryBuilders.matchAllQuery())
+    req.source(query)
+
+    searchAsync(req).map(r => {
+      val docs = r.getHits().getHits().toList.map(_.getSourceAsString)
+      docs.flatMap(Slot.read)
+    })
+  }
+
+  def get(id: String): Future[Option[Slot]] = {
+    val req = new GetRequest(index, id)
+
+    getAsync(req).map(response => {
+      if (response.isExists()) {
+        val json = response.getSourceAsString()
+        Json.fromJson[Slot](Json.parse(json)).asOpt
+      } else {
+        None
+      }
+    })
+  }
+
+  def upsert(slotId: String, updatedSlot: Slot): Future[Unit] = {
+    val json = Json.toJson(updatedSlot).toString()
+    val req = new IndexRequest(index).id(slotId).source(json, XContentType.JSON)
+
+    indexAsync(req).map(_ => ())
+  }
+}
+
+// TODO support PROD configuration
+object ElasticsearchStore {
+
+  def apply(lifecycle: ApplicationLifecycle, host: String = "localhost")(implicit ec: ExecutionContext): ElasticsearchStore = {
+    val client = new RestHighLevelClient(
+      RestClient.builder(
+        new HttpHost(host, 9200, "http"),
+        new HttpHost(host, 9201, "http")
+      )
+    )
+
+    lifecycle.addStopHook { () =>
+      println("closing Elasticsearch client...")
+      Future.successful(client.close())
+    }
+
+    new ElasticsearchStore(client)
+  }
+}
+
+object TestData {
+  val slots = Map(
     "mpu" -> Slot(
       id = "mpu",
       name = "MPU",
@@ -76,90 +230,5 @@ class MemoryStore()(implicit ex: ExecutionContext) extends SlotStore {
         )
       )
     )
-  );
-
-  def all: Future[List[Slot]] = Future.successful(slots.values.toList)
-
-  def getById(id: String): Future[Option[Slot]] = {
-    Future.successful(slots.get(id))
-  }
-
-  def update(slotId: String, updatedSlot: Slot): Future[Unit] = {
-    getById(slotId).map { slot => slots(slotId) = updatedSlot }
-    Future.successful(())
-  }
-}
-
-
-class ElasticsearchStore(client: RestHighLevelClient, index: String = "slots")(
-    implicit ec: ExecutionContext
-) {
-
-  class Listener[A] extends ActionListener[A] {
-    val p = Promise[A]()
-    def onResponse(response: A): Unit = p.success(response)
-    def onFailure(e: Exception): Unit = p.failure(e)
-    def fut = p.future
-  }
-
-  private[this] def getAsync(request: GetRequest): Future[GetResponse] = {
-    val listener = new Listener[GetResponse]
-    client.getAsync(request, RequestOptions.DEFAULT, listener)
-    listener.fut
-  }
-
-  private[this] def searchAsync(request: SearchRequest): Future[SearchResponse] = {
-    val listener = new Listener[SearchResponse]
-    client.searchAsync(request, RequestOptions.DEFAULT, listener)
-    listener.fut
-  }
-
-  private[this] def indexAsync(request: IndexRequest): Future[IndexResponse] = {
-    val listener = new Listener[IndexResponse]
-    client.indexAsync(request, RequestOptions.DEFAULT, listener)
-    listener.fut
-  }
-
-  def all: Future[List[Slot]] = {
-    val req = new SearchRequest(index)
-
-    searchAsync(req).map(r => {
-      val docs = r.getHits().getHits().toList.map(_.getSourceAsString)
-      docs.flatMap(Slot.read)
-    })
-  }
-
-  def getById(id: String): Future[Option[Slot]] = {
-    val req = new GetRequest(index, id)
-
-    getAsync(req).map(response => {
-      if (response.isExists()) {
-        val json = response.getSourceAsString()
-        Json.fromJson[Slot](Json.parse(json)).asOpt
-      } else {
-        None
-      }
-    })
-  }
-
-  def update(slotId: String, updatedSlot: Slot): Future[Unit] = {
-    val json = Json.toJson(updatedSlot)
-    val req = new IndexRequest(index).id(slotId).source(json)
-
-    indexAsync(req).map(_ => ())
-  }
-}
-
-// TODO support PROD configuration
-object ElasticsearchStore {
-  def apply(host: String = "localhost"): RestHighLevelClient = {
-    val client = new RestHighLevelClient(
-      RestClient.builder(
-        new HttpHost(host, 9200, "http"),
-        new HttpHost(host, 9201, "http")
-      )
-    );
-
-    client
-  }
+  )
 }

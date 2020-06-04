@@ -1,6 +1,6 @@
 package controllers
 
-import automat.models.{MemoryStore, Slot, Test}
+import automat.models.{Slot, SlotStore, Test}
 import javax.inject._
 import play.api.libs.json._
 import play.api.mvc._
@@ -33,16 +33,13 @@ object SlotUpdateParams {
   )
 }
 
-@Singleton
-class SlotsAdminController @Inject() (
-    val controllerComponents: ControllerComponents
+class SlotsAdminController(
+  val controllerComponents: ControllerComponents,
+  val store: SlotStore
 )(implicit ec: ExecutionContext) extends BaseController {
 
-  val store = new MemoryStore()
-
-
   def index = Action.async { implicit request: Request[AnyContent] =>
-    val slots = store.all()
+    val slots = store.getAll()
 
     for {
       slots <- slots
@@ -53,7 +50,7 @@ class SlotsAdminController @Inject() (
   }
 
   def show(slotId: String) = Action.async { implicit request =>
-    val resp = store.getById(slotId)
+    val resp = store.get(slotId)
 
     resp map { slot =>
       slot match {
@@ -66,13 +63,13 @@ class SlotsAdminController @Inject() (
 
   def update(slotId: String) = Action.async(parse.json[SlotUpdateParams]) {
     implicit request =>
-      val resp = store.getById(slotId)
+      val resp = store.get(slotId)
 
       resp map { slot =>
         slot match {
           case Some(slot) =>
             val updatedSlot = SlotUpdateParams.toSlot(request.body, slot)
-            store.update(slotId, updatedSlot)
+            store.upsert(slotId, updatedSlot)
             Ok(Json.toJson(Map("slot" -> updatedSlot)))
           case None => NotFound
         }
