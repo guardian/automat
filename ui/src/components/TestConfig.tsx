@@ -3,6 +3,7 @@ import { css, cx } from 'emotion';
 import { Test } from '../types';
 import { Button, Typography, Paper, TextField, Tabs, Tab, Grid, Card, Switch } from '@material-ui/core';
 import { Delete as DeleteIcon } from '@material-ui/icons';
+import { Confirmation } from './Confirmation';
 
 const rootStyles = css`
   width: 100%;
@@ -51,6 +52,8 @@ type Props = {
 
 export const TestConfig = ({ test, onTestUpdated, onTestDeleted, isEditing }: Props) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
+  const [deleteConfirmation, setDeleteConfirmation] = useState(false);
+
   const onTabClick = (event: any, newTabIndex: any) => setActiveTabIndex(newTabIndex);
 
   // Make dates nice for presentation
@@ -133,9 +136,38 @@ export const TestConfig = ({ test, onTestUpdated, onTestDeleted, isEditing }: Pr
             </p>
           </Grid>
           <Grid item>
-            <Button disabled={!isEditing} variant="contained" color="secondary" startIcon={<DeleteIcon />} onClick={() => onTestDeleted(test.id)}>
+            <Button disabled={!isEditing} variant="contained" color="secondary" startIcon={<DeleteIcon />} onClick={() => setDeleteConfirmation(true)}>
               Delete Test
             </Button>
+            {deleteConfirmation && (
+              <Confirmation
+                title={`Delete '${test.name}'?`}
+                message="Are you sure you want to delete this test?"
+                buttons={
+                  <>
+                    <Button
+                      onClick={() => {
+                        setDeleteConfirmation(false);
+                      }}
+                      variant="contained"
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      startIcon={<DeleteIcon />}
+                      onClick={() => {
+                        onTestDeleted(test.id);
+                        setDeleteConfirmation(false);
+                      }}
+                      variant="contained"
+                      color="secondary"
+                    >
+                      Delete Test
+                    </Button>
+                  </>
+                }
+              />
+            )}
           </Grid>
         </Grid>
       </div>

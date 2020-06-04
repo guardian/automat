@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { css, cx } from 'emotion';
 import { Grid, Chip, Paper, Button } from '@material-ui/core';
 import { LockOpen as LockOpenIcon, Backup as BackupIcon, SettingsBackupRestore as RevertIcon } from '@material-ui/icons';
+import { Confirmation } from './Confirmation';
 
 const getRootStyles = (isEditing: boolean) => css`
   width: 100%;
@@ -21,6 +22,9 @@ type Props = {
 };
 
 export const EditModeToggle = ({ isEditing = false, onStatusChanged, onSave, onCancel }: Props) => {
+  const [saveConfirmation, setSaveConfirmation] = useState(false);
+  const [revertConfirmation, setRevertConfirmation] = useState(false);
+
   return (
     <Paper className={cx(getRootStyles(isEditing))}>
       {isEditing ? (
@@ -34,14 +38,72 @@ export const EditModeToggle = ({ isEditing = false, onStatusChanged, onSave, onC
           <Grid item>
             <Grid container spacing={2}>
               <Grid item>
-                <Button startIcon={<RevertIcon />} color="primary" variant="contained" onClick={() => onCancel()}>
-                  Discard
+                <Button startIcon={<RevertIcon />} color="primary" variant="contained" onClick={() => setRevertConfirmation(true)}>
+                  Revert
                 </Button>
+                {revertConfirmation && (
+                  <Confirmation
+                    title="Revert changes?"
+                    message="Are you sure you want revert your changes?"
+                    buttons={
+                      <>
+                        <Button
+                          onClick={() => {
+                            setRevertConfirmation(false);
+                          }}
+                          variant="contained"
+                        >
+                          Cancel
+                        </Button>
+                        <Button
+                          startIcon={<RevertIcon />}
+                          onClick={() => {
+                            setRevertConfirmation(false);
+                            onCancel();
+                          }}
+                          color="primary"
+                          variant="contained"
+                        >
+                          Revert
+                        </Button>
+                      </>
+                    }
+                  />
+                )}
               </Grid>
               <Grid item>
-                <Button startIcon={<BackupIcon />} color="primary" variant="contained" onClick={() => onSave()}>
+                <Button startIcon={<BackupIcon />} color="primary" variant="contained" onClick={() => setSaveConfirmation(true)}>
                   Save All
                 </Button>
+                {saveConfirmation && (
+                  <Confirmation
+                    title="Save changes?"
+                    message="Are you sure you want to save and publish your changes?"
+                    buttons={
+                      <>
+                        <Button
+                          onClick={() => {
+                            setSaveConfirmation(false);
+                          }}
+                          variant="contained"
+                        >
+                          Cancel
+                        </Button>
+                        <Button
+                          startIcon={<BackupIcon />}
+                          onClick={() => {
+                            setSaveConfirmation(false);
+                            onSave();
+                          }}
+                          color="primary"
+                          variant="contained"
+                        >
+                          Save All
+                        </Button>
+                      </>
+                    }
+                  />
+                )}
               </Grid>
             </Grid>
           </Grid>
