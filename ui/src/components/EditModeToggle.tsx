@@ -16,14 +16,24 @@ const statusStyles = css`
 
 type Props = {
   isEditing: boolean;
-  onStatusChanged: Function;
+  onUnlock: Function;
   onSave: Function;
-  onCancel: Function;
+  onRevert: Function;
 };
 
-export const EditModeToggle = ({ isEditing = false, onStatusChanged, onSave, onCancel }: Props) => {
+export const EditModeToggle = ({ isEditing = false, onUnlock, onSave, onRevert }: Props) => {
   const [saveConfirmation, setSaveConfirmation] = useState(false);
   const [revertConfirmation, setRevertConfirmation] = useState(false);
+
+  const onSaveChanges = () => {
+    setSaveConfirmation(false);
+    onSave();
+  };
+
+  const onRevertChanges = () => {
+    setRevertConfirmation(false);
+    onRevert();
+  };
 
   return (
     <Paper className={cx(getRootStyles(isEditing))}>
@@ -50,15 +60,7 @@ export const EditModeToggle = ({ isEditing = false, onStatusChanged, onSave, onC
                         <Button onClick={() => setRevertConfirmation(false)} variant="contained">
                           Cancel
                         </Button>
-                        <Button
-                          startIcon={<RevertIcon />}
-                          onClick={() => {
-                            setRevertConfirmation(false);
-                            onCancel();
-                          }}
-                          color="primary"
-                          variant="contained"
-                        >
+                        <Button startIcon={<RevertIcon />} onClick={onRevertChanges} color="primary" variant="contained">
                           Revert
                         </Button>
                       </>
@@ -79,15 +81,7 @@ export const EditModeToggle = ({ isEditing = false, onStatusChanged, onSave, onC
                         <Button onClick={() => setSaveConfirmation(false)} variant="contained">
                           Cancel
                         </Button>
-                        <Button
-                          startIcon={<BackupIcon />}
-                          onClick={() => {
-                            setSaveConfirmation(false);
-                            onSave();
-                          }}
-                          color="primary"
-                          variant="contained"
-                        >
+                        <Button startIcon={<BackupIcon />} onClick={onSaveChanges} color="primary" variant="contained">
                           Save All
                         </Button>
                       </>
@@ -107,7 +101,7 @@ export const EditModeToggle = ({ isEditing = false, onStatusChanged, onSave, onC
             </div>
           </Grid>
           <Grid item>
-            <Button startIcon={<LockOpenIcon />} color="primary" variant="contained" onClick={() => onStatusChanged(!isEditing)}>
+            <Button startIcon={<LockOpenIcon />} color="primary" variant="contained" onClick={() => onUnlock()}>
               Unlock Editing Mode
             </Button>
           </Grid>

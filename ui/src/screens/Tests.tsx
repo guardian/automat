@@ -99,12 +99,7 @@ export const Tests = ({ slots }: Props) => {
       </Typography>
 
       <div className={marginBottom}>
-        <EditModeToggle
-          isEditing={isEditing}
-          onStatusChanged={(newState: boolean) => setIsEditing(newState)}
-          onSave={onSaveChanges}
-          onCancel={onRevertChanges}
-        />
+        <EditModeToggle isEditing={isEditing} onUnlock={() => setIsEditing(true)} onSave={onSaveChanges} onRevert={onRevertChanges} />
       </div>
 
       {loading && <Spinner />}
