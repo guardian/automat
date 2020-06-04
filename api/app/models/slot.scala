@@ -37,7 +37,7 @@ object Slot {
 trait SlotStore {
   def getAll(): Future[List[Slot]]
   def get(id: String): Future[Option[Slot]]
-  def upsert(slotId: String, updatedSlot: Slot): Future[Unit] // depends on insert case handling
+  def update(slotId: String, updatedSlot: Slot): Future[Unit]
 
   // DEV method to ensure index exists and has some dummy data
   def populate(): Future[Unit]
@@ -48,7 +48,7 @@ object SlotStore {
     val useRemoteStore = sys.env.get("USE_REMOTE_STORE").contains("true")
 
     try {
-      val store = if (true) {
+      val store = if (useRemoteStore) {
         ElasticsearchStore(lifecycle)
       } else {
         MemoryStore()
@@ -58,8 +58,8 @@ object SlotStore {
       store
     } catch {
       case e: Throwable =>
-        println("unable to start ES, falling back to MemoryStore", e.getMessage)
-        MemoryStore()
+        println("unable to connect to ES", e.getMessage)
+        throw e
     }
   }
 }
@@ -77,7 +77,7 @@ class MemoryStore()(implicit ex: ExecutionContext) extends SlotStore {
     Future.successful(slots.get(id))
   }
 
-  def upsert(slotId: String, updatedSlot: Slot): Future[Unit] = {
+  def update(slotId: String, updatedSlot: Slot): Future[Unit] = {
     slots = slots + (slotId -> updatedSlot)
     Future.successful(())
   }
@@ -119,7 +119,7 @@ class ElasticsearchStore(client: RestHighLevelClient, index: String = "slots") (
 
   def populate(): Future[Unit] = {
     val responses = TestData.slots.map({ case (id, slot) => {
-      upsert(id, slot)
+      update(id, slot)
     }})
 
     val asFut = Future.sequence(responses)
@@ -156,7 +156,7 @@ class ElasticsearchStore(client: RestHighLevelClient, index: String = "slots") (
     })
   }
 
-  def upsert(slotId: String, updatedSlot: Slot): Future[Unit] = {
+  def update(slotId: String, updatedSlot: Slot): Future[Unit] = {
     val json = Json.toJson(updatedSlot).toString()
     val req = new IndexRequest(index).id(slotId).source(json, XContentType.JSON)
 

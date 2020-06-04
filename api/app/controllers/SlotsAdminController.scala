@@ -69,7 +69,7 @@ class SlotsAdminController(
         slot match {
           case Some(slot) =>
             val updatedSlot = SlotUpdateParams.toSlot(request.body, slot)
-            store.upsert(slotId, updatedSlot)
+            store.update(slotId, updatedSlot)
             Ok(Json.toJson(Map("slot" -> updatedSlot)))
           case None => NotFound
         }

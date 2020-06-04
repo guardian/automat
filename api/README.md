@@ -1,6 +1,6 @@
 # Automat API
 
-### Run Locally
+## Run Locally
 
     $ sbt run
 
