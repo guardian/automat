@@ -70,7 +70,9 @@ export const Tests = ({ slots }: Props) => {
 
   const onCreateTest = () => {
     const newTest = createTest({});
-    setTests([newTest, ...tests]);
+    const updatedTestList = [newTest, ...tests];
+    setSimpleTests(getDerivedSimpleTest(updatedTestList));
+    setTests(updatedTestList);
   };
 
   const onUpdateTest = (updatedTest: Test) => {
@@ -78,13 +80,13 @@ export const Tests = ({ slots }: Props) => {
       ...updatedTest,
       update: new Date(),
     };
-    const updatedTests = tests.map((test: Test) => (updatedTest.id === test.id ? updatedTestWithDate : test));
-    setTests([...updatedTests]);
+    const updatedTestList = tests.map((test: Test) => (updatedTest.id === test.id ? updatedTestWithDate : test));
+    setTests([...updatedTestList]);
   };
 
   const onDeleteTest = (deletedTestId: string) => {
-    const updatedTests = tests.filter((test: Test) => deletedTestId !== test.id);
-    setTests([...updatedTests]);
+    const updatedTestList = tests.filter((test: Test) => deletedTestId !== test.id);
+    setTests([...updatedTestList]);
   };
 
   const onSaveChanges = () => {
