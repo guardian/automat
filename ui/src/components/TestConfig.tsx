@@ -41,7 +41,10 @@ const inputStyles = css`
   width: 100%;
 `;
 
-const footerTextStyles = css``;
+const footerTextStyles = css`
+  color: #9e9e9e;
+  font-size: 12px;
+`;
 
 type Props = {
   test: Test;
@@ -122,7 +125,7 @@ export const TestConfig = ({ test, onTestUpdated, onTestDeleted, isEditing }: Pr
 
         <Grid container spacing={2} justify="space-between" alignItems="center">
           <Grid item>
-            <p className={footerTextStyles}>
+            <p className={cx(footerTextStyles)}>
               {test.author && test.author.firstName && test.author.lastName ? (
                 <>
                   Test created on {formattedCreatedDate} by {`${test.author.firstName} ${test.author.lastName}`} <br /> Last updated: {formattedUpdatedDate}
