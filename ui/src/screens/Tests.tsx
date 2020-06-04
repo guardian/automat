@@ -29,10 +29,10 @@ const marginBottom = css`
   margin-bottom: 16px;
 `;
 
-const getDesktopStyles = (isEditing: boolean) => css`
+const getWorktopStyles = (isEditing: boolean) => css`
   padding: 12px;
   border-radius: 4px;
-  border: 5px solid ${isEditing ? '#FFF59D' : 'white'};
+  border: 5px solid ${isEditing ? '#ffeb3b' : 'white'};
 `;
 
 type Props = {
@@ -104,7 +104,7 @@ export const Tests = ({ slots }: Props) => {
 
       {loading && <Spinner />}
 
-      <Card className={cx(getDesktopStyles(isEditing))}>
+      <Card className={cx(getWorktopStyles(isEditing))}>
         <Grid container spacing={4}>
           <Grid item xs={4}>
             <Button className={marginBottom} disabled={!isEditing} startIcon={<AddIcon />} color="primary" variant="contained" onClick={onCreateTest}>

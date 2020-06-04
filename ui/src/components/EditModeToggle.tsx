@@ -7,7 +7,7 @@ import { Confirmation } from './Confirmation';
 const getRootStyles = (isEditing: boolean) => css`
   width: 100%;
   padding: 12px;
-  border: 5px solid ${isEditing ? '#FFF59D' : 'white'};
+  border: 5px solid ${isEditing ? '#ffeb3b' : '#fff'};
 `;
 
 const statusStyles = css`
