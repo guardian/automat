@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { css, cx } from 'emotion';
-import { Test } from '../types';
+import { Test, SimpleTest } from '../types';
 import { Button, Typography, Paper, TextField, Tabs, Tab, Grid, Card, Switch } from '@material-ui/core';
 import { Delete as DeleteIcon } from '@material-ui/icons';
 import { ConfirmDialog } from './ConfirmDialog';
@@ -48,14 +48,20 @@ const footerTextStyles = css`
 
 type Props = {
   test: Test;
+  simpleTest: SimpleTest;
   onTestUpdated: Function;
   onTestDeleted: Function;
   isEditing: boolean;
 };
 
-export const TestEditor = ({ test, onTestUpdated, onTestDeleted, isEditing }: Props) => {
-  const [activeTabIndex, setActiveTabIndex] = useState(0);
+export const TestEditor = ({ test, simpleTest, onTestUpdated, onTestDeleted, isEditing }: Props) => {
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
+
+  const [activeTabIndex, setActiveTabIndex] = useState(0);
+
+  // Resets active tab when switching tests
+  const testId = test.id;
+  useEffect(() => setActiveTabIndex(0), [testId]);
 
   const onTabClick = (event: any, newTabIndex: any) => setActiveTabIndex(newTabIndex);
 
@@ -67,9 +73,9 @@ export const TestEditor = ({ test, onTestUpdated, onTestDeleted, isEditing }: Pr
     <Card className={cx(cardStyles)}>
       <div className={rootStyles}>
         <Grid container spacing={2} justify="space-between">
-          <Grid item>
+          <Grid item xs={8}>
             <Typography component="h4" variant="h6" align="left" className={cx(headingStyles)}>
-              {test.name}
+              {simpleTest.name}
             </Typography>
           </Grid>
           <Grid item>
@@ -118,6 +124,21 @@ export const TestEditor = ({ test, onTestUpdated, onTestDeleted, isEditing }: Pr
                 variant="outlined"
                 multiline
                 rows={4}
+              />
+            </div>
+          </>
+        )}
+
+        {activeTabIndex === 1 && (
+          <>
+            <div className={formFieldStyles}>
+              <TextField
+                className={inputStyles}
+                value={test.name}
+                disabled={!isEditing}
+                onChange={(e) => onTestUpdated({ ...test, name: e.currentTarget.value })}
+                label="Test Name"
+                variant="outlined"
               />
             </div>
           </>

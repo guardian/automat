@@ -1,4 +1,4 @@
-import { Test } from '../types';
+import { Test, SimpleTest } from '../types';
 
 type StatusData = {
   label: string;
@@ -29,7 +29,7 @@ const TEST_STATUS: TestStatus = {
   },
 };
 
-export const getTestStatus = (test: Test) => {
+export const getTestStatus = (test: Test | SimpleTest) => {
   let statusCode: StatusCode = 'RUNNING';
 
   if (!test.isEnabled) {

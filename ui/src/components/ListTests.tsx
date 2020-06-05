@@ -27,9 +27,9 @@ const getCardStyles = (isSelected: boolean, isLast: boolean) => css`
 const getChipStyles = (color: string) => css`
   background-color: ${color};
   height: auto;
-  padding: 3px 0;
-  margin: 3px 0 6px;
+  padding: 2px 0;
   color: #fff;
+  margin-left: 6px;
 `;
 
 const testLinkStyles = css`
@@ -45,8 +45,9 @@ const testInfoStyles = css`
 const testHeaderStyles = css`
   width: 100%;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
+  margin-bottom: 6px;
 `;
 
 type Props = {
@@ -65,11 +66,15 @@ export const ListTests = ({ tests, slot, selectedTestId, simpleTests }: Props): 
       {tests.map((test: Test, index: number) => {
         const isSelected = selectedTestId === test.id;
         const isLast = index === tests.length - 1;
-        const status = getTestStatus(test);
 
         const simpleTest = simpleTests.find((simpleTest: SimpleTest) => simpleTest.id === test.id);
         const name = simpleTest?.name || 'Untitled Test';
         const description = simpleTest?.description;
+
+        let status;
+        if (simpleTest) {
+          status = getTestStatus(simpleTest);
+        }
 
         return (
           <Link key={test.id} to={`/slots/${slot.id}/tests/${test.id}`} className={testLinkStyles}>
@@ -78,9 +83,9 @@ export const ListTests = ({ tests, slot, selectedTestId, simpleTests }: Props): 
                 <Typography component="p" variant="h6">
                   {name}
                 </Typography>
-                {test.isEnabled ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                {status && <Chip label={status.label} className={cx(getChipStyles(status.color))} />}
               </div>
-              <Chip label={status.label} className={cx(getChipStyles(status.color))} />
+
               <p className={testInfoStyles}>{description}</p>
             </Card>
           </Link>

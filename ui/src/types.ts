@@ -37,6 +37,7 @@ export type SimpleTest = {
   id: string;
   name: string;
   description: string;
+  isEnabled: boolean;
 };
 
 // GET /admin/filters

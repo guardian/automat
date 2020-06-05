@@ -40,7 +40,10 @@ type Props = {
 };
 
 const getDerivedSimpleTest = (tests: Test[]): SimpleTest[] => {
-  return tests.map((test: Test) => ({ id: test.id, name: test.name, description: test.description }));
+  return tests.map((test: Test) => {
+    const { id, name, description, isEnabled } = test;
+    return { id, name, description, isEnabled };
+  });
 };
 
 export const Tests = ({ slots }: Props) => {
@@ -64,14 +67,17 @@ export const Tests = ({ slots }: Props) => {
   }, [data]);
 
   let test: Test | undefined;
+  let simpleTest: SimpleTest | undefined;
   if (tests) {
     test = tests.find((test: Test) => test.id === testId);
+    simpleTest = simpleTests.find((test: SimpleTest) => test.id === testId);
   }
 
   const onCreateTest = () => {
     const newTest = createTest({});
     const updatedTestList = [newTest, ...tests];
     setTests(updatedTestList);
+    setSimpleTests(getDerivedSimpleTest(updatedTestList));
   };
 
   const onUpdateTest = (updatedTest: Test) => {
@@ -124,7 +130,9 @@ export const Tests = ({ slots }: Props) => {
             {slot && tests && <ListTests tests={tests} simpleTests={simpleTests} slot={slot} selectedTestId={test?.id} />}
           </Grid>
           <Grid item xs>
-            {slot && tests && test && <TestEditor test={test} onTestUpdated={onUpdateTest} onTestDeleted={onDeleteTest} isEditing={isEditing} />}
+            {slot && tests && test && simpleTest && (
+              <TestEditor test={test} simpleTest={simpleTest} onTestUpdated={onUpdateTest} onTestDeleted={onDeleteTest} isEditing={isEditing} />
+            )}
           </Grid>
         </Grid>
       </Card>
