@@ -58,6 +58,30 @@ export const Tests = ({ slots }: Props) => {
   const [originalTests, setOriginalTests] = useState([] as Test[]);
   const [simpleTests, setSimpleTests] = useState([] as SimpleTest[]);
 
+  // Handle change checks
+  const [hasChanges, setHasChanges] = useState(false);
+  useEffect(() => {
+    const hasChanges = JSON.stringify(tests) !== JSON.stringify(originalTests);
+    setHasChanges(hasChanges);
+  }, [tests, originalTests]);
+
+  // Block navigation outside of the slot if unsaved changes
+  console.log('=== LOCK');
+  const unblockNavAway = history.block((location) => {
+    const { pathname } = location;
+    if (isEditing && hasChanges && slot && !pathname.includes(`/slots/${slot.id}`)) {
+      return 'You have unsaved changes. Are you sure you want to navigate away from this page?';
+    }
+  });
+
+  // Unblock navigation on component unmount
+  useEffect(() => {
+    return () => {
+      console.log('=== UNLOCK');
+      unblockNavAway();
+    };
+  });
+
   useEffect(() => {
     if (data) {
       setSimpleTests(getDerivedSimpleTest(data));
@@ -87,11 +111,7 @@ export const Tests = ({ slots }: Props) => {
   };
 
   const onUpdateTest = (updatedTest: Test) => {
-    const updatedTestWithDate = {
-      ...updatedTest,
-      update: new Date(),
-    };
-    const updatedTestList = tests.map((test: Test) => (updatedTest.id === test.id ? updatedTestWithDate : test));
+    const updatedTestList = tests.map((test: Test) => (updatedTest.id === test.id ? updatedTest : test));
     setTests([...updatedTestList]);
   };
 
@@ -130,7 +150,7 @@ export const Tests = ({ slots }: Props) => {
       </Typography>
 
       <div className={marginBottom}>
-        <EditModeToggle isEditing={isEditing} onUnlock={() => setIsEditing(true)} onSave={onSaveChanges} onRevert={onRevertChanges} />
+        <EditModeToggle isEditing={isEditing} hasChanges={hasChanges} onUnlock={() => setIsEditing(true)} onSave={onSaveChanges} onRevert={onRevertChanges} />
       </div>
 
       {loading && <Spinner />}

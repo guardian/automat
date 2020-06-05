@@ -16,14 +16,31 @@ const statusStyles = css`
 
 type Props = {
   isEditing: boolean;
+  hasChanges: boolean;
   onUnlock: Function;
   onSave: Function;
   onRevert: Function;
 };
 
-export const EditModeToggle = ({ isEditing = false, onUnlock, onSave, onRevert }: Props) => {
+export const EditModeToggle = ({ isEditing = false, hasChanges, onUnlock, onSave, onRevert }: Props) => {
   const [saveConfirmation, setSaveConfirmation] = useState(false);
   const [revertConfirmation, setRevertConfirmation] = useState(false);
+
+  const handleRevertClick = () => {
+    if (hasChanges) {
+      setRevertConfirmation(true);
+    } else {
+      onRevertChanges();
+    }
+  };
+
+  const handleSaveClick = () => {
+    if (hasChanges) {
+      setSaveConfirmation(true);
+    } else {
+      onSaveChanges();
+    }
+  };
 
   const onSaveChanges = () => {
     setSaveConfirmation(false);
@@ -46,7 +63,7 @@ export const EditModeToggle = ({ isEditing = false, onUnlock, onSave, onRevert }
           <Grid item>
             <Grid container spacing={2}>
               <Grid item>
-                <Button startIcon={<RevertIcon />} color="primary" variant="contained" onClick={() => setRevertConfirmation(true)}>
+                <Button startIcon={<RevertIcon />} color="primary" variant="contained" onClick={handleRevertClick}>
                   Revert
                 </Button>
                 {revertConfirmation && (
@@ -67,7 +84,7 @@ export const EditModeToggle = ({ isEditing = false, onUnlock, onSave, onRevert }
                 )}
               </Grid>
               <Grid item>
-                <Button startIcon={<BackupIcon />} color="primary" variant="contained" onClick={() => setSaveConfirmation(true)}>
+                <Button startIcon={<BackupIcon />} color="primary" variant="contained" onClick={handleSaveClick}>
                   Save All
                 </Button>
                 {saveConfirmation && (

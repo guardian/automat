@@ -2,7 +2,6 @@ import React from 'react';
 import { css, cx } from 'emotion';
 import { Link } from 'react-router-dom';
 import { Card, Typography, Chip } from '@material-ui/core';
-import { Visibility as VisibilityIcon, VisibilityOff as VisibilityOffIcon } from '@material-ui/icons';
 import { Slot, Test, SimpleTest } from '../types';
 import { getTestStatus } from '../lib/testStatusHelpers';
 
