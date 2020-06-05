@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { css, cx } from 'emotion';
 import { Grid, Chip, Paper, Button } from '@material-ui/core';
 import { LockOpen as LockOpenIcon, Backup as BackupIcon, SettingsBackupRestore as RevertIcon } from '@material-ui/icons';
-import { Confirmation } from './Confirmation';
+import { ConfirmDialog } from './ConfirmDialog';
 
 const getRootStyles = (isEditing: boolean) => css`
   width: 100%;
@@ -52,7 +52,7 @@ export const EditModeToggle = ({ isEditing = false, onUnlock, onSave, onRevert }
                   Revert
                 </Button>
                 {revertConfirmation && (
-                  <Confirmation
+                  <ConfirmDialog
                     title="Revert changes?"
                     message="Are you sure you want revert your changes?"
                     buttons={
@@ -73,7 +73,7 @@ export const EditModeToggle = ({ isEditing = false, onUnlock, onSave, onRevert }
                   Save All
                 </Button>
                 {saveConfirmation && (
-                  <Confirmation
+                  <ConfirmDialog
                     title="Save changes?"
                     message="Are you sure you want to save and publish your changes?"
                     buttons={

@@ -7,7 +7,7 @@ type Props = {
   buttons: JSX.Element;
 };
 
-export const Confirmation = ({ title, message, buttons }: Props) => {
+export const ConfirmDialog = ({ title, message, buttons }: Props) => {
   return (
     <Dialog open={true}>
       {title && <DialogTitle>{title}</DialogTitle>}

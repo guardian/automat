@@ -8,7 +8,7 @@ import { ListTests } from '../components/ListTests';
 import { useApi } from '../lib/useApi';
 import { Spinner } from '../components/Spinner';
 import { Test, SimpleTest, Slot } from '../types';
-import { TestConfig } from '../components/TestConfig';
+import { TestEditor } from '../components/TestEditor';
 import { EditModeToggle } from '../components/EditModeToggle';
 import { createTest } from '../lib/testFactory';
 
@@ -58,8 +58,8 @@ export const Tests = ({ slots }: Props) => {
   useEffect(() => {
     if (data) {
       setSimpleTests(getDerivedSimpleTest(data));
-      setTests(data);
       setOriginalTests(data);
+      setTests(data);
     }
   }, [data]);
 
@@ -124,7 +124,7 @@ export const Tests = ({ slots }: Props) => {
             {slot && tests && <ListTests tests={tests} simpleTests={simpleTests} slot={slot} selectedTestId={test?.id} />}
           </Grid>
           <Grid item xs>
-            {slot && tests && test && <TestConfig test={test} onTestUpdated={onUpdateTest} onTestDeleted={onDeleteTest} isEditing={isEditing} />}
+            {slot && tests && test && <TestEditor test={test} onTestUpdated={onUpdateTest} onTestDeleted={onDeleteTest} isEditing={isEditing} />}
           </Grid>
         </Grid>
       </Card>

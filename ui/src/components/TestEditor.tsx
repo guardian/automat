@@ -3,7 +3,7 @@ import { css, cx } from 'emotion';
 import { Test } from '../types';
 import { Button, Typography, Paper, TextField, Tabs, Tab, Grid, Card, Switch } from '@material-ui/core';
 import { Delete as DeleteIcon } from '@material-ui/icons';
-import { Confirmation } from './Confirmation';
+import { ConfirmDialog } from './ConfirmDialog';
 
 const rootStyles = css`
   width: 100%;
@@ -53,7 +53,7 @@ type Props = {
   isEditing: boolean;
 };
 
-export const TestConfig = ({ test, onTestUpdated, onTestDeleted, isEditing }: Props) => {
+export const TestEditor = ({ test, onTestUpdated, onTestDeleted, isEditing }: Props) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
 
@@ -143,17 +143,12 @@ export const TestConfig = ({ test, onTestUpdated, onTestDeleted, isEditing }: Pr
               Delete Test
             </Button>
             {deleteConfirmation && (
-              <Confirmation
+              <ConfirmDialog
                 title={`Delete '${test.name}'?`}
                 message="Are you sure you want to delete this test?"
                 buttons={
                   <>
-                    <Button
-                      onClick={() => {
-                        setDeleteConfirmation(false);
-                      }}
-                      variant="contained"
-                    >
+                    <Button onClick={() => setDeleteConfirmation(false)} variant="contained">
                       Cancel
                     </Button>
                     <Button
