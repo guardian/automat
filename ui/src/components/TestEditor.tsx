@@ -129,21 +129,6 @@ export const TestEditor = ({ test, simpleTest, onTestUpdated, onTestDeleted, isE
           </>
         )}
 
-        {activeTabIndex === 1 && (
-          <>
-            <div className={formFieldStyles}>
-              <TextField
-                className={inputStyles}
-                value={test.name}
-                disabled={!isEditing}
-                onChange={(e) => onTestUpdated({ ...test, name: e.currentTarget.value })}
-                label="Test Name"
-                variant="outlined"
-              />
-            </div>
-          </>
-        )}
-
         <Grid container spacing={2} justify="space-between" alignItems="center">
           <Grid item>
             <p className={cx(footerTextStyles)}>

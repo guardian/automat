@@ -78,6 +78,12 @@ export const Tests = ({ slots }: Props) => {
     const updatedTestList = [newTest, ...tests];
     setTests(updatedTestList);
     setSimpleTests(getDerivedSimpleTest(updatedTestList));
+
+    // Redirect to first test in list
+    const nextTest = updatedTestList[0];
+    if (slot) {
+      history.push(`/slots/${slot.id}/tests/${nextTest.id}`);
+    }
   };
 
   const onUpdateTest = (updatedTest: Test) => {
@@ -90,8 +96,16 @@ export const Tests = ({ slots }: Props) => {
   };
 
   const onDeleteTest = (deletedTestId: string) => {
-    const updatedTestList = tests.filter((test: Test) => deletedTestId !== test.id);
+    const testIndex = tests.findIndex((test: Test) => deletedTestId === test.id);
+    const updatedTestList = tests.filter((test: Test, index: number) => index !== testIndex);
     setTests([...updatedTestList]);
+
+    // Redirect to next test in list
+    const nextTest = updatedTestList[testIndex];
+    if (slot) {
+      const goTo = nextTest ? `/slots/${slot.id}/tests/${nextTest.id}` : `/slots/${slot.id}`;
+      history.push(goTo);
+    }
   };
 
   const onSaveChanges = () => {
