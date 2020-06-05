@@ -24,11 +24,9 @@ export const Slots = ({ slots }: Props) => {
       <Helmet>
         <title>Automat UI | Slots</title>
       </Helmet>
-
       <Typography component="h1" variant="h4" noWrap className={cx(headingStyles)}>
         Slots
       </Typography>
-
       {slots && <ListSlots slots={slots} />}
     </div>
   );

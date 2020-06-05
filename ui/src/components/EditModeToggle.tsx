@@ -1,51 +1,91 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { css, cx } from 'emotion';
 import { Grid, Chip, Paper, Button } from '@material-ui/core';
 import { LockOpen as LockOpenIcon, Backup as BackupIcon, SettingsBackupRestore as RevertIcon } from '@material-ui/icons';
+import { ConfirmDialog } from './ConfirmDialog';
 
 const getRootStyles = (isEditing: boolean) => css`
   width: 100%;
   padding: 12px;
-  border: 5px solid ${isEditing ? '#FFF59D' : 'white'};
+  border: 5px solid ${isEditing ? '#ffeb3b' : '#fff'};
 `;
 
 const statusStyles = css`
   font-weight: bold;
 `;
 
-const infoTextStyles = css`
-  margin: 0;
-`;
-
 type Props = {
   isEditing: boolean;
-  onStatusChanged: Function;
+  onUnlock: Function;
   onSave: Function;
-  onCancel: Function;
+  onRevert: Function;
 };
 
-export const EditModeToggle = ({ isEditing = false, onStatusChanged, onSave, onCancel }: Props) => {
+export const EditModeToggle = ({ isEditing = false, onUnlock, onSave, onRevert }: Props) => {
+  const [saveConfirmation, setSaveConfirmation] = useState(false);
+  const [revertConfirmation, setRevertConfirmation] = useState(false);
+
+  const onSaveChanges = () => {
+    setSaveConfirmation(false);
+    onSave();
+  };
+
+  const onRevertChanges = () => {
+    setRevertConfirmation(false);
+    onRevert();
+  };
+
   return (
     <Paper className={cx(getRootStyles(isEditing))}>
       {isEditing ? (
         <Grid container spacing={2} direction="row" justify="space-between" alignItems="center">
           <Grid item>
-            <p className={infoTextStyles}>
-              You're in <Chip className={statusStyles} label="EDITING" /> mode. Your changes will be published as soon as you click{' '}
-              <span className={statusStyles}>Save &amp; Lock</span>.
-            </p>
+            You're in <Chip className={statusStyles} label="Editing" /> mode. Make your changes and click <span className={statusStyles}>Save All</span> to
+            publish.
           </Grid>
           <Grid item>
             <Grid container spacing={2}>
               <Grid item>
-                <Button startIcon={<RevertIcon />} color="primary" variant="contained" onClick={() => onCancel()}>
-                  Discard
+                <Button startIcon={<RevertIcon />} color="primary" variant="contained" onClick={() => setRevertConfirmation(true)}>
+                  Revert
                 </Button>
+                {revertConfirmation && (
+                  <ConfirmDialog
+                    title="Revert changes?"
+                    message="Are you sure you want revert your changes?"
+                    buttons={
+                      <>
+                        <Button onClick={() => setRevertConfirmation(false)} variant="contained">
+                          Cancel
+                        </Button>
+                        <Button startIcon={<RevertIcon />} onClick={onRevertChanges} color="primary" variant="contained">
+                          Revert
+                        </Button>
+                      </>
+                    }
+                  />
+                )}
               </Grid>
               <Grid item>
-                <Button startIcon={<BackupIcon />} color="primary" variant="contained" onClick={() => onSave()}>
+                <Button startIcon={<BackupIcon />} color="primary" variant="contained" onClick={() => setSaveConfirmation(true)}>
                   Save All
                 </Button>
+                {saveConfirmation && (
+                  <ConfirmDialog
+                    title="Save changes?"
+                    message="Are you sure you want to save and publish your changes?"
+                    buttons={
+                      <>
+                        <Button onClick={() => setSaveConfirmation(false)} variant="contained">
+                          Cancel
+                        </Button>
+                        <Button startIcon={<BackupIcon />} onClick={onSaveChanges} color="primary" variant="contained">
+                          Save All
+                        </Button>
+                      </>
+                    }
+                  />
+                )}
               </Grid>
             </Grid>
           </Grid>
@@ -53,12 +93,11 @@ export const EditModeToggle = ({ isEditing = false, onStatusChanged, onSave, onC
       ) : (
         <Grid container spacing={2} direction="row" justify="space-between" alignItems="center">
           <Grid item>
-            <p className={infoTextStyles}>
-              You're in <Chip className={statusStyles} label="READ ONLY" /> mode. Click the <span className={statusStyles}>Unlock</span> button to make changes.
-            </p>
+            You're in <Chip className={statusStyles} label="Read Only" /> mode. Click the <span className={statusStyles}>Unlock Editing Mode</span> button to
+            make changes.
           </Grid>
           <Grid item>
-            <Button startIcon={<LockOpenIcon />} color="primary" variant="contained" onClick={() => onStatusChanged(!isEditing)}>
+            <Button startIcon={<LockOpenIcon />} color="primary" variant="contained" onClick={() => onUnlock()}>
               Unlock Editing Mode
             </Button>
           </Grid>
