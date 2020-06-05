@@ -29,6 +29,7 @@ const getChipStyles = (color: string) => css`
   padding: 2px 0;
   color: #fff;
   margin-left: 6px;
+  width: 80px;
 `;
 
 const getTestNameStyles = (isModified: boolean) => css`
