@@ -109,10 +109,28 @@ export const Tests = ({ slots }: Props) => {
   };
 
   const onSaveChanges = () => {
-    // TODO: API WORK
-    setSimpleTests(getDerivedSimpleTest(tests));
-    setOriginalTests(tests);
-    setIsEditing(false);
+    fetch(`http://localhost:3004/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(tests),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response;
+      })
+      .then((response) => response.json())
+      .then((json) => {
+        console.log('JSON:');
+        console.log(json);
+        setSimpleTests(getDerivedSimpleTest(tests));
+        setOriginalTests(tests);
+        setIsEditing(false);
+      })
+      .catch((error) => console.error(error));
   };
 
   const onRevertChanges = () => {
