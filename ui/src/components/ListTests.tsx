@@ -11,7 +11,7 @@ const rootStyles = css`
   flex-grow: 1;
 `;
 
-const getCardStyles = (isSelected: boolean, isLast: boolean) => css`
+const getCardStyles = (isSelected: boolean, isLast: boolean, isModified: boolean) => css`
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -19,7 +19,7 @@ const getCardStyles = (isSelected: boolean, isLast: boolean) => css`
   justify-content: center;
   padding: 12px;
   background-color: ${isSelected ? '#EEE' : '#FFF'};
-  border: 1px solid #bdbdbd;
+  border: ${isModified ? '2px' : '2px'} solid ${isModified ? '#ffeb3b' : '#bdbdbd'};
   margin-bottom: ${isLast ? 0 : '16px'};
 `;
 
@@ -29,6 +29,10 @@ const getChipStyles = (color: string) => css`
   padding: 2px 0;
   color: #fff;
   margin-left: 6px;
+`;
+
+const getTestNameStyles = (isModified: boolean) => css`
+  margin-bottom: ${isModified ? '0' : '6px'};
 `;
 
 const testLinkStyles = css`
@@ -49,14 +53,19 @@ const testHeaderStyles = css`
   margin-bottom: 6px;
 `;
 
+const modifiedStyles = css`
+  font-size: 12px;
+`;
+
 type Props = {
   tests: Test[];
+  originalTests: Test[];
+  simpleTests: SimpleTest[];
   slot: Slot;
   selectedTestId?: string;
-  simpleTests: SimpleTest[];
 };
 
-export const ListTests = ({ tests, slot, selectedTestId, simpleTests }: Props): JSX.Element => {
+export const ListTests = ({ tests, originalTests, simpleTests, slot, selectedTestId }: Props): JSX.Element => {
   if (tests.length === 0) {
     return <p>There are currently no tests configured in this slot.</p>;
   }
@@ -66,9 +75,12 @@ export const ListTests = ({ tests, slot, selectedTestId, simpleTests }: Props): 
         const isSelected = selectedTestId === test.id;
         const isLast = index === tests.length - 1;
 
+        const originalTest = originalTests.find((originalTest: SimpleTest) => originalTest.id === test.id);
         const simpleTest = simpleTests.find((simpleTest: SimpleTest) => simpleTest.id === test.id);
         const name = simpleTest?.name || 'Untitled Test';
         const description = simpleTest?.description;
+
+        const isModified = JSON.stringify(test) !== JSON.stringify(originalTest);
 
         let status;
         if (simpleTest) {
@@ -77,10 +89,18 @@ export const ListTests = ({ tests, slot, selectedTestId, simpleTests }: Props): 
 
         return (
           <Link key={test.id} to={`/slots/${slot.id}/tests/${test.id}`} className={testLinkStyles}>
-            <Card className={cx(getCardStyles(isSelected, isLast))} elevation={0}>
+            <Card className={cx(getCardStyles(isSelected, isLast, isModified))} elevation={0}>
               <div className={testHeaderStyles}>
-                <Typography component="p" variant="h6">
-                  {name}
+                <Typography component="p" variant="h6" className={cx(getTestNameStyles(isModified))}>
+                  {isModified ? (
+                    <>
+                      {name}
+                      <br />
+                      <div className={modifiedStyles}>(Modified)</div>
+                    </>
+                  ) : (
+                    name
+                  )}
                 </Typography>
                 {status && <Chip label={status.label} className={cx(getChipStyles(status.color))} />}
               </div>

@@ -161,7 +161,7 @@ export const Tests = ({ slots }: Props) => {
             <Button className={marginBottom} disabled={!isEditing} startIcon={<AddIcon />} color="primary" variant="contained" onClick={onCreateTest}>
               Create Test
             </Button>
-            {slot && tests && <ListTests tests={tests} simpleTests={simpleTests} slot={slot} selectedTestId={test?.id} />}
+            {slot && tests && <ListTests tests={tests} simpleTests={simpleTests} originalTests={originalTests} slot={slot} selectedTestId={test?.id} />}
           </Grid>
           <Grid item xs>
             {slot && tests && test && simpleTest && (
