@@ -5,6 +5,7 @@ import play.api.mvc.EssentialFilter
 import play.api._
 import play.filters.HttpFiltersComponents
 import play.filters.cors.CORSComponents;
+import play.api.http.{HttpErrorHandler, JsonHttpErrorHandler};
 import router.Routes
 
 class AutomatLoader extends ApplicationLoader {
@@ -27,4 +28,7 @@ class MyComponents(context: Context)
 
   override def httpFilters: Seq[EssentialFilter] =
     super.httpFilters :+ corsFilter
+
+  override lazy val httpErrorHandler =
+    new JsonHttpErrorHandler(environment)
 }
