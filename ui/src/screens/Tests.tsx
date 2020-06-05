@@ -53,16 +53,19 @@ export const Tests = ({ slots }: Props) => {
   const { slotId, testId } = useParams();
   const slot = slots.find((slot) => slot.id === slotId);
 
-  const { data, loading } = useApi<any>(`http://localhost:3004/tests`);
+  const tempSlotId = slot?.id || 'mpu';
+
+  const { data, loading } = useApi<any>(`http://localhost:9000/admin/slots/${tempSlotId}`);
   const [tests, setTests] = useState([] as Test[]);
   const [originalTests, setOriginalTests] = useState([] as Test[]);
   const [simpleTests, setSimpleTests] = useState([] as SimpleTest[]);
 
   useEffect(() => {
     if (data) {
-      setSimpleTests(getDerivedSimpleTest(data));
-      setOriginalTests(data);
-      setTests(data);
+      const tests = data.slot.tests;
+      setSimpleTests(getDerivedSimpleTest(tests));
+      setOriginalTests(tests);
+      setTests(tests);
     }
   }, [data]);
 
@@ -109,12 +112,14 @@ export const Tests = ({ slots }: Props) => {
   };
 
   const onSaveChanges = () => {
-    fetch(`http://localhost:3004/`, {
-      method: 'POST',
+    fetch(`http://localhost:9000/admin/slots/${tempSlotId}`, {
+      method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(tests),
+      body: JSON.stringify({
+        tests: [...tests],
+      }),
     })
       .then((response) => {
         if (!response.ok) {

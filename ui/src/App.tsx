@@ -10,7 +10,12 @@ import { Slots } from './screens/Slots';
 import { Tests } from './screens/Tests';
 
 export const App = () => {
-  const { data: slots, loading, error } = useApi<any>(`http://localhost:3004/slots`);
+  const { data, loading, error } = useApi<any>(`http://localhost:9000/admin/slots`);
+
+  let slots;
+  if (data) {
+    slots = data.slots;
+  }
 
   return (
     <Shell>
