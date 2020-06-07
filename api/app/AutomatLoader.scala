@@ -1,5 +1,4 @@
 import controllers._
-import automat.models.SlotStore
 import play.api.ApplicationLoader.Context
 import play.api.mvc.EssentialFilter
 import play.api._
@@ -7,6 +6,8 @@ import play.filters.HttpFiltersComponents
 import play.filters.cors.CORSComponents;
 import play.api.http.{HttpErrorHandler, JsonHttpErrorHandler};
 import router.Routes
+
+import persistence.Store
 
 class AutomatLoader extends ApplicationLoader {
   def load(context: Context): Application = {
@@ -19,12 +20,21 @@ class MyComponents(context: Context)
     with HttpFiltersComponents
     with CORSComponents {
 
-  val store = SlotStore(applicationLifecycle)
+  val store = Store(applicationLifecycle)
   val slotsController = new SlotsController(controllerComponents, store)
-  val adminController = new SlotsAdminController(controllerComponents, store)
+  val slotsAdminController =
+    new SlotsAdminController(controllerComponents, store)
+  val variantsAdminController =
+    new VariantsAdminController(controllerComponents, store)
 
   lazy val router =
-    new Routes(httpErrorHandler, adminController, slotsController, "")
+    new Routes(
+      httpErrorHandler,
+      slotsAdminController,
+      variantsAdminController,
+      slotsController,
+      ""
+    )
 
   override def httpFilters: Seq[EssentialFilter] =
     super.httpFilters :+ corsFilter

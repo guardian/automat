@@ -1,4 +1,4 @@
-package automat.models
+package models
 
 import play.api.libs.json._
 
