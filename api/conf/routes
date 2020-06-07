@@ -2,6 +2,7 @@
 GET     /admin/slots                       controllers.SlotsAdminController.index
 GET     /admin/slots/:slotId               controllers.SlotsAdminController.show(slotId)
 PATCH   /admin/slots/:slotId               controllers.SlotsAdminController.update(slotId)
+GET     /admin/variants                    controllers.VariantsAdminController.index
 
 # Public
 POST    /slots                             controllers.SlotsController.create
