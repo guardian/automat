@@ -47,43 +47,45 @@ export const Tests = ({ slots }: Props) => {
   const slot = slots.find((slot) => slot.id === slotId);
 
   const { data, loading } = useApi<any>(`http://localhost:3004/tests`);
-  const [tests, setTests] = useState([] as Test[]);
-  const [originalTests, setOriginalTests] = useState([] as Test[]);
+  const [workingTests, setWorkingTests] = useState([] as Test[]);
+  const [savedTests, setSavedTests] = useState([] as Test[]);
   const [testName, setTestName] = useState('');
-  const [test, setTest] = useState(null as Test | null);
+  const [workingTest, setWorkingTest] = useState(undefined as Test | undefined);
 
   // Handle change checks
   const [hasChanges, setHasChanges] = useState(false);
   useEffect(() => {
-    const hasChanges = JSON.stringify(tests) !== JSON.stringify(originalTests);
+    const hasChanges = JSON.stringify(workingTests) !== JSON.stringify(savedTests);
     setHasChanges(hasChanges);
-  }, [tests, originalTests]);
+  }, [workingTests, savedTests]);
 
   useEffect(() => {
     if (data) {
-      setOriginalTests(data);
-      setTests(data);
+      setSavedTests(data);
+      setWorkingTests(data);
     }
   }, [data]);
 
   useEffect(() => {
-    const test = tests.find((test: Test) => testId === test.id);
-    if (test) {
-      setTest(test);
+    const workingTest = workingTests.find((test: Test) => testId === test.id);
+    if (workingTest) {
+      setWorkingTest(workingTest);
     }
-  }, [testId, tests]);
+  }, [testId, workingTests]);
 
   useEffect(() => {
-    const originalTest = originalTests.find((test: Test) => testId === test.id);
-    if (originalTest) {
-      setTestName(originalTest.name);
+    const savedTest = savedTests.find((test: Test) => testId === test.id);
+    if (savedTest) {
+      setTestName(savedTest.name);
+    } else {
+      setTestName('Untitled Test'); // New test
     }
-  }, [originalTests]);
+  }, [testId, savedTests, workingTests]);
 
   const onCreateTest = () => {
     const newTest = createTest({});
-    const updatedTestList = [newTest, ...tests];
-    setTests(updatedTestList);
+    const updatedTestList = [newTest, ...workingTests];
+    setWorkingTests(updatedTestList);
 
     // Redirect to first test in list
     const nextTest = updatedTestList[0];
@@ -93,14 +95,14 @@ export const Tests = ({ slots }: Props) => {
   };
 
   const onUpdateTest = (updatedTest: Test) => {
-    const updatedTestList = tests.map((test: Test) => (updatedTest.id === test.id ? updatedTest : test));
-    setTests([...updatedTestList]);
+    const updatedTestList = workingTests.map((test: Test) => (updatedTest.id === test.id ? updatedTest : test));
+    setWorkingTests([...updatedTestList]);
   };
 
   const onDeleteTest = (deletedTestId: string) => {
-    const testIndex = tests.findIndex((test: Test) => deletedTestId === test.id);
-    const updatedTestList = tests.filter((test: Test, index: number) => index !== testIndex);
-    setTests([...updatedTestList]);
+    const testIndex = workingTests.findIndex((test: Test) => deletedTestId === test.id);
+    const updatedTestList = workingTests.filter((test: Test, index: number) => index !== testIndex);
+    setWorkingTests([...updatedTestList]);
 
     // Redirect to next test in list
     const nextTest = updatedTestList[testIndex];
@@ -112,12 +114,12 @@ export const Tests = ({ slots }: Props) => {
 
   const onSaveChanges = () => {
     // TODO: API WORK
-    setOriginalTests(tests);
+    setSavedTests(workingTests);
     setIsEditing(false);
   };
 
   const onRevertChanges = () => {
-    setTests(originalTests);
+    setWorkingTests(savedTests);
     setIsEditing(false);
   };
 
@@ -142,11 +144,11 @@ export const Tests = ({ slots }: Props) => {
             <Button className={marginBottom} disabled={!isEditing} startIcon={<AddIcon />} color="primary" variant="contained" onClick={onCreateTest}>
               Create Test
             </Button>
-            {slot && tests && <ListTests tests={tests} originalTests={originalTests} slot={slot} selectedTestId={test?.id} />}
+            {slot && workingTests && <ListTests workingTests={workingTests} savedTests={savedTests} slot={slot} selectedTestId={testId} />}
           </Grid>
           <Grid item xs>
-            {slot && tests && test && (
-              <TestEditor test={test} testName={testName} onTestUpdated={onUpdateTest} onTestDeleted={onDeleteTest} isEditing={isEditing} />
+            {slot && workingTest && (
+              <TestEditor workingTest={workingTest} testName={testName} onTestUpdated={onUpdateTest} onTestDeleted={onDeleteTest} isEditing={isEditing} />
             )}
           </Grid>
         </Grid>

@@ -59,35 +59,35 @@ const modifiedStyles = css`
 `;
 
 type Props = {
-  tests: Test[];
-  originalTests: Test[];
+  workingTests: Test[];
+  savedTests: Test[];
   slot: Slot;
   selectedTestId?: string;
 };
 
-export const ListTests = ({ tests, originalTests, slot, selectedTestId }: Props): JSX.Element => {
-  if (tests.length === 0) {
+export const ListTests = ({ workingTests, savedTests, slot, selectedTestId }: Props): JSX.Element => {
+  if (workingTests.length === 0) {
     return <p>There are currently no tests configured in this slot.</p>;
   }
   return (
     <div className={rootStyles}>
-      {tests.map((test: Test, index: number) => {
-        const isSelected = selectedTestId === test.id;
-        const isLast = index === tests.length - 1;
+      {workingTests.map((workingTest: Test, index: number) => {
+        const isSelected = selectedTestId === workingTest.id;
+        const isLast = index === workingTests.length - 1;
 
-        const originalTest = originalTests.find((originalTest: Test) => originalTest.id === test.id);
-        const name = originalTest?.name || 'Untitled Test';
-        const description = originalTest?.description;
+        const savedTest = savedTests.find((savedTest: Test) => savedTest.id === workingTest.id);
+        const name = savedTest?.name || 'Untitled Test';
+        const description = savedTest?.description;
 
-        const isModified = JSON.stringify(test) !== JSON.stringify(originalTest);
+        const isModified = JSON.stringify(workingTest) !== JSON.stringify(savedTest);
 
         let status;
-        if (originalTest) {
-          status = getTestStatus(originalTest);
+        if (savedTest) {
+          status = getTestStatus(savedTest);
         }
 
         return (
-          <Link key={test.id} to={`/slots/${slot.id}/tests/${test.id}`} className={testLinkStyles}>
+          <Link key={workingTest.id} to={`/slots/${slot.id}/tests/${workingTest.id}`} className={testLinkStyles}>
             <Card className={cx(getCardStyles(isSelected, isLast, isModified))} elevation={0}>
               <div className={testHeaderStyles}>
                 <Typography component="p" variant="h6" className={cx(getTestNameStyles(isModified))}>

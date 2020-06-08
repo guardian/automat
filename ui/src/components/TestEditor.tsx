@@ -47,14 +47,14 @@ const footerTextStyles = css`
 `;
 
 type Props = {
-  test: Test;
+  workingTest: Test;
   testName: string;
   onTestUpdated: Function;
   onTestDeleted: Function;
   isEditing: boolean;
 };
 
-export const TestEditor = ({ test, testName, onTestUpdated, onTestDeleted, isEditing }: Props) => {
+export const TestEditor = ({ workingTest, testName, onTestUpdated, onTestDeleted, isEditing }: Props) => {
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
 
   const [activeTabIndex, setActiveTabIndex] = useState(0);
@@ -62,13 +62,13 @@ export const TestEditor = ({ test, testName, onTestUpdated, onTestDeleted, isEdi
   // Resets active tab when switching tests
   useEffect(() => {
     setActiveTabIndex(0);
-  }, [test]);
+  }, [workingTest]);
 
   const onTabClick = (event: any, newTabIndex: any) => setActiveTabIndex(newTabIndex);
 
   // Make dates nice for presentation
-  const formattedCreatedDate = new Date(test.created).toLocaleString().slice(0, 10);
-  const formattedUpdatedDate = new Date(test.updated).toLocaleString().replace(',', ' - ');
+  const formattedCreatedDate = new Date(workingTest.created).toLocaleString().slice(0, 10);
+  const formattedUpdatedDate = new Date(workingTest.updated).toLocaleString().replace(',', ' - ');
 
   return (
     <Card className={cx(cardStyles)}>
@@ -83,10 +83,10 @@ export const TestEditor = ({ test, testName, onTestUpdated, onTestDeleted, isEdi
             <div className={switchLabelStyles}>
               Live on <b>theguardian.com</b>{' '}
               <Switch
-                checked={test.isEnabled}
+                checked={workingTest.isEnabled}
                 onChange={(e) => {
                   const isEnabled = e.currentTarget.checked;
-                  onTestUpdated({ ...test, isEnabled });
+                  onTestUpdated({ ...workingTest, isEnabled });
                 }}
                 color="primary"
                 disabled={!isEditing}
@@ -108,9 +108,9 @@ export const TestEditor = ({ test, testName, onTestUpdated, onTestDeleted, isEdi
             <div className={formFieldStyles}>
               <TextField
                 className={inputStyles}
-                value={test.name}
+                value={workingTest.name}
                 disabled={!isEditing}
-                onChange={(e) => onTestUpdated({ ...test, name: e.currentTarget.value })}
+                onChange={(e) => onTestUpdated({ ...workingTest, name: e.currentTarget.value })}
                 label="Test Name"
                 variant="outlined"
               />
@@ -118,9 +118,9 @@ export const TestEditor = ({ test, testName, onTestUpdated, onTestDeleted, isEdi
             <div className={formFieldStyles}>
               <TextField
                 className={inputStyles}
-                value={test.description}
+                value={workingTest.description}
                 disabled={!isEditing}
-                onChange={(e) => onTestUpdated({ ...test, description: e.currentTarget.value })}
+                onChange={(e) => onTestUpdated({ ...workingTest, description: e.currentTarget.value })}
                 label="Description"
                 variant="outlined"
                 multiline
@@ -133,9 +133,10 @@ export const TestEditor = ({ test, testName, onTestUpdated, onTestDeleted, isEdi
         <Grid container spacing={2} justify="space-between" alignItems="center">
           <Grid item>
             <p className={cx(footerTextStyles)}>
-              {test.author && test.author.firstName && test.author.lastName ? (
+              {workingTest.author && workingTest.author.firstName && workingTest.author.lastName ? (
                 <>
-                  Test created on {formattedCreatedDate} by {`${test.author.firstName} ${test.author.lastName}`} <br /> Last updated: {formattedUpdatedDate}
+                  Test created on {formattedCreatedDate} by {`${workingTest.author.firstName} ${workingTest.author.lastName}`} <br /> Last updated:{' '}
+                  {formattedUpdatedDate}
                 </>
               ) : (
                 <>
@@ -151,7 +152,7 @@ export const TestEditor = ({ test, testName, onTestUpdated, onTestDeleted, isEdi
             </Button>
             {deleteConfirmation && (
               <ConfirmDialog
-                title={`Delete '${test.name}'?`}
+                title={`Delete '${workingTest.name}'?`}
                 message="Are you sure you want to delete this test?"
                 buttons={
                   <>
@@ -161,7 +162,7 @@ export const TestEditor = ({ test, testName, onTestUpdated, onTestDeleted, isEdi
                     <Button
                       startIcon={<DeleteIcon />}
                       onClick={() => {
-                        onTestDeleted(test.id);
+                        onTestDeleted(workingTest.id);
                         setDeleteConfirmation(false);
                       }}
                       variant="contained"
