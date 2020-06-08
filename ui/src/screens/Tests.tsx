@@ -65,23 +65,6 @@ export const Tests = ({ slots }: Props) => {
     setHasChanges(hasChanges);
   }, [tests, originalTests]);
 
-  // Block navigation outside of the slot if unsaved changes
-  console.log('=== LOCK');
-  const unblockNavAway = history.block((location) => {
-    const { pathname } = location;
-    if (isEditing && hasChanges && slot && !pathname.includes(`/slots/${slot.id}`)) {
-      return 'You have unsaved changes. Are you sure you want to navigate away from this page?';
-    }
-  });
-
-  // Unblock navigation on component unmount
-  useEffect(() => {
-    return () => {
-      console.log('=== UNLOCK');
-      unblockNavAway();
-    };
-  });
-
   useEffect(() => {
     if (data) {
       setSimpleTests(getDerivedSimpleTest(data));
