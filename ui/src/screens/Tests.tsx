@@ -49,6 +49,8 @@ export const Tests = ({ slots }: Props) => {
   const { data, loading } = useApi<any>(`http://localhost:3004/tests`);
   const [tests, setTests] = useState([] as Test[]);
   const [originalTests, setOriginalTests] = useState([] as Test[]);
+  const [testName, setTestName] = useState('');
+  const [test, setTest] = useState(null as Test | null);
 
   // Handle change checks
   const [hasChanges, setHasChanges] = useState(false);
@@ -64,10 +66,19 @@ export const Tests = ({ slots }: Props) => {
     }
   }, [data]);
 
-  let test: Test | undefined;
-  if (tests) {
-    test = tests.find((test: Test) => test.id === testId);
-  }
+  useEffect(() => {
+    const test = tests.find((test: Test) => testId === test.id);
+    if (test) {
+      setTest(test);
+    }
+  }, [testId, tests]);
+
+  useEffect(() => {
+    const originalTest = originalTests.find((test: Test) => testId === test.id);
+    if (originalTest) {
+      setTestName(originalTest.name);
+    }
+  }, [originalTests]);
 
   const onCreateTest = () => {
     const newTest = createTest({});
@@ -134,7 +145,9 @@ export const Tests = ({ slots }: Props) => {
             {slot && tests && <ListTests tests={tests} originalTests={originalTests} slot={slot} selectedTestId={test?.id} />}
           </Grid>
           <Grid item xs>
-            {slot && tests && test && <TestEditor test={test} onTestUpdated={onUpdateTest} onTestDeleted={onDeleteTest} isEditing={isEditing} />}
+            {slot && tests && test && (
+              <TestEditor test={test} testName={testName} onTestUpdated={onUpdateTest} onTestDeleted={onDeleteTest} isEditing={isEditing} />
+            )}
           </Grid>
         </Grid>
       </Card>

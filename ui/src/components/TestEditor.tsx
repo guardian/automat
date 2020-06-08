@@ -48,16 +48,16 @@ const footerTextStyles = css`
 
 type Props = {
   test: Test;
+  testName: string;
   onTestUpdated: Function;
   onTestDeleted: Function;
   isEditing: boolean;
 };
 
-export const TestEditor = ({ test, onTestUpdated, onTestDeleted, isEditing }: Props) => {
+export const TestEditor = ({ test, testName, onTestUpdated, onTestDeleted, isEditing }: Props) => {
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
 
   const [activeTabIndex, setActiveTabIndex] = useState(0);
-  const [testName, setTestName] = useState('');
 
   // Resets active tab when switching tests
   useEffect(() => {
@@ -76,7 +76,7 @@ export const TestEditor = ({ test, onTestUpdated, onTestDeleted, isEditing }: Pr
         <Grid container spacing={2} justify="space-between">
           <Grid item xs={8}>
             <Typography component="h4" variant="h6" align="left" className={cx(headingStyles)}>
-              TESTNAME
+              {testName}
             </Typography>
           </Grid>
           <Grid item>
