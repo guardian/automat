@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { css, cx } from 'emotion';
-import { Card, Grid, Typography, Button } from '@material-ui/core';
+import { Card, Grid, Button } from '@material-ui/core';
 import { Add as AddIcon, ArrowBack as ArrowBackIcon } from '@material-ui/icons';
+import { Heading } from '../components/Heading';
 import { ListTests } from '../components/ListTests';
 import { useApi } from '../lib/useApi';
 import { Spinner } from '../components/Spinner';
@@ -11,14 +12,10 @@ import { Test, Slot } from '../types';
 import { TestEditor } from '../components/TestEditor';
 import { EditModeToggle } from '../components/EditModeToggle';
 import { createTest } from '../lib/testFactory';
+import { goToTestByIndex } from '../utils/redirects';
 
 const rootStyles = css`
   width: 100%;
-`;
-
-const headingStyles = css`
-  font-weight: bold;
-  margin: 20px auto;
 `;
 
 const marginTop = css`
@@ -41,19 +38,17 @@ type Props = {
 
 export const Tests = ({ slots }: Props) => {
   const history = useHistory();
-  const [isEditing, setIsEditing] = useState(false);
-
   const { slotId, testId } = useParams();
-  const slot = slots.find((slot) => slot.id === slotId);
-
   const { data, loading } = useApi<any>(`http://localhost:3004/tests`);
+
+  const [isEditing, setIsEditing] = useState(false);
   const [workingTests, setWorkingTests] = useState([] as Test[]);
   const [savedTests, setSavedTests] = useState([] as Test[]);
-  const [testName, setTestName] = useState('');
   const [workingTest, setWorkingTest] = useState(undefined as Test | undefined);
-
-  // Handle change checks
+  const [testName, setTestName] = useState('');
+  const [slotName, setSlotName] = useState('');
   const [hasChanges, setHasChanges] = useState(false);
+
   useEffect(() => {
     const hasChanges = JSON.stringify(workingTests) !== JSON.stringify(savedTests);
     setHasChanges(hasChanges);
@@ -67,6 +62,13 @@ export const Tests = ({ slots }: Props) => {
   }, [data]);
 
   useEffect(() => {
+    const slot = slots.find((slot) => slotId === slot.id);
+    if (slot) {
+      setSlotName(slot.name);
+    }
+  }, [slotId]);
+
+  useEffect(() => {
     const workingTest = workingTests.find((test: Test) => testId === test.id);
     if (workingTest) {
       setWorkingTest(workingTest);
@@ -75,45 +77,31 @@ export const Tests = ({ slots }: Props) => {
 
   useEffect(() => {
     const savedTest = savedTests.find((test: Test) => testId === test.id);
-    if (savedTest) {
-      setTestName(savedTest.name);
-    } else {
-      setTestName('Untitled Test'); // New test
-    }
+    const testName = savedTest?.name || 'Untitled Test';
+    setTestName(testName);
   }, [testId, savedTests, workingTests]);
 
   const onCreateTest = () => {
+    const testIndex = 0;
     const newTest = createTest({});
-    const updatedTestList = [newTest, ...workingTests];
-    setWorkingTests(updatedTestList);
-
-    // Redirect to first test in list
-    const nextTest = updatedTestList[0];
-    if (slot) {
-      history.push(`/slots/${slot.id}/tests/${nextTest.id}`);
-    }
+    const updatedTests = [newTest, ...workingTests];
+    setWorkingTests(updatedTests);
+    goToTestByIndex(updatedTests, testIndex, slotId, history);
   };
 
   const onUpdateTest = (updatedTest: Test) => {
-    const updatedTestList = workingTests.map((test: Test) => (updatedTest.id === test.id ? updatedTest : test));
-    setWorkingTests([...updatedTestList]);
+    const updatedTests = workingTests.map((test: Test) => (updatedTest.id === test.id ? updatedTest : test));
+    setWorkingTests([...updatedTests]);
   };
 
   const onDeleteTest = (deletedTestId: string) => {
     const testIndex = workingTests.findIndex((test: Test) => deletedTestId === test.id);
-    const updatedTestList = workingTests.filter((test: Test, index: number) => index !== testIndex);
-    setWorkingTests([...updatedTestList]);
-
-    // Redirect to next test in list
-    const nextTest = updatedTestList[testIndex];
-    if (slot) {
-      const goTo = nextTest ? `/slots/${slot.id}/tests/${nextTest.id}` : `/slots/${slot.id}`;
-      history.push(goTo);
-    }
+    const updatedTests = workingTests.filter((test: Test, index: number) => index !== testIndex);
+    setWorkingTests([...updatedTests]);
+    goToTestByIndex(updatedTests, testIndex, slotId, history);
   };
 
   const onSaveChanges = () => {
-    // TODO: API WORK
     setSavedTests(workingTests);
     setIsEditing(false);
   };
@@ -125,12 +113,14 @@ export const Tests = ({ slots }: Props) => {
 
   return (
     <div className={rootStyles}>
-      <Helmet>
-        <title>Automat UI | {slot?.name} Slot</title>
-      </Helmet>
-      <Typography component="h1" variant="h4" color="inherit" className={cx(headingStyles)}>
-        {slot?.name} Slot
-      </Typography>
+      {slotName && (
+        <>
+          <Helmet>
+            <title>Automat UI | {slotName} Slot</title>
+          </Helmet>
+          <Heading>{`${slotName} Slot`}</Heading>
+        </>
+      )}
 
       <div className={marginBottom}>
         <EditModeToggle isEditing={isEditing} hasChanges={hasChanges} onUnlock={() => setIsEditing(true)} onSave={onSaveChanges} onRevert={onRevertChanges} />
@@ -144,10 +134,10 @@ export const Tests = ({ slots }: Props) => {
             <Button className={marginBottom} disabled={!isEditing} startIcon={<AddIcon />} color="primary" variant="contained" onClick={onCreateTest}>
               Create Test
             </Button>
-            {slot && workingTests && <ListTests workingTests={workingTests} savedTests={savedTests} slot={slot} selectedTestId={testId} />}
+            {slotName && workingTests && <ListTests workingTests={workingTests} savedTests={savedTests} slotId={slotId} selectedTestId={testId} />}
           </Grid>
           <Grid item xs>
-            {slot && workingTest && (
+            {slotName && workingTest && (
               <TestEditor workingTest={workingTest} testName={testName} onTestUpdated={onUpdateTest} onTestDeleted={onDeleteTest} isEditing={isEditing} />
             )}
           </Grid>

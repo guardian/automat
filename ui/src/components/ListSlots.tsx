@@ -1,7 +1,8 @@
 import React from 'react';
 import { css, cx } from 'emotion';
 import { Link } from 'react-router-dom';
-import { Paper, Grid, Typography } from '@material-ui/core';
+import { Paper, Grid } from '@material-ui/core';
+import { Heading } from '../components/Heading';
 import { Slot } from '../types';
 
 const paperStyles = css`
@@ -17,11 +18,6 @@ const linkStyles = css`
   text-decoration: none;
 `;
 
-const slotNameStyles = css`
-  font-weight: bold;
-  margin-bottom: 12px;
-`;
-
 type Props = {
   slots: Slot[];
 };
@@ -32,9 +28,7 @@ export const ListSlots = ({ slots }: Props): JSX.Element => (
       <Grid key={slot.id} item>
         <Link to={`/slots/${slot.id}`} className={cx(linkStyles)}>
           <Paper className={cx(paperStyles)}>
-            <Typography component="h6" variant="h6" className={cx(slotNameStyles)}>
-              {slot.name}
-            </Typography>
+            <Heading level={2}>{slot.name}</Heading>
           </Paper>
         </Link>
       </Grid>

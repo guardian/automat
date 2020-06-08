@@ -2,7 +2,7 @@ import React from 'react';
 import { css, cx } from 'emotion';
 import { Link } from 'react-router-dom';
 import { Card, Typography, Chip } from '@material-ui/core';
-import { Slot, Test } from '../types';
+import { Test } from '../types';
 import { getTestStatus } from '../lib/testStatusHelpers';
 
 const rootStyles = css`
@@ -59,13 +59,13 @@ const modifiedStyles = css`
 `;
 
 type Props = {
+  slotId: string;
   workingTests: Test[];
   savedTests: Test[];
-  slot: Slot;
   selectedTestId?: string;
 };
 
-export const ListTests = ({ workingTests, savedTests, slot, selectedTestId }: Props): JSX.Element => {
+export const ListTests = ({ workingTests, savedTests, slotId, selectedTestId }: Props): JSX.Element => {
   if (workingTests.length === 0) {
     return <p>There are currently no tests configured in this slot.</p>;
   }
@@ -87,7 +87,7 @@ export const ListTests = ({ workingTests, savedTests, slot, selectedTestId }: Pr
         }
 
         return (
-          <Link key={workingTest.id} to={`/slots/${slot.id}/tests/${workingTest.id}`} className={testLinkStyles}>
+          <Link key={workingTest.id} to={`/slots/${slotId}/tests/${workingTest.id}`} className={testLinkStyles}>
             <Card className={cx(getCardStyles(isSelected, isLast, isModified))} elevation={0}>
               <div className={testHeaderStyles}>
                 <Typography component="p" variant="h6" className={cx(getTestNameStyles(isModified))}>

@@ -3,13 +3,10 @@ import { css, cx } from 'emotion';
 import { Test } from '../types';
 import { Button, Typography, Paper, TextField, Tabs, Tab, Grid, Card, Switch } from '@material-ui/core';
 import { Delete as DeleteIcon } from '@material-ui/icons';
+import { Heading } from './Heading';
 import { ConfirmDialog } from './ConfirmDialog';
 
 const rootStyles = css`
-  width: 100%;
-`;
-
-const cardStyles = css`
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -18,9 +15,12 @@ const cardStyles = css`
   padding: 12px;
 `;
 
-const headingStyles = css`
-  font-weight: bold;
-  margin: 0 auto 24px;
+const wrapperStyles = css`
+  width: 100%;
+`;
+
+const headerStyles = css`
+  margin-bottom: 8px;
 `;
 
 const switchLabelStyles = css`
@@ -56,7 +56,6 @@ type Props = {
 
 export const TestEditor = ({ workingTest, testName, onTestUpdated, onTestDeleted, isEditing }: Props) => {
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
-
   const [activeTabIndex, setActiveTabIndex] = useState(0);
 
   // Resets active tab when switching tests
@@ -71,13 +70,13 @@ export const TestEditor = ({ workingTest, testName, onTestUpdated, onTestDeleted
   const formattedUpdatedDate = new Date(workingTest.updated).toLocaleString().replace(',', ' - ');
 
   return (
-    <Card className={cx(cardStyles)}>
-      <div className={rootStyles}>
-        <Grid container spacing={2} justify="space-between">
+    <Card className={cx(rootStyles)}>
+      <div className={wrapperStyles}>
+        <Grid container spacing={2} justify="space-between" className={cx(headerStyles)}>
           <Grid item xs={8}>
-            <Typography component="h4" variant="h6" align="left" className={cx(headingStyles)}>
+            <Heading level={2} supressMargin>
               {testName}
-            </Typography>
+            </Heading>
           </Grid>
           <Grid item>
             <div className={switchLabelStyles}>
