@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { css, cx } from 'emotion';
-import { Test, SimpleTest } from '../types';
+import { Test } from '../types';
 import { Button, Typography, Paper, TextField, Tabs, Tab, Grid, Card, Switch } from '@material-ui/core';
 import { Delete as DeleteIcon } from '@material-ui/icons';
 import { ConfirmDialog } from './ConfirmDialog';
@@ -48,20 +48,21 @@ const footerTextStyles = css`
 
 type Props = {
   test: Test;
-  simpleTest: SimpleTest;
   onTestUpdated: Function;
   onTestDeleted: Function;
   isEditing: boolean;
 };
 
-export const TestEditor = ({ test, simpleTest, onTestUpdated, onTestDeleted, isEditing }: Props) => {
+export const TestEditor = ({ test, onTestUpdated, onTestDeleted, isEditing }: Props) => {
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
 
   const [activeTabIndex, setActiveTabIndex] = useState(0);
+  const [testName, setTestName] = useState('');
 
   // Resets active tab when switching tests
-  const testId = test.id;
-  useEffect(() => setActiveTabIndex(0), [testId]);
+  useEffect(() => {
+    setActiveTabIndex(0);
+  }, [test]);
 
   const onTabClick = (event: any, newTabIndex: any) => setActiveTabIndex(newTabIndex);
 
@@ -75,7 +76,7 @@ export const TestEditor = ({ test, simpleTest, onTestUpdated, onTestDeleted, isE
         <Grid container spacing={2} justify="space-between">
           <Grid item xs={8}>
             <Typography component="h4" variant="h6" align="left" className={cx(headingStyles)}>
-              {simpleTest.name}
+              TESTNAME
             </Typography>
           </Grid>
           <Grid item>

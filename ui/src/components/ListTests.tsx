@@ -2,7 +2,7 @@ import React from 'react';
 import { css, cx } from 'emotion';
 import { Link } from 'react-router-dom';
 import { Card, Typography, Chip } from '@material-ui/core';
-import { Slot, Test, SimpleTest } from '../types';
+import { Slot, Test } from '../types';
 import { getTestStatus } from '../lib/testStatusHelpers';
 
 const rootStyles = css`
@@ -61,12 +61,11 @@ const modifiedStyles = css`
 type Props = {
   tests: Test[];
   originalTests: Test[];
-  simpleTests: SimpleTest[];
   slot: Slot;
   selectedTestId?: string;
 };
 
-export const ListTests = ({ tests, originalTests, simpleTests, slot, selectedTestId }: Props): JSX.Element => {
+export const ListTests = ({ tests, originalTests, slot, selectedTestId }: Props): JSX.Element => {
   if (tests.length === 0) {
     return <p>There are currently no tests configured in this slot.</p>;
   }
@@ -76,16 +75,15 @@ export const ListTests = ({ tests, originalTests, simpleTests, slot, selectedTes
         const isSelected = selectedTestId === test.id;
         const isLast = index === tests.length - 1;
 
-        const originalTest = originalTests.find((originalTest: SimpleTest) => originalTest.id === test.id);
-        const simpleTest = simpleTests.find((simpleTest: SimpleTest) => simpleTest.id === test.id);
-        const name = simpleTest?.name || 'Untitled Test';
-        const description = simpleTest?.description;
+        const originalTest = originalTests.find((originalTest: Test) => originalTest.id === test.id);
+        const name = originalTest?.name || 'Untitled Test';
+        const description = originalTest?.description;
 
         const isModified = JSON.stringify(test) !== JSON.stringify(originalTest);
 
         let status;
-        if (simpleTest) {
-          status = getTestStatus(simpleTest);
+        if (originalTest) {
+          status = getTestStatus(originalTest);
         }
 
         return (
