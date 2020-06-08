@@ -1,11 +1,11 @@
 import React from 'react';
 import { css, cx } from 'emotion';
 import { Link } from 'react-router-dom';
-import { Paper, Grid } from '@material-ui/core';
+import { Grid, Card } from '@material-ui/core';
 import { Heading } from '../components/Heading';
 import { Slot } from '../types';
 
-const paperStyles = css`
+const cardStyles = css`
   height: 160px;
   width: 160px;
   display: flex;
@@ -22,14 +22,14 @@ type Props = {
   slots: Slot[];
 };
 
-export const ListSlots = ({ slots }: Props): JSX.Element => (
+export const SlotsList = ({ slots }: Props): JSX.Element => (
   <Grid container spacing={2}>
     {slots.map((slot) => (
       <Grid key={slot.id} item>
         <Link to={`/slots/${slot.id}`} className={cx(linkStyles)}>
-          <Paper className={cx(paperStyles)}>
+          <Card className={cx(cardStyles)}>
             <Heading level={2}>{slot.name}</Heading>
-          </Paper>
+          </Card>
         </Link>
       </Grid>
     ))}

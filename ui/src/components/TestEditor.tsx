@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { css, cx } from 'emotion';
 import { Test } from '../types';
-import { Button, Typography, Paper, TextField, Tabs, Tab, Grid, Card, Switch } from '@material-ui/core';
+import { Button, Paper, TextField, Tabs, Tab, Grid, Card, Switch } from '@material-ui/core';
 import { Delete as DeleteIcon } from '@material-ui/icons';
 import { Heading } from './Heading';
-import { ConfirmDialog } from './ConfirmDialog';
+import { Confirmation } from './Confirmation';
 
 const rootStyles = css`
   width: 100%;
@@ -23,7 +23,7 @@ const headerStyles = css`
   margin-bottom: 8px;
 `;
 
-const switchLabelStyles = css`
+const switchStyles = css`
   margin: 0;
 `;
 
@@ -79,7 +79,7 @@ export const TestEditor = ({ workingTest, testName, onTestUpdated, onTestDeleted
             </Heading>
           </Grid>
           <Grid item>
-            <div className={switchLabelStyles}>
+            <div className={switchStyles}>
               Live on <b>theguardian.com</b>{' '}
               <Switch
                 checked={workingTest.isEnabled}
@@ -150,7 +150,7 @@ export const TestEditor = ({ workingTest, testName, onTestUpdated, onTestDeleted
               Delete Test
             </Button>
             {deleteConfirmation && (
-              <ConfirmDialog
+              <Confirmation
                 title={`Delete '${workingTest.name}'?`}
                 message="Are you sure you want to delete this test?"
                 buttons={

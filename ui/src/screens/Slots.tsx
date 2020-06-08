@@ -2,7 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 import { css } from 'emotion';
 import { Heading } from '../components/Heading';
-import { ListSlots } from '../components/ListSlots';
+import { SlotsList } from '../components/SlotsList';
 import { Slot } from '../types';
 
 const rootStyles = css`
@@ -20,7 +20,7 @@ export const Slots = ({ slots }: Props) => {
         <title>Automat UI | Slots</title>
       </Helmet>
       <Heading>Slots</Heading>
-      {slots && <ListSlots slots={slots} />}
+      {slots && <SlotsList slots={slots} />}
     </div>
   );
 };

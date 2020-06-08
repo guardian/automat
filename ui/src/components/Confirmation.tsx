@@ -12,7 +12,7 @@ const dialogStyles = css`
   width: 500px;
 `;
 
-export const ConfirmDialog = ({ title, message, buttons }: Props) => (
+export const Confirmation = ({ title, message, buttons }: Props) => (
   <Dialog open={true}>
     {title && <DialogTitle>{title}</DialogTitle>}
     <DialogContent className={cx(dialogStyles)}>

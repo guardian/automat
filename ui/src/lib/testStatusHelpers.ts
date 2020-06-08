@@ -29,10 +29,10 @@ const TEST_STATUS: TestStatus = {
   },
 };
 
-export const getTestStatus = (test: Test) => {
+export const getTestStatus = (isEnabled: boolean) => {
   let statusCode: StatusCode = 'RUNNING';
 
-  if (!test.isEnabled) {
+  if (!isEnabled) {
     statusCode = 'INACTIVE';
   }
 

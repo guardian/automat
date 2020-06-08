@@ -4,7 +4,7 @@ import { Typography } from '@material-ui/core';
 
 const getRootStyles = (supressMargin: boolean) => css`
   font-weight: bold;
-  margin: ${supressMargin ? '0' : '20px'} auto;
+  margin: ${supressMargin ? '0' : '20px'} 0;
 `;
 
 type HeadingVariant = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';

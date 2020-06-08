@@ -3,7 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 import { Grid } from '@material-ui/core';
 import { useApi } from './lib/useApi';
 import { Spinner } from './components/Spinner';
-import { FeedbackMessage } from './components/FeedbackMessage';
+import { Notification } from './components/Notification';
 
 import { Shell } from './Shell';
 import { Slots } from './screens/Slots';
@@ -29,7 +29,7 @@ export const App = () => {
             </Route>
           </Switch>
         )}
-        {error && <FeedbackMessage severity="error" keep message="Error fetching list of slots. Please check your connection." />}
+        {error && <Notification severity="error" keep message="Error fetching list of slots. Please check your connection." />}
       </Grid>
     </Shell>
   );

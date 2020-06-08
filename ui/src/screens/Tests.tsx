@@ -5,13 +5,14 @@ import { css, cx } from 'emotion';
 import { Card, Grid, Button } from '@material-ui/core';
 import { Add as AddIcon, ArrowBack as ArrowBackIcon } from '@material-ui/icons';
 import { Heading } from '../components/Heading';
-import { ListTests } from '../components/ListTests';
+import { TestsList } from '../components/TestsList';
 import { useApi } from '../lib/useApi';
 import { Spinner } from '../components/Spinner';
 import { Test, Slot } from '../types';
 import { TestEditor } from '../components/TestEditor';
 import { EditModeToggle } from '../components/EditModeToggle';
-import { createTest } from '../lib/testFactory';
+import { Notification } from '../components/Notification';
+import { createTest } from '../utils/createTest';
 import { goToTestByIndex } from '../utils/redirects';
 
 const rootStyles = css`
@@ -39,7 +40,7 @@ type Props = {
 export const Tests = ({ slots }: Props) => {
   const history = useHistory();
   const { slotId, testId } = useParams();
-  const { data, loading } = useApi<any>(`http://localhost:3004/tests`);
+  const { data, loading, error } = useApi<any>(`http://localhost:3004/tests`);
 
   const [isEditing, setIsEditing] = useState(false);
   const [workingTests, setWorkingTests] = useState([] as Test[]);
@@ -134,7 +135,7 @@ export const Tests = ({ slots }: Props) => {
             <Button className={marginBottom} disabled={!isEditing} startIcon={<AddIcon />} color="primary" variant="contained" onClick={onCreateTest}>
               Create Test
             </Button>
-            {slotName && workingTests && <ListTests workingTests={workingTests} savedTests={savedTests} slotId={slotId} selectedTestId={testId} />}
+            {slotName && workingTests && <TestsList workingTests={workingTests} savedTests={savedTests} slotId={slotId} selectedTestId={testId} />}
           </Grid>
           <Grid item xs>
             {slotName && workingTest && (
@@ -147,6 +148,8 @@ export const Tests = ({ slots }: Props) => {
       <Button className={cx(marginTop)} startIcon={<ArrowBackIcon />} color="primary" onClick={() => history.push(`/`)}>
         Back to Slots
       </Button>
+
+      {error && <Notification severity="error" keep message="Error fetching list of tests. Please check your connection." />}
     </div>
   );
 };
