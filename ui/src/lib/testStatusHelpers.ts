@@ -1,5 +1,3 @@
-import { Test } from '../types';
-
 type StatusData = {
   label: string;
   color: string;

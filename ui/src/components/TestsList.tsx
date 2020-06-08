@@ -26,7 +26,8 @@ export const TestsList = ({ workingTests, savedTests, slotId, selectedTestId }: 
       {workingTests.map((workingTest: Test, index: number) => {
         const savedTest = savedTests.find((savedTest: Test) => savedTest.id === workingTest.id);
 
-        const { id, isEnabled } = workingTest;
+        const { id } = workingTest;
+        const isEnabled = savedTest?.isEnabled || false;
         const name = savedTest?.name || 'Untitled Test';
         const description = savedTest?.description || '';
         const link = `/slots/${slotId}/tests/${workingTest.id}`;

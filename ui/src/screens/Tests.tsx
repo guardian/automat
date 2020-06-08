@@ -10,7 +10,7 @@ import { useApi } from '../lib/useApi';
 import { Spinner } from '../components/Spinner';
 import { Test, Slot } from '../types';
 import { TestEditor } from '../components/TestEditor';
-import { EditModeToggle } from '../components/EditModeToggle';
+import { ModeToggler } from '../components/ModeToggler';
 import { Notification } from '../components/Notification';
 import { createTest } from '../utils/createTest';
 import { goToTestByIndex } from '../utils/redirects';
@@ -40,7 +40,7 @@ type Props = {
 export const Tests = ({ slots }: Props) => {
   const history = useHistory();
   const { slotId, testId } = useParams();
-  const { data, loading, error } = useApi<any>(`http://localhost:3004/tests`);
+  const { data, loading, error } = useApi<any>(`/tests`);
 
   const [isEditing, setIsEditing] = useState(false);
   const [workingTests, setWorkingTests] = useState([] as Test[]);
@@ -67,7 +67,7 @@ export const Tests = ({ slots }: Props) => {
     if (slot) {
       setSlotName(slot.name);
     }
-  }, [slotId]);
+  }, [slots, slotId]);
 
   useEffect(() => {
     const workingTest = workingTests.find((test: Test) => testId === test.id);
@@ -82,7 +82,7 @@ export const Tests = ({ slots }: Props) => {
     setTestName(testName);
   }, [testId, savedTests, workingTests]);
 
-  const onCreateTest = () => {
+  const handleCreateTest = () => {
     const testIndex = 0;
     const newTest = createTest({});
     const updatedTests = [newTest, ...workingTests];
@@ -90,24 +90,24 @@ export const Tests = ({ slots }: Props) => {
     goToTestByIndex(updatedTests, testIndex, slotId, history);
   };
 
-  const onUpdateTest = (updatedTest: Test) => {
+  const handleUpdateTest = (updatedTest: Test) => {
     const updatedTests = workingTests.map((test: Test) => (updatedTest.id === test.id ? updatedTest : test));
     setWorkingTests([...updatedTests]);
   };
 
-  const onDeleteTest = (deletedTestId: string) => {
+  const handleDeleteTest = (deletedTestId: string) => {
     const testIndex = workingTests.findIndex((test: Test) => deletedTestId === test.id);
     const updatedTests = workingTests.filter((test: Test, index: number) => index !== testIndex);
     setWorkingTests([...updatedTests]);
     goToTestByIndex(updatedTests, testIndex, slotId, history);
   };
 
-  const onSaveChanges = () => {
+  const handleSaveChanges = () => {
     setSavedTests(workingTests);
     setIsEditing(false);
   };
 
-  const onRevertChanges = () => {
+  const handleRevertChanges = () => {
     setWorkingTests(savedTests);
     setIsEditing(false);
   };
@@ -124,7 +124,13 @@ export const Tests = ({ slots }: Props) => {
       )}
 
       <div className={marginBottom}>
-        <EditModeToggle isEditing={isEditing} hasChanges={hasChanges} onUnlock={() => setIsEditing(true)} onSave={onSaveChanges} onRevert={onRevertChanges} />
+        <ModeToggler
+          isEditing={isEditing}
+          hasChanges={hasChanges}
+          onUnlock={() => setIsEditing(true)}
+          onSaveChanges={handleSaveChanges}
+          onRevertChanges={handleRevertChanges}
+        />
       </div>
 
       {loading && <Spinner />}
@@ -132,14 +138,20 @@ export const Tests = ({ slots }: Props) => {
       <Card className={cx(getWorktopStyles(isEditing))}>
         <Grid container spacing={4}>
           <Grid item xs={4}>
-            <Button className={marginBottom} disabled={!isEditing} startIcon={<AddIcon />} color="primary" variant="contained" onClick={onCreateTest}>
+            <Button className={marginBottom} disabled={!isEditing} startIcon={<AddIcon />} color="primary" variant="contained" onClick={handleCreateTest}>
               Create Test
             </Button>
             {slotName && workingTests && <TestsList workingTests={workingTests} savedTests={savedTests} slotId={slotId} selectedTestId={testId} />}
           </Grid>
           <Grid item xs>
-            {slotName && workingTest && (
-              <TestEditor workingTest={workingTest} testName={testName} onTestUpdated={onUpdateTest} onTestDeleted={onDeleteTest} isEditing={isEditing} />
+            {slotName && workingTest && testId && (
+              <TestEditor
+                workingTest={workingTest}
+                testName={testName}
+                onTestUpdated={handleUpdateTest}
+                onTestDeleted={handleDeleteTest}
+                isEditing={isEditing}
+              />
             )}
           </Grid>
         </Grid>

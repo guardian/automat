@@ -29,7 +29,7 @@ interface ApiResponse<T> {
   error?: Error;
 }
 
-export const useApi = <T>(url: string, options?: FetchOptions): ApiResponse<T> => {
+export const useApi = <T>(endpointUrl: string, options?: FetchOptions, prefixAutomat = true): ApiResponse<T> => {
   const [request, setRequest] = useState<{
     loading: boolean;
     data?: T;
@@ -38,8 +38,10 @@ export const useApi = <T>(url: string, options?: FetchOptions): ApiResponse<T> =
     loading: true,
   });
 
+  const apiPrefix = process.env.REACT_APP_AUTOMAT_API_URL;
+  const apiUrl = prefixAutomat && apiPrefix ? `${apiPrefix}${endpointUrl}` : endpointUrl;
   useEffect(() => {
-    callApi(url, options)
+    callApi(apiUrl, options)
       .then((data) => {
         setRequest({
           data,
@@ -52,7 +54,7 @@ export const useApi = <T>(url: string, options?: FetchOptions): ApiResponse<T> =
           loading: false,
         });
       });
-  }, [url, options]);
+  }, [apiUrl, options]);
 
   return request;
 };

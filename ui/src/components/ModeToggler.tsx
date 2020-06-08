@@ -18,38 +18,38 @@ type Props = {
   isEditing: boolean;
   hasChanges: boolean;
   onUnlock: Function;
-  onSave: Function;
-  onRevert: Function;
+  onSaveChanges: Function;
+  onRevertChanges: Function;
 };
 
-export const EditModeToggle = ({ isEditing = false, hasChanges, onUnlock, onSave, onRevert }: Props) => {
+export const ModeToggler = ({ isEditing = false, hasChanges, onUnlock, onSaveChanges, onRevertChanges }: Props) => {
   const [saveConfirmation, setSaveConfirmation] = useState(false);
   const [revertConfirmation, setRevertConfirmation] = useState(false);
 
-  const handleRevertClick = () => {
+  const handleRevertConfirmation = () => {
     if (hasChanges) {
       setRevertConfirmation(true);
     } else {
-      onRevertChanges();
+      revertChanges();
     }
   };
 
-  const handleSaveClick = () => {
+  const handleSaveConfirmation = () => {
     if (hasChanges) {
       setSaveConfirmation(true);
     } else {
-      onSaveChanges();
+      saveChanges();
     }
   };
 
-  const onSaveChanges = () => {
+  const saveChanges = () => {
     setSaveConfirmation(false);
-    onSave();
+    onSaveChanges();
   };
 
-  const onRevertChanges = () => {
+  const revertChanges = () => {
     setRevertConfirmation(false);
-    onRevert();
+    onRevertChanges();
   };
 
   return (
@@ -57,13 +57,12 @@ export const EditModeToggle = ({ isEditing = false, hasChanges, onUnlock, onSave
       {isEditing ? (
         <Grid container spacing={2} direction="row" justify="space-between" alignItems="center">
           <Grid item>
-            You're in <Chip className={statusStyles} label="Editing" /> mode. Make your changes and click <span className={statusStyles}>Save All</span> to
-            publish.
+            You're in <Chip className={statusStyles} label="Editing" /> mode. Make your changes and click <b>Save All</b> to publish.
           </Grid>
           <Grid item>
             <Grid container spacing={2}>
               <Grid item>
-                <Button startIcon={<RevertIcon />} color="primary" variant="contained" onClick={handleRevertClick}>
+                <Button startIcon={<RevertIcon />} color="primary" variant="contained" onClick={handleRevertConfirmation}>
                   Revert
                 </Button>
                 {revertConfirmation && (
@@ -75,7 +74,7 @@ export const EditModeToggle = ({ isEditing = false, hasChanges, onUnlock, onSave
                         <Button onClick={() => setRevertConfirmation(false)} variant="contained">
                           Cancel
                         </Button>
-                        <Button startIcon={<RevertIcon />} onClick={onRevertChanges} color="primary" variant="contained">
+                        <Button startIcon={<RevertIcon />} onClick={revertChanges} color="primary" variant="contained">
                           Revert
                         </Button>
                       </>
@@ -84,7 +83,7 @@ export const EditModeToggle = ({ isEditing = false, hasChanges, onUnlock, onSave
                 )}
               </Grid>
               <Grid item>
-                <Button startIcon={<BackupIcon />} color="primary" variant="contained" onClick={handleSaveClick}>
+                <Button startIcon={<BackupIcon />} color="primary" variant="contained" onClick={handleSaveConfirmation}>
                   Save All
                 </Button>
                 {saveConfirmation && (
@@ -96,7 +95,7 @@ export const EditModeToggle = ({ isEditing = false, hasChanges, onUnlock, onSave
                         <Button onClick={() => setSaveConfirmation(false)} variant="contained">
                           Cancel
                         </Button>
-                        <Button startIcon={<BackupIcon />} onClick={onSaveChanges} color="primary" variant="contained">
+                        <Button startIcon={<BackupIcon />} onClick={saveChanges} color="primary" variant="contained">
                           Save All
                         </Button>
                       </>
@@ -110,8 +109,7 @@ export const EditModeToggle = ({ isEditing = false, hasChanges, onUnlock, onSave
       ) : (
         <Grid container spacing={2} direction="row" justify="space-between" alignItems="center">
           <Grid item>
-            You're in <Chip className={statusStyles} label="Read Only" /> mode. Click the <span className={statusStyles}>Unlock Editing Mode</span> button to
-            make changes.
+            You're in <Chip className={statusStyles} label="Read Only" /> mode. Click the <b>Unlock Editing Mode</b> button to make changes.
           </Grid>
           <Grid item>
             <Button startIcon={<LockOpenIcon />} color="primary" variant="contained" onClick={() => onUnlock()}>
