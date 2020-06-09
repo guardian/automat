@@ -24,7 +24,7 @@ export const EditorFooter = ({ test, isEditing, onTestDeleted }: Props) => {
 
   const { id, name, created, author } = test;
 
-  const formattedDate = new Date(created).toLocaleString().slice(0, 10);
+  const formattedDate = new Date(created).toLocaleString().replace(', ', ' at ');
   let createdSentence = `Test created on ${formattedDate}`;
   if (author && author.firstName && author.lastName) {
     createdSentence += ` by ${author.firstName} ${author.lastName}`;
