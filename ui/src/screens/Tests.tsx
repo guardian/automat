@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet';
 import { css, cx } from 'emotion';
 import isEqual from 'lodash.isequal';
 import { Card, Grid, Button } from '@material-ui/core';
-import { Add as AddIcon, ArrowBack as ArrowBackIcon } from '@material-ui/icons';
+import { AddCircleOutline as AddCircleOutlineIcon, ArrowBack as ArrowBackIcon } from '@material-ui/icons';
 import { Heading } from '../components/Heading';
 import { TestsList } from '../components/TestsList';
 import { useApi } from '../lib/useApi';
@@ -139,7 +139,14 @@ export const Tests = ({ slots }: Props) => {
       <Card className={cx(getWorktopStyles(isEditing))}>
         <Grid container spacing={4}>
           <Grid item xs={4}>
-            <Button className={marginBottom} disabled={!isEditing} startIcon={<AddIcon />} color="primary" variant="contained" onClick={handleCreateTest}>
+            <Button
+              className={marginBottom}
+              disabled={!isEditing}
+              startIcon={<AddCircleOutlineIcon />}
+              color="primary"
+              variant="contained"
+              onClick={handleCreateTest}
+            >
               Create Test
             </Button>
             {slotName && workingTests && <TestsList workingTests={workingTests} savedTests={savedTests} slotId={slotId} selectedTestId={testId} />}

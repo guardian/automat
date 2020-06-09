@@ -2,6 +2,7 @@ import React from 'react';
 import { css } from 'emotion';
 import isEqual from 'lodash.isequal';
 import { TestsItem } from './TestsItem';
+import { TestsPlaceholder } from './TestsPlaceholder';
 import { Test } from '../types';
 
 const rootStyles = css`
@@ -19,7 +20,7 @@ type Props = {
 
 export const TestsList = ({ workingTests, savedTests, slotId, selectedTestId }: Props): JSX.Element => {
   if (workingTests.length === 0) {
-    return <p>There are currently no tests configured in this slot.</p>;
+    return <TestsPlaceholder />;
   }
 
   return (
