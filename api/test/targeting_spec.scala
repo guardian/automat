@@ -1,5 +1,5 @@
 import org.scalatestplus.play._
-import automat.models._
+import models._
 
 class TargetingSpec extends PlaySpec {
   "findMatches" must {
