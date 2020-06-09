@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { css, cx } from 'emotion';
+import isEqual from 'lodash.isequal';
 import { Card, Grid, Button } from '@material-ui/core';
 import { Add as AddIcon, ArrowBack as ArrowBackIcon } from '@material-ui/icons';
 import { Heading } from '../components/Heading';
@@ -51,7 +52,7 @@ export const Tests = ({ slots }: Props) => {
   const [hasChanges, setHasChanges] = useState(false);
 
   useEffect(() => {
-    const hasChanges = JSON.stringify(workingTests) !== JSON.stringify(savedTests);
+    const hasChanges = !isEqual(workingTests, savedTests);
     setHasChanges(hasChanges);
   }, [workingTests, savedTests]);
 

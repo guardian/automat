@@ -1,5 +1,6 @@
 import React from 'react';
 import { css } from 'emotion';
+import isEqual from 'lodash.isequal';
 import { TestsItem } from './TestsItem';
 import { Test } from '../types';
 
@@ -32,7 +33,7 @@ export const TestsList = ({ workingTests, savedTests, slotId, selectedTestId }: 
         const description = savedTest?.description || '';
         const link = `/slots/${slotId}/tests/${workingTest.id}`;
 
-        const isModified = JSON.stringify(workingTest) !== JSON.stringify(savedTest);
+        const isModified = !isEqual(workingTest, savedTest);
         const isSelected = selectedTestId === workingTest.id;
         const isLastItem = index === workingTests.length - 1;
 
