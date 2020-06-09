@@ -3,7 +3,8 @@ import { css, cx } from 'emotion';
 import { Link } from 'react-router-dom';
 import { Card, Chip } from '@material-ui/core';
 import { Heading } from './Heading';
-import { getTestStatus } from '../lib/testStatusHelpers';
+import { getTestStatus } from '../utils/testStatus';
+import { colors } from '../utils/theme';
 
 const rootStyles = css`
   color: inherit;
@@ -18,16 +19,16 @@ const getCardStyles = (isSelected: boolean, isLastItem: boolean, isModified: boo
   align-items: flex-start;
   justify-content: center;
   padding: 12px;
-  background-color: ${isSelected ? '#EEE' : '#FFF'};
-  border: ${isModified ? '2px' : '2px'} solid ${isModified ? '#ffeb3b' : '#bdbdbd'};
-  margin-bottom: ${isLastItem ? 0 : '16px'};
+  background-color: ${isSelected ? colors.lighterGrey : colors.white};
+  border: 2px solid ${isModified ? colors.yellow : colors.darkerGrey};
+  margin-bottom: ${isLastItem ? '0' : '16px'};
 `;
 
 const getChipStyles = (color: string) => css`
   background-color: ${color};
   height: auto;
   padding: 2px 0;
-  color: #fff;
+  color: ${colors.white};
   margin-left: 6px;
   width: 80px;
 `;

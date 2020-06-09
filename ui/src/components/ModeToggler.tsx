@@ -3,11 +3,12 @@ import { css, cx } from 'emotion';
 import { Grid, Chip, Paper, Button } from '@material-ui/core';
 import { LockOpen as LockOpenIcon, Backup as BackupIcon, SettingsBackupRestore as RevertIcon } from '@material-ui/icons';
 import { Confirmation } from './Confirmation';
+import { colors } from '../utils/theme';
 
 const getRootStyles = (isEditing: boolean) => css`
   width: 100%;
   padding: 12px;
-  border: 5px solid ${isEditing ? '#ffeb3b' : '#fff'};
+  border: 5px solid ${isEditing ? colors.yellow : colors.white};
 `;
 
 const statusStyles = css`

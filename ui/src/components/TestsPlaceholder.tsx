@@ -3,6 +3,7 @@ import { css, cx } from 'emotion';
 import { Card } from '@material-ui/core';
 import { LibraryBooks as LibraryBooksIcon } from '@material-ui/icons';
 import { Heading } from './Heading';
+import { colors } from '../utils/theme';
 
 const rootStyles = css`
   width: 100%;
@@ -11,8 +12,8 @@ const rootStyles = css`
   align-items: center;
   justify-content: center;
   padding: 36px 24px;
-  background-color: #eee;
-  border: 2px solid #bdbdbd;
+  background-color: ${colors.lighterGrey};
+  border: 2px solid ${colors.darkerGrey};
 `;
 
 const iconStyles = css`

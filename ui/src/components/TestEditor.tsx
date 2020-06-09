@@ -7,6 +7,7 @@ import { Heading } from './Heading';
 import { TabBasic } from './TabBasic';
 import { TabVariants } from './TabVariants';
 import { TabFilters } from './TabFilters';
+import { colors } from '../utils/theme';
 
 const rootStyles = css`
   width: 100%;
@@ -34,9 +35,11 @@ const contentAreaStyles = css`
 `;
 
 const tabButtonsStyles = css`
-  background-color: #eeeeee;
+  background-color: ${colors.lighterGrey};
   margin-bottom: 24px;
   overflow: hidden;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
 `;
 
 const tabContentStyles = css``;

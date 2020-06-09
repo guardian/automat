@@ -19,7 +19,7 @@ import {
   ListItemIcon,
   ListItemText,
 } from '@material-ui/core';
-import { Menu as MenuIcon, ChevronLeft as ChevronLeftIcon, Notifications as NotificationsIcon, Dashboard as DashboardIcon } from '@material-ui/icons';
+import { Menu as MenuIcon, ChevronLeft as ChevronLeftIcon, Notifications as NotificationsIcon, ViewQuilt as ViewQuiltIcon } from '@material-ui/icons';
 
 // TODO
 // Refactor styling to use JSS/Emotion for consistency
@@ -179,7 +179,7 @@ export const Shell = ({ children }: Props) => {
               <Link to="/" className={sidebarLinkStyles}>
                 <ListItem button>
                   <ListItemIcon>
-                    <DashboardIcon />
+                    <ViewQuiltIcon />
                   </ListItemIcon>
 
                   <ListItemText primary="Slots" />

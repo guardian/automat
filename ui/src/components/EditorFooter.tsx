@@ -3,13 +3,14 @@ import { css, cx } from 'emotion';
 import { Button, Grid } from '@material-ui/core';
 import { Delete as DeleteIcon } from '@material-ui/icons';
 import { Confirmation } from './Confirmation';
+import { colors } from '../utils/theme';
 import { Test } from '../types';
 
 const rootStyles = css``;
 
 const createdByStyles = css`
   font-size: 12px;
-  color: #9e9e9e;
+  color: ${colors.darkerGrey};
 `;
 
 type Props = {

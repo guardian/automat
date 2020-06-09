@@ -15,6 +15,7 @@ import { ModeToggler } from '../components/ModeToggler';
 import { Notification } from '../components/Notification';
 import { createTest } from '../utils/createTest';
 import { goToTestByIndex } from '../utils/redirects';
+import { colors } from '../utils/theme';
 
 const rootStyles = css`
   width: 100%;
@@ -31,7 +32,7 @@ const marginBottom = css`
 const getWorktopStyles = (isEditing: boolean) => css`
   padding: 12px;
   border-radius: 4px;
-  border: 5px solid ${isEditing ? '#ffeb3b' : 'white'};
+  border: 5px solid ${isEditing ? colors.yellow : colors.white};
 `;
 
 type Props = {
