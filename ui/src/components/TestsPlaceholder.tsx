@@ -12,7 +12,7 @@ const rootStyles = css`
   justify-content: center;
   padding: 36px 24px;
   background-color: #eee;
-  border: #bdbdbd;
+  border: 2px solid #bdbdbd;
 `;
 
 const iconStyles = css`
