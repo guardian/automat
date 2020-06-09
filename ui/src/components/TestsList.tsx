@@ -40,6 +40,7 @@ export const TestsList = ({ workingTests, savedTests, slotId, selectedTestId }: 
 
         return (
           <TestsItem
+            key={id}
             id={id}
             name={name}
             description={description}

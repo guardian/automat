@@ -32,9 +32,7 @@ export const EditorFooter = ({ test, isEditing, onTestDeleted }: Props) => {
 
   return (
     <Grid container spacing={2} justify="space-between" alignItems="center" className={cx(rootStyles)}>
-      <Grid item>
-        <p className={createdByStyles}>{createdSentence}</p>
-      </Grid>
+      <Grid item>{created && formattedDate && <p className={createdByStyles}>{createdSentence}</p>}</Grid>
       <Grid item>
         <Button disabled={!isEditing} variant="contained" color="secondary" startIcon={<DeleteIcon />} onClick={() => setDeleteConfirmation(true)}>
           Delete Test

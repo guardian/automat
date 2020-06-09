@@ -16,6 +16,7 @@ import { Notification } from '../components/Notification';
 import { createTest } from '../utils/createTest';
 import { goToTestByIndex } from '../utils/redirects';
 import { colors } from '../utils/theme';
+import { patchTestsBySlot } from '../utils/patchTests';
 
 const rootStyles = css`
   width: 100%;
@@ -39,11 +40,14 @@ type Props = {
   slots: Slot[];
 };
 
+type SavingState = 'success' | 'failure' | 'loading' | undefined;
+
 export const Tests = ({ slots }: Props) => {
   const history = useHistory();
   const { slotId, testId } = useParams();
-  const { data, loading, error } = useApi<any>(`/tests`);
+  const { data, loading, error } = useApi<any>(`/admin/slots/${slotId}`);
 
+  const [saveStatus, setSaveStatus] = useState(undefined as SavingState);
   const [isEditing, setIsEditing] = useState(false);
   const [workingTests, setWorkingTests] = useState([] as Test[]);
   const [savedTests, setSavedTests] = useState([] as Test[]);
@@ -59,8 +63,8 @@ export const Tests = ({ slots }: Props) => {
 
   useEffect(() => {
     if (data) {
-      setSavedTests(data);
-      setWorkingTests(data);
+      setSavedTests(data.slot.tests);
+      setWorkingTests(data.slot.tests);
     }
   }, [data]);
 
@@ -105,8 +109,19 @@ export const Tests = ({ slots }: Props) => {
   };
 
   const handleSaveChanges = () => {
-    setSavedTests(workingTests);
-    setIsEditing(false);
+    if (saveStatus === 'loading') {
+      alert('Already saving');
+      return undefined;
+    }
+
+    setSaveStatus('loading');
+    patchTestsBySlot(slotId, workingTests)
+      .then(() => {
+        setSavedTests(workingTests);
+        setSaveStatus('success');
+        setIsEditing(false);
+      })
+      .catch(() => setSaveStatus('failure'));
   };
 
   const handleRevertChanges = () => {
@@ -171,6 +186,9 @@ export const Tests = ({ slots }: Props) => {
       </Button>
 
       {error && <Notification severity="error" keep message="Error fetching list of tests. Please check your connection." />}
+
+      {saveStatus === 'success' && <Notification severity="success" message="Your changes have been saved successfully." />}
+      {saveStatus === 'failure' && <Notification severity="error" message="An error occurred. Your changes could not be saved. Please try again later." />}
     </div>
   );
 };

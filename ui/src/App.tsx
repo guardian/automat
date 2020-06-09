@@ -1,16 +1,24 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import { Grid } from '@material-ui/core';
 import { useApi } from './lib/useApi';
 import { Spinner } from './components/Spinner';
 import { Notification } from './components/Notification';
+import { Slot } from './types';
 
 import { Shell } from './Shell';
-import { Slots } from './screens/Slots';
-import { Tests } from './screens/Tests';
+import { Slots as SlotsScreen } from './screens/Slots';
+import { Tests as TestsScreen } from './screens/Tests';
 
 export const App = () => {
-  const { data: slots, loading, error } = useApi<any>(`/slots`);
+  const { data, loading, error } = useApi<any>(`/admin/slots`);
+
+  const [slots, setSlots] = useState([] as Slot[]);
+  useEffect(() => {
+    if (data) {
+      setSlots(data.slots);
+    }
+  }, [data]);
 
   return (
     <Shell>
@@ -19,13 +27,13 @@ export const App = () => {
         {slots && (
           <Switch>
             <Route exact path="/">
-              <Slots slots={slots} />
+              <SlotsScreen slots={slots} />
             </Route>
             <Route exact path="/slots/:slotId">
-              <Tests slots={slots} />
+              <TestsScreen slots={slots} />
             </Route>
             <Route exact path="/slots/:slotId/tests/:testId">
-              <Tests slots={slots} />
+              <TestsScreen slots={slots} />
             </Route>
           </Switch>
         )}
