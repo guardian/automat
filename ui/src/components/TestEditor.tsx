@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { css, cx } from 'emotion';
-import { Test } from '../types';
+import { Test, Variant } from '../types';
 import { Paper, Tabs, Tab, Grid, Card, Switch } from '@material-ui/core';
 import { EditorFooter } from './EditorFooter';
 import { Heading } from './Heading';
@@ -45,19 +45,23 @@ const tabButtonsStyles = css`
 const tabContentStyles = css``;
 
 type Props = {
-  workingTest: Test;
   testName: string;
+  workingTest: Test;
+  variants: Variant[];
   isEditing: boolean;
   onTestUpdated: Function;
   onTestDeleted: Function;
 };
 
-export const TestEditor = ({ workingTest, testName, onTestUpdated, onTestDeleted, isEditing }: Props) => {
+export const TestEditor = ({ workingTest, testName, variants, onTestUpdated, onTestDeleted, isEditing }: Props) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
 
   useEffect(() => {
     setActiveTabIndex(0);
   }, [workingTest]);
+
+  // TODO: TESTING ONLY
+  workingTest.variants = ['subsmpu', 'contributionsepic'];
 
   const onTabClick = (event: any, newTabIndex: any) => setActiveTabIndex(newTabIndex);
 
@@ -94,7 +98,7 @@ export const TestEditor = ({ workingTest, testName, onTestUpdated, onTestDeleted
           </Tabs>
           <section className={tabContentStyles}>
             {activeTabIndex === 0 && <TabBasic test={workingTest} isEditing={isEditing} onTestUpdated={onTestUpdated} />}
-            {activeTabIndex === 1 && <TabVariants test={workingTest} isEditing={isEditing} onTestUpdated={onTestUpdated} />}
+            {activeTabIndex === 1 && <TabVariants test={workingTest} variants={variants} isEditing={isEditing} onTestUpdated={onTestUpdated} />}
             {activeTabIndex === 2 && <TabFilters test={workingTest} isEditing={isEditing} onTestUpdated={onTestUpdated} />}
           </section>
         </Paper>

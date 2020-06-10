@@ -4,40 +4,47 @@ import { Grid } from '@material-ui/core';
 import { useApi } from './lib/useApi';
 import { Spinner } from './components/Spinner';
 import { Notification } from './components/Notification';
-import { Slot } from './types';
-
+import { Slot, Variant } from './types';
 import { Shell } from './Shell';
 import { Slots as SlotsScreen } from './screens/Slots';
 import { Tests as TestsScreen } from './screens/Tests';
 
 export const App = () => {
-  const { data, loading, error } = useApi<any>(`/admin/slots`);
+  const { data: dataSlots, loading: loadingSlots, error: errorSlots } = useApi<any>(`/admin/slots`);
+  const { data: dataVariants, loading: loadingVariants, error: errorVariants } = useApi<any>(`/admin/variants`);
 
   const [slots, setSlots] = useState([] as Slot[]);
   useEffect(() => {
-    if (data) {
-      setSlots(data.slots);
+    if (dataSlots) {
+      setSlots(dataSlots.slots);
     }
-  }, [data]);
+  }, [dataSlots]);
+
+  const [variants, setVariants] = useState([] as Variant[]);
+  useEffect(() => {
+    if (dataVariants) {
+      setVariants(dataVariants.variants);
+    }
+  }, [dataVariants]);
 
   return (
     <Shell>
       <Grid container spacing={3}>
-        {loading && <Spinner />}
+        {(loadingSlots || loadingVariants) && <Spinner />}
         {slots && (
           <Switch>
             <Route exact path="/">
               <SlotsScreen slots={slots} />
             </Route>
             <Route exact path="/slots/:slotId">
-              <TestsScreen slots={slots} />
+              <TestsScreen slots={slots} variants={variants} />
             </Route>
             <Route exact path="/slots/:slotId/tests/:testId">
-              <TestsScreen slots={slots} />
+              <TestsScreen slots={slots} variants={variants} />
             </Route>
           </Switch>
         )}
-        {error && <Notification severity="error" keep message="Error fetching list of slots. Please check your connection." />}
+        {(errorSlots || errorVariants) && <Notification severity="error" keep message="Error fetching data. Please check your connection." />}
       </Grid>
     </Shell>
   );
