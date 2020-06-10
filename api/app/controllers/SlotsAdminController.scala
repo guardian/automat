@@ -11,14 +11,15 @@ import persistence.{SlotStore}
 
 case class SlimSlot(
     id: String,
-    name: String
+    name: String,
+    testCount: Int
 )
 
 object SlimSlot {
   implicit val testFmt = Json.format[SlimSlot]
 
   def fromSlot(slot: Slot): SlimSlot =
-    SlimSlot(id = slot.id, name = slot.name)
+    SlimSlot(id = slot.id, name = slot.name, testCount = slot.tests.length)
 }
 
 case class SlotUpdateParams(
