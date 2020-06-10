@@ -52,7 +52,7 @@ class SlotsAdminController(
     }
   }
 
-  def show(slotId: String) = Action.async { implicit request =>
+  def get(slotId: String) = Action.async { implicit request =>
     val resp = store.getSlot(slotId)
 
     resp map { slot =>
