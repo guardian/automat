@@ -10,21 +10,19 @@ class TargetingSpec extends PlaySpec {
         name = "Test 1",
         description = "example test",
         isEnabled = true,
-        variants = List("foo", "bar"),
-        sections = List("culture")
+        variants = List("foo", "bar")
       )
       val test2 = Test(
         id = "test2",
         name = "Test 2",
         description = "example test",
         isEnabled = true,
-        variants = List("foo", "bar"),
-        sections = List("football")
+        variants = List("foo", "bar")
       )
 
       val matches = Targeting.findMatches(targeting, List(test1, test2))
 
-      matches mustBe List(test2)
+      matches mustBe List(test1, test2)
     }
     "return an empty list when there are no matches" in {
       val targeting = new Targeting(section = "cycling")
@@ -33,21 +31,19 @@ class TargetingSpec extends PlaySpec {
         name = "Test 1",
         description = "example test",
         isEnabled = true,
-        variants = List("foo", "bar"),
-        sections = List("culture")
+        variants = List("foo", "bar")
       )
       val test2 = Test(
         id = "test2",
         name = "Test 2",
         description = "example test",
         isEnabled = true,
-        variants = List("foo", "bar"),
-        sections = List("football")
+        variants = List("foo", "bar")
       )
 
       val matches = Targeting.findMatches(targeting, List(test1, test2))
 
-      matches mustBe List()
+      matches mustBe List(test1, test2)
     }
   }
 }

@@ -7,8 +7,7 @@ case class Test(
     name: String,
     description: String,
     isEnabled: Boolean,
-    variants: List[String],
-    sections: List[String]
+    variants: List[String]
 )
 
 object Test {
