@@ -1,61 +1,100 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { css, cx } from 'emotion';
-import { Card, Grid, IconButton } from '@material-ui/core';
-import { Delete as DeleteIcon } from '@material-ui/icons';
-import { Heading } from './Heading';
+import { Dialog, DialogTitle, DialogContent, Select, MenuItem, DialogActions, Button } from '@material-ui/core';
+import { AddCircleOutline as AddCircleOutlineIcon, CheckCircle as CheckCircleIcon } from '@material-ui/icons';
 import { Variant } from '../types';
 import { colors } from '../utils/theme';
-import { alphabet } from '../utils/alphabet';
 
-const rootStyles = css`
-  width: 100%;
-  background-color: ${colors.lighterGrey};
-  border: 1px solid ${colors.darkerGrey};
-  padding: 3px 0 3px 12px;
-  border-radius: 4px;
-  margin-bottom: 16px;
+const dialogStyles = css`
+  width: 500px;
 `;
 
-const gridStyles = css`
+const helperStyles = css`
+  margin: 0 0 12px 0;
+`;
+
+const selectStyles = css`
   width: 100%;
 `;
 
-const indexStyles = css`
-  font-size: 48px;
-  text-align: center;
+const itemRowStyles = css`
+  border-top: 1px solid ${colors.lighterGrey};
+  border-bottom: 1px solid ${colors.lighterGrey};
+`;
+
+const itemContentStyles = css`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+`;
+
+const nameStyles = css`
+  font-weight: bold;
   margin: 0;
 `;
 
-const noMargin = css`
+const descriptionStyles = css`
   margin: 0;
 `;
 
 type Props = {
-  index: number;
-  variant: Variant;
-  isEditing: boolean;
-  onChange: Function;
+  value?: string;
+  variants: Variant[];
+  onSelect: Function;
+  onCancel: Function;
 };
 
-export const VariantSelector = ({ index, variant, isEditing }: Props) => {
+export const VariantSelector = ({ value = '', variants, onSelect, onCancel }: Props) => {
+  const [selectedVariantId, setSelectedVariantId] = useState(value);
+
+  const handleChange = (event: any) => {
+    const variantId = event.target.value;
+    if (variantId) {
+      setSelectedVariantId(variantId);
+    }
+  };
+
+  const isUpdating = !!value;
+
   return (
-    <Card elevation={0} className={rootStyles}>
-      <Grid container spacing={2} justify="flex-start" alignItems="center" className={cx(gridStyles)}>
-        <Grid item xs={1} alignContent="center">
-          <p className={indexStyles}>{alphabet[index]}</p>
-        </Grid>
-        <Grid item xs={10}>
-          <Heading level={2} supressMargin>
-            {variant.name}
-          </Heading>
-          <p className={noMargin}>{variant.description}</p>
-        </Grid>
-        <Grid item xs={1}>
-          <IconButton disabled={!isEditing}>
-            <DeleteIcon />
-          </IconButton>
-        </Grid>
-      </Grid>
-    </Card>
+    <Dialog disableBackdropClick disableEscapeKeyDown open={true}>
+      <DialogTitle>Select Component</DialogTitle>
+      <DialogContent className={cx(dialogStyles)}>
+        <p className={helperStyles}>
+          Users seeing this variant will be presented the <b>Component</b> you select below. You can change this at any time, but doing so may affect the test
+          results.
+        </p>
+        <Select value={selectedVariantId} onChange={handleChange} className={selectStyles} variant="outlined">
+          {variants.map((variant) => (
+            <MenuItem key={variant.id} value={variant.id} className={itemRowStyles}>
+              <div className={itemContentStyles}>
+                <p className={nameStyles}>{variant.name}</p>
+                <p className={descriptionStyles}>{variant.description}</p>
+              </div>
+            </MenuItem>
+          ))}
+        </Select>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={() => onCancel()} variant="contained">
+          Cancel
+        </Button>
+        {isUpdating ? (
+          <Button disabled={!selectedVariantId} startIcon={<CheckCircleIcon />} color="primary" variant="contained" onClick={() => onSelect(selectedVariantId)}>
+            Update Variant
+          </Button>
+        ) : (
+          <Button
+            disabled={!selectedVariantId}
+            startIcon={<AddCircleOutlineIcon />}
+            color="primary"
+            variant="contained"
+            onClick={() => onSelect(selectedVariantId)}
+          >
+            Add Variant
+          </Button>
+        )}
+      </DialogActions>
+    </Dialog>
   );
 };

@@ -99,7 +99,7 @@ export const Tests = ({ slots, variants }: Props) => {
 
   const handleUpdateTest = (updatedTest: Test) => {
     const updatedTests = workingTests.map((test: Test) => (updatedTest.id === test.id ? updatedTest : test));
-    setWorkingTests([...updatedTests]);
+    setWorkingTests(updatedTests);
   };
 
   const handleDeleteTest = (deletedTestId: string) => {

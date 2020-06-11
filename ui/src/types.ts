@@ -53,4 +53,5 @@ export interface Variant {
   name: string;
   description: string;
   thumbnailUrl?: string;
+  isEditing?: boolean;
 }
