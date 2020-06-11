@@ -1,10 +1,10 @@
 {
-  "name": "Automat deploy code",
+  "name": "automat-infra",
   "version": "0.1.0",
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
-    "cdk": "cdk"
+    "cdk": "cdk synth"
   },
   "devDependencies": {
     "@aws-cdk/assert": "1.45.0",
