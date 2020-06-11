@@ -24,3 +24,5 @@ yarn-error.log*
 
 target
 project/target
+
+.metals
