@@ -216,16 +216,14 @@ object TestData {
           name = "Test 1",
           description = "example test",
           isEnabled = true,
-          variants = List("subsmpu"),
-          sections = List("culture")
+          variants = List("subsmpu")
         ),
         Test(
           id = "test2",
           name = "Test 2",
           description = "example test",
           isEnabled = true,
-          variants = List("subsmpu"),
-          sections = List("football")
+          variants = List("subsmpu")
         )
       )
     ),
@@ -238,16 +236,14 @@ object TestData {
           name = "Test 3",
           description = "example test",
           isEnabled = true,
-          variants = List("contributionsepic"),
-          sections = List("culture")
+          variants = List("contributionsepic")
         ),
         Test(
           id = "test4",
           name = "Test 4",
           description = "example test",
           isEnabled = true,
-          variants = List("contributionsepic"),
-          sections = List("cricket")
+          variants = List("contributionsepic")
         )
       )
     )
