@@ -9,7 +9,7 @@ import { Heading } from '../components/Heading';
 import { TestsList } from '../components/TestsList';
 import { useApi } from '../lib/useApi';
 import { Spinner } from '../components/Spinner';
-import { Test, Slot, Variant } from '../types';
+import { Test, Slot, Variant, Filter, TestFilter } from '../types';
 import { TestEditor } from '../components/TestEditor';
 import { ModeToggler } from '../components/ModeToggler';
 import { Notification } from '../components/Notification';
@@ -39,11 +39,12 @@ const getWorktopStyles = (isEditing: boolean) => css`
 type Props = {
   slots: Slot[];
   variants: Variant[];
+  filters: Filter[];
 };
 
 type SavingState = 'success' | 'failure' | 'loading' | undefined;
 
-export const Tests = ({ slots, variants }: Props) => {
+export const Tests = ({ slots, variants, filters }: Props) => {
   const history = useHistory();
   const { slotId, testId } = useParams();
   const { data, loading, error } = useApi<any>(`/admin/slots/${slotId}`);
@@ -64,8 +65,31 @@ export const Tests = ({ slots, variants }: Props) => {
 
   useEffect(() => {
     if (data) {
-      setSavedTests(data.slot.tests);
-      setWorkingTests(data.slot.tests);
+      // TEST ONLY
+      const extendedTests = data.slot.tests.map((test: TestFilter) => {
+        const extendedTest = {
+          ...test,
+          filters: [
+            {
+              filterId: 'authstatus',
+              selectedOptionIds: ['loggedin'],
+            },
+            {
+              filterId: 'subspropensity',
+              selectedOptionIds: ['hot', 'warm'],
+            },
+            // {
+            //   filterId: 'samplerate',
+            //   selectedOptionIds: ['25'],
+            // },
+          ],
+        };
+        return extendedTest;
+      });
+      setSavedTests(extendedTests);
+      setWorkingTests(extendedTests);
+      // setSavedTests(data.slot.tests);
+      // setWorkingTests(data.slot.tests);
     }
   }, [data]);
 
@@ -174,6 +198,7 @@ export const Tests = ({ slots, variants }: Props) => {
                 testName={testName}
                 workingTest={workingTest}
                 variants={variants}
+                filters={filters}
                 onTestUpdated={handleUpdateTest}
                 onTestDeleted={handleDeleteTest}
                 isEditing={isEditing}

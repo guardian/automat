@@ -4,7 +4,7 @@ import { Grid } from '@material-ui/core';
 import { useApi } from './lib/useApi';
 import { Spinner } from './components/Spinner';
 import { Notification } from './components/Notification';
-import { Slot, Variant } from './types';
+import { Slot, Variant, Filter } from './types';
 import { Shell } from './Shell';
 import { Slots as SlotsScreen } from './screens/Slots';
 import { Tests as TestsScreen } from './screens/Tests';
@@ -12,6 +12,7 @@ import { Tests as TestsScreen } from './screens/Tests';
 export const App = () => {
   const { data: dataSlots, loading: loadingSlots, error: errorSlots } = useApi<any>(`/admin/slots`);
   const { data: dataVariants, loading: loadingVariants, error: errorVariants } = useApi<any>(`/admin/variants`);
+  const { data: dataFilters, loading: loadingFilters, error: errorFilters } = useApi<any>(`http://localhost:3004/filters`, undefined, false);
 
   const [slots, setSlots] = useState([] as Slot[]);
   useEffect(() => {
@@ -27,24 +28,32 @@ export const App = () => {
     }
   }, [dataVariants]);
 
+  const [filters, setFilters] = useState([] as Filter[]);
+  useEffect(() => {
+    if (dataFilters) {
+      // setFilters(dataFilters.filters);
+      setFilters(dataFilters);
+    }
+  }, [dataFilters]);
+
   return (
     <Shell>
       <Grid container spacing={3}>
-        {(loadingSlots || loadingVariants) && <Spinner />}
+        {(loadingSlots || loadingVariants || loadingFilters) && <Spinner />}
         {slots && (
           <Switch>
             <Route exact path="/">
               <SlotsScreen slots={slots} />
             </Route>
             <Route exact path="/slots/:slotId">
-              <TestsScreen slots={slots} variants={variants} />
+              <TestsScreen slots={slots} variants={variants} filters={filters} />
             </Route>
             <Route exact path="/slots/:slotId/tests/:testId">
-              <TestsScreen slots={slots} variants={variants} />
+              <TestsScreen slots={slots} variants={variants} filters={filters} />
             </Route>
           </Switch>
         )}
-        {(errorSlots || errorVariants) && <Notification severity="error" keep message="Error fetching data. Please check your connection." />}
+        {(errorSlots || errorVariants || errorFilters) && <Notification severity="error" keep message="Error fetching data. Please check your connection." />}
       </Grid>
     </Shell>
   );

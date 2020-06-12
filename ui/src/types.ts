@@ -27,7 +27,7 @@ export interface Test {
   filters: TestFilter[];
 }
 
-interface TestFilter {
+export interface TestFilter {
   filterId: string;
   selectedOptionIds: string[]; // Allow one or multiple entries depending on allowMultiple boolean in Filter
 }
