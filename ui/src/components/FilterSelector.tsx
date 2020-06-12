@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { css, cx } from 'emotion';
 import { Dialog, DialogTitle, DialogContent, Select, MenuItem, DialogActions, Button } from '@material-ui/core';
 import { AddCircleOutline as AddCircleOutlineIcon, CheckCircle as CheckCircleIcon } from '@material-ui/icons';

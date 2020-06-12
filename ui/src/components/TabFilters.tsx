@@ -41,6 +41,10 @@ export const TabFilters = ({ test, filters, isEditing, onTestUpdated }: Props) =
     onTestUpdated({ ...test, filters: testFilters });
   };
 
+  const handleUpdateFilter = (filterIndex: number, selectedOptionId: string) => {
+    console.log('=== handleUpdateFilter: ');
+  };
+
   const handleAddFilter = (filterId: string) => {
     if (filterId) {
       onTestUpdated({ ...test, filters: [...test.filters, { filterId, selectedOptionIds: [] }] });
@@ -51,7 +55,14 @@ export const TabFilters = ({ test, filters, isEditing, onTestUpdated }: Props) =
   return (
     <div className={rootStyles}>
       {derivedFilters.map((derivedFilter, index) => (
-        <FiltersItem index={index} filter={derivedFilter} test={test} isEditing={isEditing} onFilterDeleted={handleDeleteFilter} />
+        <FiltersItem
+          index={index}
+          filter={derivedFilter}
+          test={test}
+          isEditing={isEditing}
+          onFilterUpdated={handleUpdateFilter}
+          onFilterDeleted={handleDeleteFilter}
+        />
       ))}
       {isAdding && <FilterSelector filters={filters} onCancel={() => setIsAdding(false)} onSelect={handleAddFilter} />}
       <Button disabled={!isEditing} startIcon={<AddCircleOutlineIcon />} color="primary" variant="contained" onClick={() => setIsAdding(true)}>

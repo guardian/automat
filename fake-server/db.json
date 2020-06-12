@@ -52,16 +52,11 @@
       "options": [
         {
           "value": "loggedin",
-          "label": "Logged In users only"
+          "label": "Logged In Users"
         },
         {
           "value": "notloggedin",
-          "label": "Not logged-in users only"
-        },
-        {
-          "value": "any",
-          "label": "Any (it doesn't matter)",
-          "selected": true
+          "label": "Not Logged-in Users"
         }
       ]
     },

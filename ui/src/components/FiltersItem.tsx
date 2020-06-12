@@ -6,7 +6,7 @@ import { Heading } from './Heading';
 import { Confirmation } from './Confirmation';
 import { colors } from '../utils/theme';
 import { Test, Filter } from '../types';
-import { FilterSelector } from './FilterSelector';
+import { FilterConfig } from './FilterConfig';
 
 const rootStyles = css`
   width: 100%;
@@ -47,12 +47,13 @@ type Props = {
   filter: Filter;
   test: Test;
   isEditing: boolean;
+  onFilterUpdated: Function;
   onFilterDeleted: Function;
 };
 
-export const FiltersItem = ({ index, filter, test, isEditing, onFilterDeleted }: Props) => {
-  const [isUpdating, setIsUpdating] = useState(false);
+export const FiltersItem = ({ index, filter, test, isEditing, onFilterUpdated, onFilterDeleted }: Props) => {
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
+  const handleUpdate = () => {};
 
   return (
     <Card elevation={0} className={rootStyles}>
@@ -94,6 +95,15 @@ export const FiltersItem = ({ index, filter, test, isEditing, onFilterDeleted }:
               }
             />
           )}
+        </Grid>
+        <Grid item xs={12}>
+          <FilterConfig
+            selectedOptionIds={filter.selectedOptionIds || []}
+            options={filter.options}
+            allowMultipe={filter.allowMultiple}
+            isEditing={isEditing}
+            onChange={handleUpdate}
+          />
         </Grid>
       </Grid>
     </Card>

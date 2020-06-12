@@ -40,8 +40,9 @@ export interface Filter {
   helpText: string;
   options: FilterOption[];
   allowMultiple: boolean; // Default to false?
+  selectedOptionIds?: string[];
 }
-interface FilterOption {
+export interface FilterOption {
   value: string;
   label: string;
 }
