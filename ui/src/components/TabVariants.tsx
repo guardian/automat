@@ -45,18 +45,17 @@ export const TabVariants = ({ test, variants, isEditing, onTestUpdated }: Props)
 
   return (
     <div className={rootStyles}>
-      {derivedVariants &&
-        derivedVariants.map((derivedVariant, index) => (
-          <VariantsItem
-            key={derivedVariant.id}
-            index={index}
-            variant={derivedVariant}
-            variants={variants}
-            onVariantDeleted={handleDeleteVariant}
-            onVariantUpdated={handleUpdateVariant}
-            isEditing={isEditing}
-          />
-        ))}
+      {derivedVariants.map((derivedVariant, index) => (
+        <VariantsItem
+          key={`${derivedVariant.id}-${index}`}
+          index={index}
+          variant={derivedVariant}
+          variants={variants}
+          onVariantDeleted={handleDeleteVariant}
+          onVariantUpdated={handleUpdateVariant}
+          isEditing={isEditing}
+        />
+      ))}
       {isAdding && <VariantSelector variants={variants} onCancel={() => setIsAdding(false)} onSelect={handleAddVariant} />}
       <Button disabled={!isEditing} startIcon={<AddCircleOutlineIcon />} color="primary" variant="contained" onClick={() => setIsAdding(true)}>
         Add Variant
