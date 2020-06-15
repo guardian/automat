@@ -13,7 +13,7 @@ type Props = {
   slots: Slot[];
 };
 
-export const Slots = ({ slots }: Props) => {
+export const SlotsScreen = ({ slots }: Props) => {
   return (
     <div className={rootStyles}>
       <Helmet>

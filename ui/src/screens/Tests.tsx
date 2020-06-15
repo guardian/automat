@@ -43,7 +43,7 @@ type Props = {
 
 type SavingState = 'success' | 'failure' | 'loading' | undefined;
 
-export const Tests = ({ slots, variants }: Props) => {
+export const TestsScreen = ({ slots, variants }: Props) => {
   const history = useHistory();
   const { slotId, testId } = useParams();
   const { data, loading, error } = useApi<any>(`/admin/slots/${slotId}`);
@@ -111,8 +111,7 @@ export const Tests = ({ slots, variants }: Props) => {
 
   const handleSaveChanges = () => {
     if (saveStatus === 'loading') {
-      alert('Already saving');
-      return undefined;
+      return;
     }
 
     setSaveStatus('loading');
