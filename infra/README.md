@@ -1,8 +1,11 @@
 # Infra
 
-Deployment-related code.
+Deployment-related code. Note, this is a helper and not part of continuous
+delivery.
 
-We want to provision:
+If you want to update the cloudformation, run:
 
-- ALB/EC2 instances for the API
-- S3 bucket/static code for UI
+    $ npm run cdk
+
+This will generate and copy cfn files into the `/api` and `/ui` directories. You
+can then commit and push any changes.
