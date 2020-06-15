@@ -8,7 +8,7 @@ const rootStyles = css``;
 
 const inputStyles = css`
   width: 100%;
-  margin: 0 0 12px 0;
+  margin: 0 0 16px 0;
 `;
 
 type Props = {

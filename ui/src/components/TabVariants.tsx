@@ -5,8 +5,13 @@ import { AddCircleOutline as AddCircleOutlineIcon } from '@material-ui/icons';
 import { Test, Variant } from '../types';
 import { VariantSelector } from './VariantSelector';
 import { VariantsItem } from './VariantsItem';
+import { VariantsPlaceholder } from './VariantsPlaceholder';
 
 const rootStyles = css``;
+
+const placeholderWrapperStyles = css`
+  margin-bottom: 16px;
+`;
 
 type Props = {
   test: Test;
@@ -43,17 +48,23 @@ export const TabVariants = ({ test, variants, isEditing, onTestUpdated }: Props)
 
   return (
     <div className={rootStyles}>
-      {derivedVariants.map((derivedVariant, index) => (
-        <VariantsItem
-          key={`${derivedVariant.id}-${index}`}
-          index={index}
-          variant={derivedVariant}
-          variants={variants}
-          onVariantDeleted={handleDeleteVariant}
-          onVariantUpdated={handleUpdateVariant}
-          isEditing={isEditing}
-        />
-      ))}
+      {derivedVariants.length === 0 ? (
+        <div className={placeholderWrapperStyles}>
+          <VariantsPlaceholder />
+        </div>
+      ) : (
+        derivedVariants.map((derivedVariant, index) => (
+          <VariantsItem
+            key={`${derivedVariant.id}-${index}`}
+            index={index}
+            variant={derivedVariant}
+            variants={variants}
+            onVariantDeleted={handleDeleteVariant}
+            onVariantUpdated={handleUpdateVariant}
+            isEditing={isEditing}
+          />
+        ))
+      )}
       {isAdding && <VariantSelector variants={variants} onCancel={() => setIsAdding(false)} onSelect={handleAddVariant} />}
       <Button disabled={!isEditing} startIcon={<AddCircleOutlineIcon />} color="primary" variant="contained" onClick={() => setIsAdding(true)}>
         Add Variant
