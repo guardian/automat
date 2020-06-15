@@ -59,7 +59,7 @@ export const FilterSelector = ({ value = '', filters, onSelect, onCancel }: Prop
   const isUpdating = !!value;
 
   return (
-    <Dialog disableBackdropClick disableEscapeKeyDown open={true}>
+    <Dialog disableBackdropClick disableEscapeKeyDown open={true} className={cx(rootStyles)}>
       <DialogTitle>Select Filter</DialogTitle>
       <DialogContent className={cx(dialogStyles)}>
         <p className={helperStyles}>

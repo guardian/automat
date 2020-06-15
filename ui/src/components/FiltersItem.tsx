@@ -36,12 +36,6 @@ const buttonStyles = css`
   border: 1px solid ${colors.darkerGrey};
 `;
 
-const optionsWrapperStyles = css`
-  padding: 12px;
-  border: 1px solid red;
-  border-radius: 4px;
-`;
-
 type Props = {
   index: number;
   filter: Filter;
@@ -101,6 +95,7 @@ export const FiltersItem = ({ index, filter, isEditing, onFilterUpdated, onFilte
         <Grid item xs={12}>
           <FilterConfig
             selectedOptionIds={filter.selectedOptionIds || []}
+            filterName={filter.name}
             options={filter.options}
             allowMultipe={filter.allowMultiple}
             isEditing={isEditing}

@@ -35,7 +35,7 @@ export const TabFilters = ({ test, filters, isEditing, onTestUpdated }: Props) =
   };
 
   const handleUpdateFilter = (filterIndex: number, selectedOptionIds: string) => {
-    const updatedFilters = test.filters.map((filter, index) => (filterIndex == index ? { ...filter, selectedOptionIds } : filter));
+    const updatedFilters = test.filters.map((filter, index) => (filterIndex === index ? { ...filter, selectedOptionIds } : filter));
     onTestUpdated({ ...test, filters: updatedFilters });
   };
 

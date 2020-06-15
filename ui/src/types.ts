@@ -45,6 +45,7 @@ export interface Filter {
 export interface FilterOption {
   value: string;
   label: string;
+  selected?: boolean;
 }
 
 // GET /admin/variants
