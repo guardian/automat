@@ -25,15 +25,13 @@ export const TabVariants = ({ test, variants, isEditing, onTestUpdated }: Props)
   }, [test, variants]);
 
   const handleDeleteVariant = (variantIndex: number) => {
-    const updatedDerivedVariants = derivedVariants.filter((dV: Variant, index: number) => variantIndex !== index);
-    const variantIds = updatedDerivedVariants.map((dV) => dV.id);
-    onTestUpdated({ ...test, variants: variantIds });
+    const updatedVariants = test.variants.filter((variant, index) => variantIndex !== index);
+    onTestUpdated({ ...test, variants: updatedVariants });
   };
 
   const handleUpdateVariant = (variantIndex: number, variantId: string) => {
-    const updatedDerivedVariants = derivedVariants.map((dV: Variant, index: number) => (variantIndex === index ? { ...dV, id: variantId } : dV));
-    const variantIds = updatedDerivedVariants.map((dV) => dV.id);
-    onTestUpdated({ ...test, variants: variantIds });
+    const updatedVariants = test.variants.map((variant, index) => (variantIndex === index ? variantId : variant));
+    onTestUpdated({ ...test, variants: updatedVariants });
   };
 
   const handleAddVariant = (variantId: string) => {
