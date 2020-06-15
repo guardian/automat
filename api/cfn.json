@@ -12,777 +12,38 @@
       "Type": "String",
       "Default": "automat-api"
     },
+    "VpcId": {
+      "Type": "AWS::EC2::VPC::Id",
+      "Description": "VPC in which instances will run"
+    },
+    "Subnets": {
+      "Type": "List<AWS::EC2::Subnet::Id>",
+      "Description": "Subnets where instances will run"
+    },
+    "AZs": {
+      "Type": "List<AWS::EC2::AvailabilityZone::Name>",
+      "Description": "List of AZs"
+    },
     "AMI": {
-      "Type": "String",
+      "Type": "AWS::EC2::Image::Id",
+      "Default": "ami-07e05aef825d2078a",
       "Description": "AMI ID to be provded by RiffRafff"
+    },
+    "PlaySecret": {
+      "Type": "String",
+      "Description": "Secret key for Play app",
+      "NoEcho": true
     }
   },
   "Resources": {
-    "VPCB9E5F0B4": {
-      "Type": "AWS::EC2::VPC",
-      "Properties": {
-        "CidrBlock": "10.0.0.0/16",
-        "EnableDnsHostnames": true,
-        "EnableDnsSupport": true,
-        "InstanceTenancy": "default",
-        "Tags": [
-          {
-            "Key": "App",
-            "Value": {
-              "Ref": "App"
-            }
-          },
-          {
-            "Key": "Name",
-            "Value": "automat-api/VPC"
-          },
-          {
-            "Key": "Owner",
-            "Value": "automat"
-          },
-          {
-            "Key": "Stack",
-            "Value": {
-              "Ref": "Stack"
-            }
-          },
-          {
-            "Key": "Stage",
-            "Value": {
-              "Ref": "Stage"
-            }
-          }
-        ]
-      },
-      "Metadata": {
-        "aws:cdk:path": "automat-api/VPC/Resource"
-      }
-    },
-    "VPCPublicSubnet1SubnetB4246D30": {
-      "Type": "AWS::EC2::Subnet",
-      "Properties": {
-        "CidrBlock": "10.0.0.0/18",
-        "VpcId": {
-          "Ref": "VPCB9E5F0B4"
-        },
-        "AvailabilityZone": {
-          "Fn::Select": [
-            0,
-            {
-              "Fn::GetAZs": ""
-            }
-          ]
-        },
-        "MapPublicIpOnLaunch": true,
-        "Tags": [
-          {
-            "Key": "App",
-            "Value": {
-              "Ref": "App"
-            }
-          },
-          {
-            "Key": "aws-cdk:subnet-name",
-            "Value": "Public"
-          },
-          {
-            "Key": "aws-cdk:subnet-type",
-            "Value": "Public"
-          },
-          {
-            "Key": "Name",
-            "Value": "automat-api/VPC/PublicSubnet1"
-          },
-          {
-            "Key": "Owner",
-            "Value": "automat"
-          },
-          {
-            "Key": "Stack",
-            "Value": {
-              "Ref": "Stack"
-            }
-          },
-          {
-            "Key": "Stage",
-            "Value": {
-              "Ref": "Stage"
-            }
-          }
-        ]
-      },
-      "Metadata": {
-        "aws:cdk:path": "automat-api/VPC/PublicSubnet1/Subnet"
-      }
-    },
-    "VPCPublicSubnet1RouteTableFEE4B781": {
-      "Type": "AWS::EC2::RouteTable",
-      "Properties": {
-        "VpcId": {
-          "Ref": "VPCB9E5F0B4"
-        },
-        "Tags": [
-          {
-            "Key": "App",
-            "Value": {
-              "Ref": "App"
-            }
-          },
-          {
-            "Key": "Name",
-            "Value": "automat-api/VPC/PublicSubnet1"
-          },
-          {
-            "Key": "Owner",
-            "Value": "automat"
-          },
-          {
-            "Key": "Stack",
-            "Value": {
-              "Ref": "Stack"
-            }
-          },
-          {
-            "Key": "Stage",
-            "Value": {
-              "Ref": "Stage"
-            }
-          }
-        ]
-      },
-      "Metadata": {
-        "aws:cdk:path": "automat-api/VPC/PublicSubnet1/RouteTable"
-      }
-    },
-    "VPCPublicSubnet1RouteTableAssociation0B0896DC": {
-      "Type": "AWS::EC2::SubnetRouteTableAssociation",
-      "Properties": {
-        "RouteTableId": {
-          "Ref": "VPCPublicSubnet1RouteTableFEE4B781"
-        },
-        "SubnetId": {
-          "Ref": "VPCPublicSubnet1SubnetB4246D30"
-        }
-      },
-      "Metadata": {
-        "aws:cdk:path": "automat-api/VPC/PublicSubnet1/RouteTableAssociation"
-      }
-    },
-    "VPCPublicSubnet1DefaultRoute91CEF279": {
-      "Type": "AWS::EC2::Route",
-      "Properties": {
-        "RouteTableId": {
-          "Ref": "VPCPublicSubnet1RouteTableFEE4B781"
-        },
-        "DestinationCidrBlock": "0.0.0.0/0",
-        "GatewayId": {
-          "Ref": "VPCIGWB7E252D3"
-        }
-      },
-      "DependsOn": [
-        "VPCVPCGW99B986DC"
-      ],
-      "Metadata": {
-        "aws:cdk:path": "automat-api/VPC/PublicSubnet1/DefaultRoute"
-      }
-    },
-    "VPCPublicSubnet1EIP6AD938E8": {
-      "Type": "AWS::EC2::EIP",
-      "Properties": {
-        "Domain": "vpc",
-        "Tags": [
-          {
-            "Key": "App",
-            "Value": {
-              "Ref": "App"
-            }
-          },
-          {
-            "Key": "Name",
-            "Value": "automat-api/VPC/PublicSubnet1"
-          },
-          {
-            "Key": "Owner",
-            "Value": "automat"
-          },
-          {
-            "Key": "Stack",
-            "Value": {
-              "Ref": "Stack"
-            }
-          },
-          {
-            "Key": "Stage",
-            "Value": {
-              "Ref": "Stage"
-            }
-          }
-        ]
-      },
-      "Metadata": {
-        "aws:cdk:path": "automat-api/VPC/PublicSubnet1/EIP"
-      }
-    },
-    "VPCPublicSubnet1NATGatewayE0556630": {
-      "Type": "AWS::EC2::NatGateway",
-      "Properties": {
-        "AllocationId": {
-          "Fn::GetAtt": [
-            "VPCPublicSubnet1EIP6AD938E8",
-            "AllocationId"
-          ]
-        },
-        "SubnetId": {
-          "Ref": "VPCPublicSubnet1SubnetB4246D30"
-        },
-        "Tags": [
-          {
-            "Key": "App",
-            "Value": {
-              "Ref": "App"
-            }
-          },
-          {
-            "Key": "Name",
-            "Value": "automat-api/VPC/PublicSubnet1"
-          },
-          {
-            "Key": "Owner",
-            "Value": "automat"
-          },
-          {
-            "Key": "Stack",
-            "Value": {
-              "Ref": "Stack"
-            }
-          },
-          {
-            "Key": "Stage",
-            "Value": {
-              "Ref": "Stage"
-            }
-          }
-        ]
-      },
-      "Metadata": {
-        "aws:cdk:path": "automat-api/VPC/PublicSubnet1/NATGateway"
-      }
-    },
-    "VPCPublicSubnet2Subnet74179F39": {
-      "Type": "AWS::EC2::Subnet",
-      "Properties": {
-        "CidrBlock": "10.0.64.0/18",
-        "VpcId": {
-          "Ref": "VPCB9E5F0B4"
-        },
-        "AvailabilityZone": {
-          "Fn::Select": [
-            1,
-            {
-              "Fn::GetAZs": ""
-            }
-          ]
-        },
-        "MapPublicIpOnLaunch": true,
-        "Tags": [
-          {
-            "Key": "App",
-            "Value": {
-              "Ref": "App"
-            }
-          },
-          {
-            "Key": "aws-cdk:subnet-name",
-            "Value": "Public"
-          },
-          {
-            "Key": "aws-cdk:subnet-type",
-            "Value": "Public"
-          },
-          {
-            "Key": "Name",
-            "Value": "automat-api/VPC/PublicSubnet2"
-          },
-          {
-            "Key": "Owner",
-            "Value": "automat"
-          },
-          {
-            "Key": "Stack",
-            "Value": {
-              "Ref": "Stack"
-            }
-          },
-          {
-            "Key": "Stage",
-            "Value": {
-              "Ref": "Stage"
-            }
-          }
-        ]
-      },
-      "Metadata": {
-        "aws:cdk:path": "automat-api/VPC/PublicSubnet2/Subnet"
-      }
-    },
-    "VPCPublicSubnet2RouteTable6F1A15F1": {
-      "Type": "AWS::EC2::RouteTable",
-      "Properties": {
-        "VpcId": {
-          "Ref": "VPCB9E5F0B4"
-        },
-        "Tags": [
-          {
-            "Key": "App",
-            "Value": {
-              "Ref": "App"
-            }
-          },
-          {
-            "Key": "Name",
-            "Value": "automat-api/VPC/PublicSubnet2"
-          },
-          {
-            "Key": "Owner",
-            "Value": "automat"
-          },
-          {
-            "Key": "Stack",
-            "Value": {
-              "Ref": "Stack"
-            }
-          },
-          {
-            "Key": "Stage",
-            "Value": {
-              "Ref": "Stage"
-            }
-          }
-        ]
-      },
-      "Metadata": {
-        "aws:cdk:path": "automat-api/VPC/PublicSubnet2/RouteTable"
-      }
-    },
-    "VPCPublicSubnet2RouteTableAssociation5A808732": {
-      "Type": "AWS::EC2::SubnetRouteTableAssociation",
-      "Properties": {
-        "RouteTableId": {
-          "Ref": "VPCPublicSubnet2RouteTable6F1A15F1"
-        },
-        "SubnetId": {
-          "Ref": "VPCPublicSubnet2Subnet74179F39"
-        }
-      },
-      "Metadata": {
-        "aws:cdk:path": "automat-api/VPC/PublicSubnet2/RouteTableAssociation"
-      }
-    },
-    "VPCPublicSubnet2DefaultRouteB7481BBA": {
-      "Type": "AWS::EC2::Route",
-      "Properties": {
-        "RouteTableId": {
-          "Ref": "VPCPublicSubnet2RouteTable6F1A15F1"
-        },
-        "DestinationCidrBlock": "0.0.0.0/0",
-        "GatewayId": {
-          "Ref": "VPCIGWB7E252D3"
-        }
-      },
-      "DependsOn": [
-        "VPCVPCGW99B986DC"
-      ],
-      "Metadata": {
-        "aws:cdk:path": "automat-api/VPC/PublicSubnet2/DefaultRoute"
-      }
-    },
-    "VPCPublicSubnet2EIP4947BC00": {
-      "Type": "AWS::EC2::EIP",
-      "Properties": {
-        "Domain": "vpc",
-        "Tags": [
-          {
-            "Key": "App",
-            "Value": {
-              "Ref": "App"
-            }
-          },
-          {
-            "Key": "Name",
-            "Value": "automat-api/VPC/PublicSubnet2"
-          },
-          {
-            "Key": "Owner",
-            "Value": "automat"
-          },
-          {
-            "Key": "Stack",
-            "Value": {
-              "Ref": "Stack"
-            }
-          },
-          {
-            "Key": "Stage",
-            "Value": {
-              "Ref": "Stage"
-            }
-          }
-        ]
-      },
-      "Metadata": {
-        "aws:cdk:path": "automat-api/VPC/PublicSubnet2/EIP"
-      }
-    },
-    "VPCPublicSubnet2NATGateway3C070193": {
-      "Type": "AWS::EC2::NatGateway",
-      "Properties": {
-        "AllocationId": {
-          "Fn::GetAtt": [
-            "VPCPublicSubnet2EIP4947BC00",
-            "AllocationId"
-          ]
-        },
-        "SubnetId": {
-          "Ref": "VPCPublicSubnet2Subnet74179F39"
-        },
-        "Tags": [
-          {
-            "Key": "App",
-            "Value": {
-              "Ref": "App"
-            }
-          },
-          {
-            "Key": "Name",
-            "Value": "automat-api/VPC/PublicSubnet2"
-          },
-          {
-            "Key": "Owner",
-            "Value": "automat"
-          },
-          {
-            "Key": "Stack",
-            "Value": {
-              "Ref": "Stack"
-            }
-          },
-          {
-            "Key": "Stage",
-            "Value": {
-              "Ref": "Stage"
-            }
-          }
-        ]
-      },
-      "Metadata": {
-        "aws:cdk:path": "automat-api/VPC/PublicSubnet2/NATGateway"
-      }
-    },
-    "VPCPrivateSubnet1Subnet8BCA10E0": {
-      "Type": "AWS::EC2::Subnet",
-      "Properties": {
-        "CidrBlock": "10.0.128.0/18",
-        "VpcId": {
-          "Ref": "VPCB9E5F0B4"
-        },
-        "AvailabilityZone": {
-          "Fn::Select": [
-            0,
-            {
-              "Fn::GetAZs": ""
-            }
-          ]
-        },
-        "MapPublicIpOnLaunch": false,
-        "Tags": [
-          {
-            "Key": "App",
-            "Value": {
-              "Ref": "App"
-            }
-          },
-          {
-            "Key": "aws-cdk:subnet-name",
-            "Value": "Private"
-          },
-          {
-            "Key": "aws-cdk:subnet-type",
-            "Value": "Private"
-          },
-          {
-            "Key": "Name",
-            "Value": "automat-api/VPC/PrivateSubnet1"
-          },
-          {
-            "Key": "Owner",
-            "Value": "automat"
-          },
-          {
-            "Key": "Stack",
-            "Value": {
-              "Ref": "Stack"
-            }
-          },
-          {
-            "Key": "Stage",
-            "Value": {
-              "Ref": "Stage"
-            }
-          }
-        ]
-      },
-      "Metadata": {
-        "aws:cdk:path": "automat-api/VPC/PrivateSubnet1/Subnet"
-      }
-    },
-    "VPCPrivateSubnet1RouteTableBE8A6027": {
-      "Type": "AWS::EC2::RouteTable",
-      "Properties": {
-        "VpcId": {
-          "Ref": "VPCB9E5F0B4"
-        },
-        "Tags": [
-          {
-            "Key": "App",
-            "Value": {
-              "Ref": "App"
-            }
-          },
-          {
-            "Key": "Name",
-            "Value": "automat-api/VPC/PrivateSubnet1"
-          },
-          {
-            "Key": "Owner",
-            "Value": "automat"
-          },
-          {
-            "Key": "Stack",
-            "Value": {
-              "Ref": "Stack"
-            }
-          },
-          {
-            "Key": "Stage",
-            "Value": {
-              "Ref": "Stage"
-            }
-          }
-        ]
-      },
-      "Metadata": {
-        "aws:cdk:path": "automat-api/VPC/PrivateSubnet1/RouteTable"
-      }
-    },
-    "VPCPrivateSubnet1RouteTableAssociation347902D1": {
-      "Type": "AWS::EC2::SubnetRouteTableAssociation",
-      "Properties": {
-        "RouteTableId": {
-          "Ref": "VPCPrivateSubnet1RouteTableBE8A6027"
-        },
-        "SubnetId": {
-          "Ref": "VPCPrivateSubnet1Subnet8BCA10E0"
-        }
-      },
-      "Metadata": {
-        "aws:cdk:path": "automat-api/VPC/PrivateSubnet1/RouteTableAssociation"
-      }
-    },
-    "VPCPrivateSubnet1DefaultRouteAE1D6490": {
-      "Type": "AWS::EC2::Route",
-      "Properties": {
-        "RouteTableId": {
-          "Ref": "VPCPrivateSubnet1RouteTableBE8A6027"
-        },
-        "DestinationCidrBlock": "0.0.0.0/0",
-        "NatGatewayId": {
-          "Ref": "VPCPublicSubnet1NATGatewayE0556630"
-        }
-      },
-      "Metadata": {
-        "aws:cdk:path": "automat-api/VPC/PrivateSubnet1/DefaultRoute"
-      }
-    },
-    "VPCPrivateSubnet2SubnetCFCDAA7A": {
-      "Type": "AWS::EC2::Subnet",
-      "Properties": {
-        "CidrBlock": "10.0.192.0/18",
-        "VpcId": {
-          "Ref": "VPCB9E5F0B4"
-        },
-        "AvailabilityZone": {
-          "Fn::Select": [
-            1,
-            {
-              "Fn::GetAZs": ""
-            }
-          ]
-        },
-        "MapPublicIpOnLaunch": false,
-        "Tags": [
-          {
-            "Key": "App",
-            "Value": {
-              "Ref": "App"
-            }
-          },
-          {
-            "Key": "aws-cdk:subnet-name",
-            "Value": "Private"
-          },
-          {
-            "Key": "aws-cdk:subnet-type",
-            "Value": "Private"
-          },
-          {
-            "Key": "Name",
-            "Value": "automat-api/VPC/PrivateSubnet2"
-          },
-          {
-            "Key": "Owner",
-            "Value": "automat"
-          },
-          {
-            "Key": "Stack",
-            "Value": {
-              "Ref": "Stack"
-            }
-          },
-          {
-            "Key": "Stage",
-            "Value": {
-              "Ref": "Stage"
-            }
-          }
-        ]
-      },
-      "Metadata": {
-        "aws:cdk:path": "automat-api/VPC/PrivateSubnet2/Subnet"
-      }
-    },
-    "VPCPrivateSubnet2RouteTable0A19E10E": {
-      "Type": "AWS::EC2::RouteTable",
-      "Properties": {
-        "VpcId": {
-          "Ref": "VPCB9E5F0B4"
-        },
-        "Tags": [
-          {
-            "Key": "App",
-            "Value": {
-              "Ref": "App"
-            }
-          },
-          {
-            "Key": "Name",
-            "Value": "automat-api/VPC/PrivateSubnet2"
-          },
-          {
-            "Key": "Owner",
-            "Value": "automat"
-          },
-          {
-            "Key": "Stack",
-            "Value": {
-              "Ref": "Stack"
-            }
-          },
-          {
-            "Key": "Stage",
-            "Value": {
-              "Ref": "Stage"
-            }
-          }
-        ]
-      },
-      "Metadata": {
-        "aws:cdk:path": "automat-api/VPC/PrivateSubnet2/RouteTable"
-      }
-    },
-    "VPCPrivateSubnet2RouteTableAssociation0C73D413": {
-      "Type": "AWS::EC2::SubnetRouteTableAssociation",
-      "Properties": {
-        "RouteTableId": {
-          "Ref": "VPCPrivateSubnet2RouteTable0A19E10E"
-        },
-        "SubnetId": {
-          "Ref": "VPCPrivateSubnet2SubnetCFCDAA7A"
-        }
-      },
-      "Metadata": {
-        "aws:cdk:path": "automat-api/VPC/PrivateSubnet2/RouteTableAssociation"
-      }
-    },
-    "VPCPrivateSubnet2DefaultRouteF4F5CFD2": {
-      "Type": "AWS::EC2::Route",
-      "Properties": {
-        "RouteTableId": {
-          "Ref": "VPCPrivateSubnet2RouteTable0A19E10E"
-        },
-        "DestinationCidrBlock": "0.0.0.0/0",
-        "NatGatewayId": {
-          "Ref": "VPCPublicSubnet2NATGateway3C070193"
-        }
-      },
-      "Metadata": {
-        "aws:cdk:path": "automat-api/VPC/PrivateSubnet2/DefaultRoute"
-      }
-    },
-    "VPCIGWB7E252D3": {
-      "Type": "AWS::EC2::InternetGateway",
-      "Properties": {
-        "Tags": [
-          {
-            "Key": "App",
-            "Value": {
-              "Ref": "App"
-            }
-          },
-          {
-            "Key": "Name",
-            "Value": "automat-api/VPC"
-          },
-          {
-            "Key": "Owner",
-            "Value": "automat"
-          },
-          {
-            "Key": "Stack",
-            "Value": {
-              "Ref": "Stack"
-            }
-          },
-          {
-            "Key": "Stage",
-            "Value": {
-              "Ref": "Stage"
-            }
-          }
-        ]
-      },
-      "Metadata": {
-        "aws:cdk:path": "automat-api/VPC/IGW"
-      }
-    },
-    "VPCVPCGW99B986DC": {
-      "Type": "AWS::EC2::VPCGatewayAttachment",
-      "Properties": {
-        "VpcId": {
-          "Ref": "VPCB9E5F0B4"
-        },
-        "InternetGatewayId": {
-          "Ref": "VPCIGWB7E252D3"
-        }
-      },
-      "Metadata": {
-        "aws:cdk:path": "automat-api/VPC/VPCGW"
-      }
-    },
     "automatelasticsearch": {
       "Type": "AWS::Elasticsearch::Domain",
       "Properties": {
-        "AccessPolicies": {},
-        "DomainName": "automat-elasticsearch-PROD",
+        "DomainName": "automat-elasticsearch-prod",
+        "EBSOptions": {
+          "EBSEnabled": true,
+          "VolumeSize": 60
+        },
         "ElasticsearchClusterConfig": {
           "InstanceCount": 1,
           "InstanceType": "r5.large.elasticsearch"
@@ -847,9 +108,23 @@
                   }
                 },
                 {
-                  "Action": "s3:GetObject",
+                  "Action": [
+                    "s3:GetObject",
+                    "s3:HeadObject",
+                    "s3:List*"
+                  ],
                   "Effect": "Allow",
                   "Resource": "arn:aws:s3:::aws-frontend-artifacts/*"
+                },
+                {
+                  "Action": [
+                    "ssmmessages:*",
+                    "ssm:*",
+                    "ec2messages:*",
+                    "logs:*"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": "*"
                 }
               ],
               "Version": "2012-10-17"
@@ -926,19 +201,19 @@
           }
         ],
         "VpcId": {
-          "Ref": "VPCB9E5F0B4"
+          "Ref": "VpcId"
         }
       },
       "Metadata": {
         "aws:cdk:path": "automat-api/ASG/InstanceSecurityGroup/Resource"
       }
     },
-    "ASGInstanceSecurityGroupfromautomatapiLBSecurityGroup4548FB9E808A4ACFD2": {
+    "ASGInstanceSecurityGroupfromautomatapiLBSecurityGroup4548FB9E9000E3406B9C": {
       "Type": "AWS::EC2::SecurityGroupIngress",
       "Properties": {
         "IpProtocol": "tcp",
         "Description": "Load balancer to target",
-        "FromPort": 80,
+        "FromPort": 9000,
         "GroupId": {
           "Fn::GetAtt": [
             "ASGInstanceSecurityGroup0525485D",
@@ -951,10 +226,10 @@
             "GroupId"
           ]
         },
-        "ToPort": 80
+        "ToPort": 9000
       },
       "Metadata": {
-        "aws:cdk:path": "automat-api/ASG/InstanceSecurityGroup/from automatapiLBSecurityGroup4548FB9E:80"
+        "aws:cdk:path": "automat-api/ASG/InstanceSecurityGroup/from automatapiLBSecurityGroup4548FB9E:9000"
       }
     },
     "ASGInstanceProfile0A2834D7": {
@@ -976,7 +251,8 @@
         "ImageId": {
           "Ref": "AMI"
         },
-        "InstanceType": "a1.medium",
+        "InstanceType": "t3a.small",
+        "AssociatePublicIpAddress": true,
         "IamInstanceProfile": {
           "Ref": "ASGInstanceProfile0A2834D7"
         },
@@ -989,7 +265,18 @@
           }
         ],
         "UserData": {
-          "Fn::Base64": "#!/bin/bash\naws --region eu-west-1 s3 cp s3://aws-frontend-artifacts/PROD/automat/automat_1.0-SNAPSHOT_all.deb /tmp\ndpkg -i /tmp/janus_1.0-SNAPSHOT_all.deb"
+          "Fn::Base64": {
+            "Fn::Join": [
+              "",
+              [
+                "#!/bin/bash\naws s3 cp s3://aws-frontend-artifacts/frontend/PROD/automat-api/automat-api_1.0-SNAPSHOT_all.deb /tmp\nexport APPLICATION_SECRET=",
+                {
+                  "Ref": "PlaySecret"
+                },
+                "\ndpkg -i /tmp/automat-api_1.0-SNAPSHOT_all.deb"
+              ]
+            ]
+          }
         }
       },
       "DependsOn": [
@@ -1045,14 +332,9 @@
             "Ref": "LBListenerTargetGroupF04FCF6D"
           }
         ],
-        "VPCZoneIdentifier": [
-          {
-            "Ref": "VPCPrivateSubnet1Subnet8BCA10E0"
-          },
-          {
-            "Ref": "VPCPrivateSubnet2SubnetCFCDAA7A"
-          }
-        ]
+        "VPCZoneIdentifier": {
+          "Ref": "Subnets"
+        }
       },
       "UpdatePolicy": {
         "AutoScalingScheduledAction": {
@@ -1093,14 +375,9 @@
             ]
           }
         ],
-        "Subnets": [
-          {
-            "Ref": "VPCPublicSubnet1SubnetB4246D30"
-          },
-          {
-            "Ref": "VPCPublicSubnet2Subnet74179F39"
-          }
-        ],
+        "Subnets": {
+          "Ref": "Subnets"
+        },
         "Tags": [
           {
             "Key": "App",
@@ -1127,10 +404,6 @@
         ],
         "Type": "application"
       },
-      "DependsOn": [
-        "VPCPublicSubnet1DefaultRoute91CEF279",
-        "VPCPublicSubnet2DefaultRouteB7481BBA"
-      ],
       "Metadata": {
         "aws:cdk:path": "automat-api/LB/Resource"
       }
@@ -1173,14 +446,14 @@
           }
         ],
         "VpcId": {
-          "Ref": "VPCB9E5F0B4"
+          "Ref": "VpcId"
         }
       },
       "Metadata": {
         "aws:cdk:path": "automat-api/LB/SecurityGroup/Resource"
       }
     },
-    "LBSecurityGrouptoautomatapiASGInstanceSecurityGroup9E12140D80153233A0": {
+    "LBSecurityGrouptoautomatapiASGInstanceSecurityGroup9E12140D900086CBD9D1": {
       "Type": "AWS::EC2::SecurityGroupEgress",
       "Properties": {
         "GroupId": {
@@ -1197,11 +470,11 @@
             "GroupId"
           ]
         },
-        "FromPort": 80,
-        "ToPort": 80
+        "FromPort": 9000,
+        "ToPort": 9000
       },
       "Metadata": {
-        "aws:cdk:path": "automat-api/LB/SecurityGroup/to automatapiASGInstanceSecurityGroup9E12140D:80"
+        "aws:cdk:path": "automat-api/LB/SecurityGroup/to automatapiASGInstanceSecurityGroup9E12140D:9000"
       }
     },
     "LBListener49E825B4": {
@@ -1228,7 +501,8 @@
     "LBListenerTargetGroupF04FCF6D": {
       "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
       "Properties": {
-        "Port": 80,
+        "HealthCheckPath": "/healthcheck",
+        "Port": 9000,
         "Protocol": "HTTP",
         "Tags": [
           {
@@ -1256,7 +530,7 @@
         ],
         "TargetType": "instance",
         "VpcId": {
-          "Ref": "VPCB9E5F0B4"
+          "Ref": "VpcId"
         }
       },
       "Metadata": {

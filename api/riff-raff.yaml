@@ -1,0 +1,17 @@
+stacks: [frontend]
+regions: [eu-west-1]
+deployments:
+  cfn:
+    type: cloud-formation
+    app: automat-api
+    parameters:
+      templatePath: cfn.yaml
+      amiTags:
+        Recipe: frontend-base
+        AmigoStage: PROD
+      amiEncrypted: true
+  automat-api:
+    type: autoscaling
+    dependencies: [cfn]
+    parameters:
+      bucket: aws-frontend-artifacts

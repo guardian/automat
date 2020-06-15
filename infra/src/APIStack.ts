@@ -26,12 +26,38 @@ export class APIStack extends cdk.Stack {
       default: "automat-api",
     });
 
-    const ami = new cdk.CfnParameter(this, "AMI", {
-      type: "String",
-      description: "AMI ID to be provded by RiffRafff",
+    const vpcId = new cdk.CfnParameter(this, "VpcId", {
+      type: "AWS::EC2::VPC::Id",
+      description: "VPC in which instances will run",
     });
 
-    const vpc = new ec2.Vpc(this, "VPC");
+    const publicSubnets = new cdk.CfnParameter(this, "Subnets", {
+      type: "List<AWS::EC2::Subnet::Id>",
+      description: "Subnets where instances will run",
+    });
+
+    const availabilityZones = new cdk.CfnParameter(this, "AZs", {
+      type: "List<AWS::EC2::AvailabilityZone::Name>",
+      description: "List of AZs",
+    });
+
+    const ami = new cdk.CfnParameter(this, "AMI", {
+      type: "AWS::EC2::Image::Id",
+      description: "AMI ID to be provded by RiffRafff",
+      default: "ami-07e05aef825d2078a",
+    });
+
+    const vpc = ec2.Vpc.fromVpcAttributes(this, "vpc", {
+      vpcId: vpcId.valueAsString,
+      availabilityZones: availabilityZones.valueAsList,
+      publicSubnetIds: publicSubnets.valueAsList,
+    });
+
+    const playSecret = new cdk.CfnParameter(this, "PlaySecret", {
+      type: "String",
+      description: "Secret key for Play app",
+      noEcho: true,
+    });
 
     const tags = [
       { key: "Stack", value: stack.valueAsString },
@@ -43,14 +69,17 @@ export class APIStack extends cdk.Stack {
     tags.forEach((tag) => Tag.add(this, tag.key, tag.value));
 
     const es = new elasticsearch.CfnDomain(this, "automat-elasticsearch", {
-      domainName: "automat-elasticsearch-PROD",
+      domainName: "automat-elasticsearch-prod",
       elasticsearchVersion: "7.4",
       elasticsearchClusterConfig: {
         instanceType: "r5.large.elasticsearch",
         instanceCount: 1,
       },
-      accessPolicies: {},
       tags: tags,
+      ebsOptions: {
+        ebsEnabled: true,
+        volumeSize: 60,
+      },
     });
 
     const role = new iam.Role(this, "roll", {
@@ -66,7 +95,12 @@ export class APIStack extends cdk.Stack {
             new iam.PolicyStatement({
               effect: iam.Effect.ALLOW,
               resources: ["arn:aws:s3:::aws-frontend-artifacts/*"],
-              actions: ["s3:GetObject"],
+              actions: ["s3:GetObject", "s3:HeadObject", "s3:List*"],
+            }),
+            new iam.PolicyStatement({
+              effect: iam.Effect.ALLOW,
+              resources: ["*"],
+              actions: ["ssmmessages:*", "ssm:*", "ec2messages:*", "logs:*"],
             }),
           ],
         }),
@@ -75,21 +109,24 @@ export class APIStack extends cdk.Stack {
 
     const userData = ec2.UserData.forLinux();
     userData.addCommands(
-      "aws --region eu-west-1 s3 cp s3://aws-frontend-artifacts/PROD/automat/automat_1.0-SNAPSHOT_all.deb /tmp",
-      "dpkg -i /tmp/janus_1.0-SNAPSHOT_all.deb"
+      "aws s3 cp s3://aws-frontend-artifacts/frontend/PROD/automat-api/automat-api_1.0-SNAPSHOT_all.deb /tmp",
+      `export APPLICATION_SECRET=${playSecret.valueAsString}`,
+      "dpkg -i /tmp/automat-api_1.0-SNAPSHOT_all.deb"
     );
 
     const asg = new autoscaling.AutoScalingGroup(this, "ASG", {
       vpc,
       instanceType: ec2.InstanceType.of(
-        ec2.InstanceClass.A1,
-        ec2.InstanceSize.MEDIUM
+        ec2.InstanceClass.T3A,
+        ec2.InstanceSize.SMALL
       ),
       machineImage: ec2.MachineImage.genericLinux({
         "eu-west-1": ami.valueAsString,
       }),
       userData: userData,
       role: role,
+      vpcSubnets: { subnetType: ec2.SubnetType.PUBLIC },
+      associatePublicIpAddress: true,
     });
 
     const lb = new elbv2.ApplicationLoadBalancer(this, "LB", {
@@ -102,8 +139,12 @@ export class APIStack extends cdk.Stack {
     });
 
     listener.addTargets("Target", {
-      port: 80,
+      port: 9000,
+      protocol: elbv2.ApplicationProtocol.HTTP,
       targets: [asg],
+      healthCheck: {
+        path: "/healthcheck",
+      },
     });
 
     listener.connections.allowDefaultPortFromAnyIpv4("Open to the world");
