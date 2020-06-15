@@ -65,9 +65,9 @@ export const TestsScreen = ({ slots, variants, filters }: Props) => {
 
   useEffect(() => {
     if (data) {
-      // TEST ONLY - this adds a mock filters array to the test object
-      // TODO: re-integrate with API when filters available
-      const extendedTests = data.slot.tests.map((test: TestFilter) => {
+      // TESTING ONLY - this adds a mock filters array to the test object
+      // TODO: remove this when filters supported by API.
+      const testsWithDummyFilters = data.slot.tests.map((test: TestFilter) => {
         const extendedTest = {
           ...test,
           filters: [
@@ -83,10 +83,8 @@ export const TestsScreen = ({ slots, variants, filters }: Props) => {
         };
         return extendedTest;
       });
-      setSavedTests(extendedTests);
-      setWorkingTests(extendedTests);
-      // setSavedTests(data.slot.tests);
-      // setWorkingTests(data.slot.tests);
+      setSavedTests(testsWithDummyFilters);
+      setWorkingTests(testsWithDummyFilters);
     }
   }, [data]);
 

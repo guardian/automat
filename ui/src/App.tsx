@@ -12,6 +12,8 @@ import { TestsScreen } from './screens/Tests';
 export const App = () => {
   const { data: dataSlots, loading: loadingSlots, error: errorSlots } = useApi<any>(`/admin/slots`);
   const { data: dataVariants, loading: loadingVariants, error: errorVariants } = useApi<any>(`/admin/variants`);
+
+  // TODO: fetch filters from API when available
   const { data: dataFilters, loading: loadingFilters, error: errorFilters } = useApi<any>(`http://localhost:3004/filters`, undefined, false);
 
   const [slots, setSlots] = useState([] as Slot[]);
@@ -31,7 +33,6 @@ export const App = () => {
   const [filters, setFilters] = useState([] as Filter[]);
   useEffect(() => {
     if (dataFilters) {
-      // setFilters(dataFilters.filters);
       setFilters(dataFilters);
     }
   }, [dataFilters]);
