@@ -66,6 +66,7 @@ export const Tests = ({ slots, variants, filters }: Props) => {
   useEffect(() => {
     if (data) {
       // TEST ONLY
+      // TODO: integrate with API when ready
       const extendedTests = data.slot.tests.map((test: TestFilter) => {
         const extendedTest = {
           ...test,
@@ -78,10 +79,6 @@ export const Tests = ({ slots, variants, filters }: Props) => {
               filterId: 'subspropensity',
               selectedOptionIds: ['hot', 'warm'],
             },
-            // {
-            //   filterId: 'samplerate',
-            //   selectedOptionIds: ['25'],
-            // },
           ],
         };
         return extendedTest;

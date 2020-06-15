@@ -5,8 +5,13 @@ import { AddCircleOutline as AddCircleOutlineIcon } from '@material-ui/icons';
 import { FiltersItem } from './FiltersItem';
 import { Test, Filter } from '../types';
 import { FilterSelector } from './FilterSelector';
+import { FiltersPlaceholder } from './FiltersPlaceholder';
 
 const rootStyles = css``;
+
+const placeholderWrapperStyles = css`
+  margin-bottom: 16px;
+`;
 
 type Props = {
   test: Test;
@@ -48,9 +53,15 @@ export const TabFilters = ({ test, filters, isEditing, onTestUpdated }: Props) =
 
   return (
     <div className={rootStyles}>
-      {derivedFilters.map((derivedFilter, index) => (
-        <FiltersItem index={index} filter={derivedFilter} isEditing={isEditing} onFilterUpdated={handleUpdateFilter} onFilterDeleted={handleDeleteFilter} />
-      ))}
+      {derivedFilters.length === 0 ? (
+        <div className={placeholderWrapperStyles}>
+          <FiltersPlaceholder />
+        </div>
+      ) : (
+        derivedFilters.map((derivedFilter, index) => (
+          <FiltersItem index={index} filter={derivedFilter} isEditing={isEditing} onFilterUpdated={handleUpdateFilter} onFilterDeleted={handleDeleteFilter} />
+        ))
+      )}
       {isAdding && <FilterSelector filters={filters} onCancel={() => setIsAdding(false)} onSelect={handleAddFilter} />}
       <Button disabled={!isEditing} startIcon={<AddCircleOutlineIcon />} color="primary" variant="contained" onClick={() => setIsAdding(true)}>
         Add Filter
