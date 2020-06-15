@@ -32,7 +32,9 @@ export class UIStack extends cdk.Stack {
     tags.forEach((tag) => Tag.add(this, tag.key, tag.value));
 
     new s3.Bucket(this, "automat-ui", {
+      bucketName: "com-gu-automat-ui",
       websiteIndexDocument: "index.html",
+      websiteErrorDocument: "index.html",
       publicReadAccess: true,
     });
   }
