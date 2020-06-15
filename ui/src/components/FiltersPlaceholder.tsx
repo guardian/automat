@@ -13,7 +13,7 @@ const rootStyles = css`
   justify-content: center;
   padding: 36px 24px;
   background-color: ${colors.lighterGrey};
-  border: 2px solid ${colors.darkerGrey};
+  border: 1px solid ${colors.darkerGrey};
 `;
 
 const iconStyles = css`
