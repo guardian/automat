@@ -3,7 +3,7 @@ import { css } from 'emotion';
 import { Button } from '@material-ui/core';
 import { AddCircleOutline as AddCircleOutlineIcon } from '@material-ui/icons';
 import { FiltersItem } from './FiltersItem';
-import { Test, Filter, TestFilter } from '../types';
+import { Test, Filter } from '../types';
 import { FilterSelector } from './FilterSelector';
 
 const rootStyles = css``;
@@ -30,19 +30,13 @@ export const TabFilters = ({ test, filters, isEditing, onTestUpdated }: Props) =
   }, [test, filters]);
 
   const handleDeleteFilter = (filterIndex: number) => {
-    const updatedDerivedFilters = derivedFilters.filter((dF: Filter, index: number) => filterIndex !== index);
-    const testFilters = updatedDerivedFilters.map((dF) => {
-      const testFilter: TestFilter = {
-        filterId: dF.id,
-        selectedOptionIds: [],
-      };
-      return testFilter;
-    });
-    onTestUpdated({ ...test, filters: testFilters });
+    const updatedFilters = test.filters.filter((filter, index) => filterIndex !== index);
+    onTestUpdated({ ...test, filters: updatedFilters });
   };
 
-  const handleUpdateFilter = (filterIndex: number, selectedOptionId: string) => {
-    console.log('=== handleUpdateFilter: ');
+  const handleUpdateFilter = (filterIndex: number, selectedOptionIds: string) => {
+    const updatedFilters = test.filters.map((filter, index) => (filterIndex == index ? { ...filter, selectedOptionIds } : filter));
+    onTestUpdated({ ...test, filters: updatedFilters });
   };
 
   const handleAddFilter = (filterId: string) => {
@@ -55,14 +49,7 @@ export const TabFilters = ({ test, filters, isEditing, onTestUpdated }: Props) =
   return (
     <div className={rootStyles}>
       {derivedFilters.map((derivedFilter, index) => (
-        <FiltersItem
-          index={index}
-          filter={derivedFilter}
-          test={test}
-          isEditing={isEditing}
-          onFilterUpdated={handleUpdateFilter}
-          onFilterDeleted={handleDeleteFilter}
-        />
+        <FiltersItem index={index} filter={derivedFilter} isEditing={isEditing} onFilterUpdated={handleUpdateFilter} onFilterDeleted={handleDeleteFilter} />
       ))}
       {isAdding && <FilterSelector filters={filters} onCancel={() => setIsAdding(false)} onSelect={handleAddFilter} />}
       <Button disabled={!isEditing} startIcon={<AddCircleOutlineIcon />} color="primary" variant="contained" onClick={() => setIsAdding(true)}>

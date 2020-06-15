@@ -5,7 +5,7 @@ import { FilterList as FilterListIcon, Delete as DeleteIcon } from '@material-ui
 import { Heading } from './Heading';
 import { Confirmation } from './Confirmation';
 import { colors } from '../utils/theme';
-import { Test, Filter } from '../types';
+import { Filter } from '../types';
 import { FilterConfig } from './FilterConfig';
 
 const rootStyles = css`
@@ -45,15 +45,17 @@ const optionsWrapperStyles = css`
 type Props = {
   index: number;
   filter: Filter;
-  test: Test;
   isEditing: boolean;
   onFilterUpdated: Function;
   onFilterDeleted: Function;
 };
 
-export const FiltersItem = ({ index, filter, test, isEditing, onFilterUpdated, onFilterDeleted }: Props) => {
+export const FiltersItem = ({ index, filter, isEditing, onFilterUpdated, onFilterDeleted }: Props) => {
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
-  const handleUpdate = () => {};
+
+  const handleUpdateFilter = (selectedOptionIds: string[]) => {
+    onFilterUpdated(index, selectedOptionIds);
+  };
 
   return (
     <Card elevation={0} className={rootStyles}>
@@ -102,7 +104,7 @@ export const FiltersItem = ({ index, filter, test, isEditing, onFilterUpdated, o
             options={filter.options}
             allowMultipe={filter.allowMultiple}
             isEditing={isEditing}
-            onChange={handleUpdate}
+            onFilterUpdated={handleUpdateFilter}
           />
         </Grid>
       </Grid>
