@@ -1,6 +1,6 @@
 # Admin 
 GET     /admin/slots                       controllers.SlotsAdminController.index
-GET     /admin/slots/:slotId               controllers.SlotsAdminController.show(slotId)
+GET     /admin/slots/:slotId               controllers.SlotsAdminController.get(slotId)
 PATCH   /admin/slots/:slotId               controllers.SlotsAdminController.update(slotId)
 GET     /admin/variants                    controllers.VariantsAdminController.index
 

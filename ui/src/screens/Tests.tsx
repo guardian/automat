@@ -44,7 +44,7 @@ type Props = {
 
 type SavingState = 'success' | 'failure' | 'loading' | undefined;
 
-export const Tests = ({ slots, variants, filters }: Props) => {
+export const TestsScreen = ({ slots, variants, filters }: Props) => {
   const history = useHistory();
   const { slotId, testId } = useParams();
   const { data, loading, error } = useApi<any>(`/admin/slots/${slotId}`);
@@ -65,8 +65,8 @@ export const Tests = ({ slots, variants, filters }: Props) => {
 
   useEffect(() => {
     if (data) {
-      // TEST ONLY
-      // TODO: integrate with API when ready
+      // TEST ONLY - this adds a mock filters array to the test object
+      // TODO: re-integrate with API when filters available
       const extendedTests = data.slot.tests.map((test: TestFilter) => {
         const extendedTest = {
           ...test,
@@ -132,8 +132,7 @@ export const Tests = ({ slots, variants, filters }: Props) => {
 
   const handleSaveChanges = () => {
     if (saveStatus === 'loading') {
-      alert('Already saving');
-      return undefined;
+      return;
     }
 
     setSaveStatus('loading');

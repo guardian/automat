@@ -6,8 +6,8 @@ import { Spinner } from './components/Spinner';
 import { Notification } from './components/Notification';
 import { Slot, Variant, Filter } from './types';
 import { Shell } from './Shell';
-import { Slots as SlotsScreen } from './screens/Slots';
-import { Tests as TestsScreen } from './screens/Tests';
+import { SlotsScreen } from './screens/Slots';
+import { TestsScreen } from './screens/Tests';
 
 export const App = () => {
   const { data: dataSlots, loading: loadingSlots, error: errorSlots } = useApi<any>(`/admin/slots`);
