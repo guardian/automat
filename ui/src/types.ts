@@ -33,13 +33,6 @@ interface TestFilter {
   selectedOptionIds: string[]; // Allow one or multiple entries depending on allowMultiple boolean in Filter
 }
 
-export type SimpleTest = {
-  id: string;
-  name: string;
-  description: string;
-  isEnabled: boolean;
-};
-
 // GET /admin/filters
 type Filters = Filter[];
 interface Filter {

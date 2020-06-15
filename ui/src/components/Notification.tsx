@@ -8,22 +8,22 @@ type Props = {
   keep?: boolean;
 };
 
-export const FeedbackMessage = ({ message, severity = 'info', keep = false }: Props) => {
-  const [open, setOpen] = useState(true);
+export const Notification = ({ message, severity = 'info', keep = false }: Props) => {
+  const [isOpen, setIsOpen] = useState(true);
 
   const handleClose = (event: any, reason: string) => {
     if (reason === 'clickaway') {
       return;
     }
 
-    setOpen(false);
+    setIsOpen(false);
   };
 
   const horizontal = 'right';
   const vertical = 'bottom';
 
   return (
-    <Snackbar open={open} autoHideDuration={keep ? undefined : 6000} onClose={handleClose} anchorOrigin={{ vertical, horizontal }}>
+    <Snackbar open={isOpen} autoHideDuration={keep ? undefined : 6000} onClose={handleClose} anchorOrigin={{ vertical, horizontal }}>
       <MuiAlert elevation={6} variant="filled" severity={severity}>
         {message}
       </MuiAlert>

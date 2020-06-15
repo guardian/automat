@@ -1,10 +1,12 @@
 import React from 'react';
 import { css, cx } from 'emotion';
 import { Link } from 'react-router-dom';
-import { Paper, Grid, Typography } from '@material-ui/core';
+import { Grid, Card } from '@material-ui/core';
+import { ViewQuilt as ViewQuiltIcon } from '@material-ui/icons';
+import { Heading } from '../components/Heading';
 import { Slot } from '../types';
 
-const paperStyles = css`
+const cardStyles = css`
   height: 160px;
   width: 160px;
   display: flex;
@@ -17,25 +19,25 @@ const linkStyles = css`
   text-decoration: none;
 `;
 
-const slotNameStyles = css`
-  font-weight: bold;
-  margin-bottom: 12px;
+const iconStyles = css`
+  font-size: 36px;
 `;
 
 type Props = {
   slots: Slot[];
 };
 
-export const ListSlots = ({ slots }: Props): JSX.Element => (
+export const SlotsList = ({ slots }: Props): JSX.Element => (
   <Grid container spacing={2}>
     {slots.map((slot) => (
       <Grid key={slot.id} item>
         <Link to={`/slots/${slot.id}`} className={cx(linkStyles)}>
-          <Paper className={cx(paperStyles)}>
-            <Typography component="h6" variant="h6" className={cx(slotNameStyles)}>
+          <Card className={cx(cardStyles)}>
+            <Heading level={2} supressMargin>
               {slot.name}
-            </Typography>
-          </Paper>
+            </Heading>
+            <ViewQuiltIcon className={iconStyles} />
+          </Card>
         </Link>
       </Grid>
     ))}

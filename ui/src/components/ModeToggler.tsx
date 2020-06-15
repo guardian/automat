@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { css, cx } from 'emotion';
 import { Grid, Chip, Paper, Button } from '@material-ui/core';
 import { LockOpen as LockOpenIcon, Backup as BackupIcon, SettingsBackupRestore as RevertIcon } from '@material-ui/icons';
-import { ConfirmDialog } from './ConfirmDialog';
+import { Confirmation } from './Confirmation';
+import { colors } from '../utils/theme';
 
 const getRootStyles = (isEditing: boolean) => css`
   width: 100%;
   padding: 12px;
-  border: 5px solid ${isEditing ? '#ffeb3b' : '#fff'};
+  border: 5px solid ${isEditing ? colors.yellow : colors.white};
 `;
 
 const statusStyles = css`
@@ -16,23 +17,40 @@ const statusStyles = css`
 
 type Props = {
   isEditing: boolean;
+  hasChanges: boolean;
   onUnlock: Function;
-  onSave: Function;
-  onRevert: Function;
+  onSaveChanges: Function;
+  onRevertChanges: Function;
 };
 
-export const EditModeToggle = ({ isEditing = false, onUnlock, onSave, onRevert }: Props) => {
+export const ModeToggler = ({ isEditing = false, hasChanges, onUnlock, onSaveChanges, onRevertChanges }: Props) => {
   const [saveConfirmation, setSaveConfirmation] = useState(false);
   const [revertConfirmation, setRevertConfirmation] = useState(false);
 
-  const onSaveChanges = () => {
-    setSaveConfirmation(false);
-    onSave();
+  const handleRevertConfirmation = () => {
+    if (hasChanges) {
+      setRevertConfirmation(true);
+    } else {
+      revertChanges();
+    }
   };
 
-  const onRevertChanges = () => {
+  const handleSaveConfirmation = () => {
+    if (hasChanges) {
+      setSaveConfirmation(true);
+    } else {
+      saveChanges();
+    }
+  };
+
+  const saveChanges = () => {
+    setSaveConfirmation(false);
+    onSaveChanges();
+  };
+
+  const revertChanges = () => {
     setRevertConfirmation(false);
-    onRevert();
+    onRevertChanges();
   };
 
   return (
@@ -40,17 +58,16 @@ export const EditModeToggle = ({ isEditing = false, onUnlock, onSave, onRevert }
       {isEditing ? (
         <Grid container spacing={2} direction="row" justify="space-between" alignItems="center">
           <Grid item>
-            You're in <Chip className={statusStyles} label="Editing" /> mode. Make your changes and click <span className={statusStyles}>Save All</span> to
-            publish.
+            You're in <Chip className={statusStyles} label="Editing" /> mode. Make your changes and click <b>Save All</b> to publish.
           </Grid>
           <Grid item>
             <Grid container spacing={2}>
               <Grid item>
-                <Button startIcon={<RevertIcon />} color="primary" variant="contained" onClick={() => setRevertConfirmation(true)}>
+                <Button startIcon={<RevertIcon />} color="primary" variant="contained" onClick={handleRevertConfirmation}>
                   Revert
                 </Button>
                 {revertConfirmation && (
-                  <ConfirmDialog
+                  <Confirmation
                     title="Revert changes?"
                     message="Are you sure you want revert your changes?"
                     buttons={
@@ -58,7 +75,7 @@ export const EditModeToggle = ({ isEditing = false, onUnlock, onSave, onRevert }
                         <Button onClick={() => setRevertConfirmation(false)} variant="contained">
                           Cancel
                         </Button>
-                        <Button startIcon={<RevertIcon />} onClick={onRevertChanges} color="primary" variant="contained">
+                        <Button startIcon={<RevertIcon />} onClick={revertChanges} color="primary" variant="contained">
                           Revert
                         </Button>
                       </>
@@ -67,11 +84,11 @@ export const EditModeToggle = ({ isEditing = false, onUnlock, onSave, onRevert }
                 )}
               </Grid>
               <Grid item>
-                <Button startIcon={<BackupIcon />} color="primary" variant="contained" onClick={() => setSaveConfirmation(true)}>
+                <Button startIcon={<BackupIcon />} color="primary" variant="contained" onClick={handleSaveConfirmation}>
                   Save All
                 </Button>
                 {saveConfirmation && (
-                  <ConfirmDialog
+                  <Confirmation
                     title="Save changes?"
                     message="Are you sure you want to save and publish your changes?"
                     buttons={
@@ -79,7 +96,7 @@ export const EditModeToggle = ({ isEditing = false, onUnlock, onSave, onRevert }
                         <Button onClick={() => setSaveConfirmation(false)} variant="contained">
                           Cancel
                         </Button>
-                        <Button startIcon={<BackupIcon />} onClick={onSaveChanges} color="primary" variant="contained">
+                        <Button startIcon={<BackupIcon />} onClick={saveChanges} color="primary" variant="contained">
                           Save All
                         </Button>
                       </>
@@ -93,8 +110,7 @@ export const EditModeToggle = ({ isEditing = false, onUnlock, onSave, onRevert }
       ) : (
         <Grid container spacing={2} direction="row" justify="space-between" alignItems="center">
           <Grid item>
-            You're in <Chip className={statusStyles} label="Read Only" /> mode. Click the <span className={statusStyles}>Unlock Editing Mode</span> button to
-            make changes.
+            You're in <Chip className={statusStyles} label="Read Only" /> mode. Click the <b>Unlock Editing Mode</b> button to make changes.
           </Grid>
           <Grid item>
             <Button startIcon={<LockOpenIcon />} color="primary" variant="contained" onClick={() => onUnlock()}>

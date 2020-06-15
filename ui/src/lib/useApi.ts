@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { checkForErrors } from '../utils/checkForErrors';
 
 // Not meant to be an exhaustive type definition of the fetch API,
 // just a starting point to get us going on 99% of our possible use cases
@@ -8,13 +9,6 @@ interface FetchOptions {
     'Content-Type': 'text/plain' | 'multipart/form-data' | 'application/json' | 'application/x-www-form-urlencoded';
   };
   body?: string;
-}
-
-function checkForErrors(response: any) {
-  if (!response.ok) {
-    throw Error(response.statusText);
-  }
-  return response;
 }
 
 const callApi = (url: string, options?: FetchOptions) => {
@@ -29,7 +23,7 @@ interface ApiResponse<T> {
   error?: Error;
 }
 
-export const useApi = <T>(url: string, options?: FetchOptions): ApiResponse<T> => {
+export const useApi = <T>(endpointUrl: string, options?: FetchOptions, prefixAutomat = true): ApiResponse<T> => {
   const [request, setRequest] = useState<{
     loading: boolean;
     data?: T;
@@ -38,8 +32,10 @@ export const useApi = <T>(url: string, options?: FetchOptions): ApiResponse<T> =
     loading: true,
   });
 
+  const apiPrefix = process.env.REACT_APP_AUTOMAT_API_URL;
+  const apiUrl = prefixAutomat && apiPrefix ? `${apiPrefix}${endpointUrl}` : endpointUrl;
   useEffect(() => {
-    callApi(url, options)
+    callApi(apiUrl, options)
       .then((data) => {
         setRequest({
           data,
@@ -52,7 +48,7 @@ export const useApi = <T>(url: string, options?: FetchOptions): ApiResponse<T> =
           loading: false,
         });
       });
-  }, [url, options]);
+  }, [apiUrl, options]);
 
   return request;
 };

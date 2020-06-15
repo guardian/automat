@@ -1,4 +1,4 @@
-import { Test, SimpleTest } from '../types';
+import { colors } from '../utils/theme';
 
 type StatusData = {
   label: string;
@@ -10,29 +10,27 @@ type TestStatus = Record<StatusCode, StatusData>;
 
 const TEST_STATUS: TestStatus = {
   SCHEDULED: {
-    // Not yet supported
-    label: 'Scheduled',
-    color: '#9e9e9e',
+    label: 'Scheduled', // Not yet supported
+    color: colors.darkerGrey,
   },
   RUNNING: {
     label: 'Running',
-    color: '#4caf50',
+    color: colors.green,
   },
   EXPIRED: {
-    // Not yet supported
-    label: 'Expired',
-    color: '#ffc107',
+    label: 'Expired', // Not yet supported
+    color: colors.orange,
   },
   INACTIVE: {
     label: 'Inactive',
-    color: '#f44336',
+    color: colors.red,
   },
 };
 
-export const getTestStatus = (test: Test | SimpleTest) => {
+export const getTestStatus = (isEnabled: boolean) => {
   let statusCode: StatusCode = 'RUNNING';
 
-  if (!test.isEnabled) {
+  if (!isEnabled) {
     statusCode = 'INACTIVE';
   }
 
