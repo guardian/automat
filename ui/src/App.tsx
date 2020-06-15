@@ -7,8 +7,8 @@ import { Notification } from './components/Notification';
 import { Slot } from './types';
 
 import { Shell } from './Shell';
-import { Slots as SlotsScreen } from './screens/Slots';
-import { Tests as TestsScreen } from './screens/Tests';
+import { SlotsScreen } from './screens/Slots';
+import { TestsScreen } from './screens/Tests';
 
 export const App = () => {
   const { data, loading, error } = useApi<any>(`/admin/slots`);

@@ -42,7 +42,7 @@ type Props = {
 
 type SavingState = 'success' | 'failure' | 'loading' | undefined;
 
-export const Tests = ({ slots }: Props) => {
+export const TestsScreen = ({ slots }: Props) => {
   const history = useHistory();
   const { slotId, testId } = useParams();
   const { data, loading, error } = useApi<any>(`/admin/slots/${slotId}`);
