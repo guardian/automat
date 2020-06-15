@@ -15,7 +15,7 @@ const rootStyles = css`
   border: 1px solid ${colors.darkerGrey};
   padding: 12px 0 12px 12px;
   border-radius: 4px;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
 `;
 
 const gridStyles = css`
