@@ -1,0 +1,17 @@
+stacks: [frontend]
+regions: [eu-west-1]
+deployments:
+  cfn:
+    type: cloud-formation
+    app: automat-api
+    parameters:
+      templatePath: cfn.yaml
+      amiTags:
+        Recipe: xenial-membership # TODO change
+        AmigoStage: PROD
+      amiEncrypted: true
+  admin-console:
+    type: autoscaling
+    dependencies: [cfn]
+    parameters:
+      bucket: frontend-artifacts
