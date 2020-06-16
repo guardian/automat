@@ -2,7 +2,7 @@ import React from 'react';
 import { css } from 'emotion';
 import { TextField } from '@material-ui/core';
 import { Test } from '../types';
-import { EditorFooter } from './EditorFooter';
+import { colors } from '../utils/theme';
 
 const rootStyles = css``;
 
@@ -11,14 +11,27 @@ const inputStyles = css`
   margin: 0 0 16px 0;
 `;
 
+const createdByStyles = css`
+  font-size: 12px;
+  color: ${colors.darkerGrey};
+  margin: 0;
+`;
+
 type Props = {
   test: Test;
   isEditing: boolean;
   onTestUpdated: Function;
-  onTestDeleted: Function;
 };
 
-export const TabBasic = ({ test, isEditing, onTestUpdated, onTestDeleted }: Props) => {
+export const TabBasic = ({ test, isEditing, onTestUpdated }: Props) => {
+  const { created, author } = test;
+
+  const formattedDate = new Date(created).toLocaleString().replace(', ', ' at ');
+  let createdSentence = `Test created on ${formattedDate}`;
+  if (author && author.firstName && author.lastName) {
+    createdSentence += ` by ${author.firstName} ${author.lastName}`;
+  }
+
   return (
     <div className={rootStyles}>
       <TextField
@@ -39,7 +52,7 @@ export const TabBasic = ({ test, isEditing, onTestUpdated, onTestDeleted }: Prop
         multiline
         rows={4}
       />
-      <EditorFooter test={test} isEditing={isEditing} onTestDeleted={onTestDeleted} />
+      {created && formattedDate && createdSentence && <p className={createdByStyles}>{createdSentence}</p>}
     </div>
   );
 };

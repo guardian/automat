@@ -3,6 +3,7 @@ import { css, cx } from 'emotion';
 import { Test, Variant, Filter } from '../types';
 import { Paper, Tabs, Tab, Grid, Card, Switch } from '@material-ui/core';
 import { Heading } from './Heading';
+import { TestContextMenu } from './TestContextMenu';
 import { TabBasic } from './TabBasic';
 import { TabVariants } from './TabVariants';
 import { TabFilters } from './TabFilters';
@@ -25,7 +26,7 @@ const headerStyles = css`
   margin-bottom: 8px;
 `;
 
-const switchStyles = css`
+const noMargin = css`
   margin: 0;
 `;
 
@@ -33,7 +34,7 @@ const contentAreaStyles = css`
   flex-grow: 1;
 `;
 
-const tabButtonsStyles = css`
+const tabHeaderStyles = css`
   background-color: ${colors.lighterGrey};
   margin-bottom: 24px;
   overflow: hidden;
@@ -72,7 +73,7 @@ export const TestEditor = ({ workingTest, testName, variants, filters, onTestUpd
             </Heading>
           </Grid>
           <Grid item>
-            <div className={switchStyles}>
+            <div className={noMargin}>
               Live on <b>theguardian.com</b>{' '}
               <Switch
                 checked={workingTest.isEnabled}
@@ -88,13 +89,21 @@ export const TestEditor = ({ workingTest, testName, variants, filters, onTestUpd
         </Grid>
 
         <Paper elevation={0} className={cx(contentAreaStyles)}>
-          <Tabs value={activeTabIndex} onChange={onTabClick} indicatorColor="primary" textColor="primary" className={tabButtonsStyles}>
-            <Tab label="Basic" />
-            <Tab label="Variants" />
-            <Tab label="Filters" />
-          </Tabs>
+          <Grid container spacing={0} justify="space-between" alignItems="center" className={cx(tabHeaderStyles)}>
+            <Grid item>
+              <Tabs value={activeTabIndex} onChange={onTabClick} indicatorColor="primary" textColor="primary">
+                <Tab label="Basic" />
+                <Tab label="Variants" />
+                <Tab label="Filters" />
+              </Tabs>
+            </Grid>
+            <Grid item>
+              <TestContextMenu test={workingTest} isEditing={isEditing} onTestDeleted={onTestDeleted} />
+            </Grid>
+          </Grid>
+
           <section className={tabContentStyles}>
-            {activeTabIndex === 0 && <TabBasic test={workingTest} isEditing={isEditing} onTestUpdated={onTestUpdated} onTestDeleted={onTestDeleted} />}
+            {activeTabIndex === 0 && <TabBasic test={workingTest} isEditing={isEditing} onTestUpdated={onTestUpdated} />}
             {activeTabIndex === 1 && <TabVariants test={workingTest} variants={variants} isEditing={isEditing} onTestUpdated={onTestUpdated} />}
             {activeTabIndex === 2 && <TabFilters test={workingTest} filters={filters} isEditing={isEditing} onTestUpdated={onTestUpdated} />}
           </section>
