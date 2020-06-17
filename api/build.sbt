@@ -1,3 +1,5 @@
+import com.typesafe.sbt.packager.archetypes.systemloader.SystemdPlugin
+import com.typesafe.sbt.packager.archetypes.systemloader.ServerLoader.Systemd
 
 name := """automat-api"""
 organization := "com.gu"
@@ -16,12 +18,13 @@ sources in(Compile, doc) := Seq.empty
 
 publishArtifact in(Compile, packageDoc) := false
 
-enablePlugins(PlayScala, RiffRaffArtifact, JDebPackaging)
+enablePlugins(PlayScala, RiffRaffArtifact, JDebPackaging, SystemdPlugin)
 
 debianPackageDependencies := Seq("openjdk-8-jre-headless")
 maintainer := "Automat <automat.dev@theguardian.com>"
 packageSummary := "Automat API"
 packageDescription := """Automat API"""
+serverLoading in Debian := Some(Systemd)
 
 riffRaffPackageType := (packageBin in Debian).value
 riffRaffManifestProjectName := "dotcom:automat-api"

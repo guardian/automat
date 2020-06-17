@@ -10,6 +10,7 @@ deployments:
         Recipe: frontend-base
         AmigoStage: PROD
       amiEncrypted: true
+      cloudFormationStackByTags: false
   automat-api:
     type: autoscaling
     dependencies: [cfn]

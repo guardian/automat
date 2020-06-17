@@ -53,10 +53,9 @@ export class APIStack extends cdk.Stack {
       publicSubnetIds: publicSubnets.valueAsList,
     });
 
-    const playSecret = new cdk.CfnParameter(this, "PlaySecret", {
+    const confBucket = new cdk.CfnParameter(this, "ConfBucket", {
       type: "String",
-      description: "Secret key for Play app",
-      noEcho: true,
+      description: "Bucket containing PROD conf file for app",
     });
 
     const tags = [
@@ -94,7 +93,10 @@ export class APIStack extends cdk.Stack {
             }),
             new iam.PolicyStatement({
               effect: iam.Effect.ALLOW,
-              resources: ["arn:aws:s3:::aws-frontend-artifacts/*"],
+              resources: [
+                "arn:aws:s3:::aws-frontend-artifacts/*",
+                `arn:aws:s3:::${confBucket.valueAsString}/*`,
+              ],
               actions: ["s3:GetObject", "s3:HeadObject", "s3:List*"],
             }),
             new iam.PolicyStatement({
@@ -109,8 +111,9 @@ export class APIStack extends cdk.Stack {
 
     const userData = ec2.UserData.forLinux();
     userData.addCommands(
+      "mkdir /etc/gu",
+      `aws s3 cp s3://${confBucket.valueAsString}/${stage.valueAsString}/automat-api.private.conf /etc/gu`,
       "aws s3 cp s3://aws-frontend-artifacts/frontend/PROD/automat-api/automat-api_1.0-SNAPSHOT_all.deb /tmp",
-      `export APPLICATION_SECRET=${playSecret.valueAsString}`,
       "dpkg -i /tmp/automat-api_1.0-SNAPSHOT_all.deb"
     );
 
@@ -127,6 +130,7 @@ export class APIStack extends cdk.Stack {
       role: role,
       vpcSubnets: { subnetType: ec2.SubnetType.PUBLIC },
       associatePublicIpAddress: true,
+      maxCapacity: 2,
     });
 
     const lb = new elbv2.ApplicationLoadBalancer(this, "LB", {

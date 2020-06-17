@@ -29,10 +29,9 @@
       "Default": "ami-07e05aef825d2078a",
       "Description": "AMI ID to be provded by RiffRafff"
     },
-    "PlaySecret": {
+    "ConfBucket": {
       "Type": "String",
-      "Description": "Secret key for Play app",
-      "NoEcho": true
+      "Description": "Bucket containing PROD conf file for app"
     }
   },
   "Resources": {
@@ -114,7 +113,21 @@
                     "s3:List*"
                   ],
                   "Effect": "Allow",
-                  "Resource": "arn:aws:s3:::aws-frontend-artifacts/*"
+                  "Resource": [
+                    "arn:aws:s3:::aws-frontend-artifacts/*",
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:aws:s3:::",
+                          {
+                            "Ref": "ConfBucket"
+                          },
+                          "/*"
+                        ]
+                      ]
+                    }
+                  ]
                 },
                 {
                   "Action": [
@@ -269,11 +282,15 @@
             "Fn::Join": [
               "",
               [
-                "#!/bin/bash\naws s3 cp s3://aws-frontend-artifacts/frontend/PROD/automat-api/automat-api_1.0-SNAPSHOT_all.deb /tmp\nexport APPLICATION_SECRET=",
+                "#!/bin/bash\nmkdir /etc/gu\naws s3 cp s3://",
                 {
-                  "Ref": "PlaySecret"
+                  "Ref": "ConfBucket"
                 },
-                "\ndpkg -i /tmp/automat-api_1.0-SNAPSHOT_all.deb"
+                "/",
+                {
+                  "Ref": "Stage"
+                },
+                "/automat-api.private.conf /etc/gu\naws s3 cp s3://aws-frontend-artifacts/frontend/PROD/automat-api/automat-api_1.0-SNAPSHOT_all.deb /tmp\ndpkg -i /tmp/automat-api_1.0-SNAPSHOT_all.deb"
               ]
             ]
           }
