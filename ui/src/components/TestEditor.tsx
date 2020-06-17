@@ -43,8 +43,6 @@ const tabHeaderStyles = css`
   border-top-right-radius: 4px;
 `;
 
-const tabContentStyles = css``;
-
 type Props = {
   name: string;
   workingTest: Test;
@@ -58,11 +56,11 @@ type Props = {
 export const TestEditor = ({ workingTest, name, variants, filters, onTestUpdated, onTestDeleted, isEditing }: Props) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
 
+  const testName = truncate(name, 50);
+
   useEffect(() => {
     setActiveTabIndex(0);
   }, [workingTest.id]);
-
-  const testName = truncate(name, 50);
 
   const onTabClick = (e: any, newTabIndex: number) => {
     setActiveTabIndex(newTabIndex);
@@ -107,11 +105,9 @@ export const TestEditor = ({ workingTest, name, variants, filters, onTestUpdated
             </Grid>
           </Grid>
 
-          <section className={tabContentStyles}>
-            {activeTabIndex === 0 && <TabBasic test={workingTest} isEditing={isEditing} onTestUpdated={onTestUpdated} />}
-            {activeTabIndex === 1 && <TabVariants test={workingTest} variants={variants} isEditing={isEditing} onTestUpdated={onTestUpdated} />}
-            {activeTabIndex === 2 && <TabFilters test={workingTest} filters={filters} isEditing={isEditing} onTestUpdated={onTestUpdated} />}
-          </section>
+          {activeTabIndex === 0 && <TabBasic test={workingTest} isEditing={isEditing} onTestUpdated={onTestUpdated} />}
+          {activeTabIndex === 1 && <TabVariants test={workingTest} variants={variants} isEditing={isEditing} onTestUpdated={onTestUpdated} />}
+          {activeTabIndex === 2 && <TabFilters test={workingTest} filters={filters} isEditing={isEditing} onTestUpdated={onTestUpdated} />}
         </Paper>
       </div>
     </Card>
