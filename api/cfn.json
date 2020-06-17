@@ -306,7 +306,7 @@
     "ASG46ED3070": {
       "Type": "AWS::AutoScaling::AutoScalingGroup",
       "Properties": {
-        "MaxSize": "1",
+        "MaxSize": "2",
         "MinSize": "1",
         "LaunchConfigurationName": {
           "Ref": "ASGLaunchConfigC00AF12B"
