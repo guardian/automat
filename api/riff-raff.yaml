@@ -3,7 +3,6 @@ regions: [eu-west-1]
 deployments:
   cfn:
     type: cloud-formation
-    app: automat-api
     parameters:
       templatePath: cfn.yaml
       amiTags:
@@ -11,6 +10,7 @@ deployments:
         AmigoStage: PROD
       amiEncrypted: true
       cloudFormationStackByTags: false
+      cloudFormationStackName: automat-api
   automat-api:
     type: autoscaling
     dependencies: [cfn]
