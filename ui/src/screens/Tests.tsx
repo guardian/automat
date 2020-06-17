@@ -189,7 +189,7 @@ export const TestsScreen = ({ slots, variants, filters }: Props) => {
           <Grid item xs>
             {slotName && workingTest && testId && (
               <TestEditor
-                testName={testName}
+                name={testName}
                 workingTest={workingTest}
                 variants={variants}
                 filters={filters}

@@ -19,7 +19,7 @@ export const TestContextMenu = ({ test, isEditing, onTestDeleted }: Props) => {
   const { id, name } = test;
   return (
     <>
-      <IconButton disabled={!isEditing} onClick={(e) => setMenuAnchor(e.currentTarget)}>
+      <IconButton onClick={(e) => setMenuAnchor(e.currentTarget)}>
         <MenuIcon />
       </IconButton>
       <Popover
@@ -37,7 +37,7 @@ export const TestContextMenu = ({ test, isEditing, onTestDeleted }: Props) => {
         }}
       >
         <List dense>
-          <ListItem button onClick={() => setDeleteConfirmation(true)}>
+          <ListItem disabled={!isEditing} button onClick={() => setDeleteConfirmation(true)}>
             <ListItemIcon>
               <DeleteIcon />
             </ListItemIcon>

@@ -8,6 +8,7 @@ import { TabBasic } from './TabBasic';
 import { TabVariants } from './TabVariants';
 import { TabFilters } from './TabFilters';
 import { colors } from '../utils/theme';
+import { truncate } from '../utils/truncate';
 
 const rootStyles = css`
   width: 100%;
@@ -45,7 +46,7 @@ const tabHeaderStyles = css`
 const tabContentStyles = css``;
 
 type Props = {
-  testName: string;
+  name: string;
   workingTest: Test;
   variants: Variant[];
   filters: Filter[];
@@ -54,14 +55,18 @@ type Props = {
   onTestDeleted: Function;
 };
 
-export const TestEditor = ({ workingTest, testName, variants, filters, onTestUpdated, onTestDeleted, isEditing }: Props) => {
+export const TestEditor = ({ workingTest, name, variants, filters, onTestUpdated, onTestDeleted, isEditing }: Props) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
 
   useEffect(() => {
     setActiveTabIndex(0);
   }, [workingTest.id]);
 
-  const onTabClick = (event: any, newTabIndex: any) => setActiveTabIndex(newTabIndex);
+  const testName = truncate(name, 50);
+
+  const onTabClick = (e: any, newTabIndex: number) => {
+    setActiveTabIndex(newTabIndex);
+  };
 
   return (
     <Card className={cx(rootStyles)}>
