@@ -2,21 +2,23 @@ import React from 'react';
 import { css } from 'emotion';
 import { TextField } from '@material-ui/core';
 import { Test } from '../types';
+import { EditorFooter } from './EditorFooter';
 
 const rootStyles = css``;
 
 const inputStyles = css`
   width: 100%;
-  margin: 0 0 12px 0;
+  margin: 0 0 16px 0;
 `;
 
 type Props = {
   test: Test;
   isEditing: boolean;
   onTestUpdated: Function;
+  onTestDeleted: Function;
 };
 
-export const TabBasic = ({ test, isEditing, onTestUpdated }: Props) => {
+export const TabBasic = ({ test, isEditing, onTestUpdated, onTestDeleted }: Props) => {
   return (
     <div className={rootStyles}>
       <TextField
@@ -37,6 +39,7 @@ export const TabBasic = ({ test, isEditing, onTestUpdated }: Props) => {
         multiline
         rows={4}
       />
+      <EditorFooter test={test} isEditing={isEditing} onTestDeleted={onTestDeleted} />
     </div>
   );
 };

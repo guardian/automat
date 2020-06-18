@@ -19,7 +19,6 @@ export const createTest = ({
   description,
   isEnabled,
   created: new Date(),
-  updated: new Date(),
   author: {
     id: 'automat.dev@guardian.co.uk',
     firstName: 'Automat',

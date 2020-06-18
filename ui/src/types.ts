@@ -16,7 +16,6 @@ export interface Test {
   description: string;
   isEnabled: boolean;
   created: Date;
-  updated: Date;
   startDate?: Date;
   expiryDate?: Date;
   author: {
@@ -35,7 +34,7 @@ interface TestFilter {
 
 // GET /admin/filters
 type Filters = Filter[];
-interface Filter {
+export interface Filter {
   id: string;
   name: string;
   helpText: string;
@@ -49,9 +48,10 @@ interface FilterOption {
 
 // GET /admin/variants
 type Variants = Variant[];
-interface Variant {
+export interface Variant {
   id: string;
   name: string;
   description: string;
-  thumbnailUrl: string;
+  thumbnailUrl?: string;
+  isEditing?: boolean;
 }

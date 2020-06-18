@@ -9,7 +9,7 @@ import { Heading } from '../components/Heading';
 import { TestsList } from '../components/TestsList';
 import { useApi } from '../lib/useApi';
 import { Spinner } from '../components/Spinner';
-import { Test, Slot } from '../types';
+import { Test, Slot, Variant } from '../types';
 import { TestEditor } from '../components/TestEditor';
 import { ModeToggler } from '../components/ModeToggler';
 import { Notification } from '../components/Notification';
@@ -38,11 +38,12 @@ const getWorktopStyles = (isEditing: boolean) => css`
 
 type Props = {
   slots: Slot[];
+  variants: Variant[];
 };
 
 type SavingState = 'success' | 'failure' | 'loading' | undefined;
 
-export const TestsScreen = ({ slots }: Props) => {
+export const TestsScreen = ({ slots, variants }: Props) => {
   const history = useHistory();
   const { slotId, testId } = useParams();
   const { data, loading, error } = useApi<any>(`/admin/slots/${slotId}`);
@@ -98,7 +99,7 @@ export const TestsScreen = ({ slots }: Props) => {
 
   const handleUpdateTest = (updatedTest: Test) => {
     const updatedTests = workingTests.map((test: Test) => (updatedTest.id === test.id ? updatedTest : test));
-    setWorkingTests([...updatedTests]);
+    setWorkingTests(updatedTests);
   };
 
   const handleDeleteTest = (deletedTestId: string) => {
@@ -110,8 +111,7 @@ export const TestsScreen = ({ slots }: Props) => {
 
   const handleSaveChanges = () => {
     if (saveStatus === 'loading') {
-      alert('Already saving');
-      return undefined;
+      return;
     }
 
     setSaveStatus('loading');
@@ -170,8 +170,9 @@ export const TestsScreen = ({ slots }: Props) => {
           <Grid item xs>
             {slotName && workingTest && testId && (
               <TestEditor
-                workingTest={workingTest}
                 testName={testName}
+                workingTest={workingTest}
+                variants={variants}
                 onTestUpdated={handleUpdateTest}
                 onTestDeleted={handleDeleteTest}
                 isEditing={isEditing}
