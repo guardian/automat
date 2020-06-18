@@ -18,7 +18,7 @@ import play.api.libs.json._
 import scala.concurrent.{ExecutionContext, Future, Promise}
 import scala.util.{Failure, Success}
 
-import models.{Slot, Test, Variant}
+import models.{Author, Slot, Test, Variant}
 
 trait SlotStore {
   def getAllSlots(): Future[List[Slot]]
@@ -217,7 +217,11 @@ object TestData {
           description = "example test",
           isEnabled = true,
           variants = List("subsmpu"),
-          sections = List("culture")
+          author = Author(
+            id = "example.user@guardian.co.uk",
+            firstName = "Example",
+            lastName = "User"
+          )
         ),
         Test(
           id = "test2",
@@ -225,7 +229,11 @@ object TestData {
           description = "example test",
           isEnabled = true,
           variants = List("subsmpu"),
-          sections = List("football")
+          author = Author(
+            id = "example.user@guardian.co.uk",
+            firstName = "Example",
+            lastName = "User"
+          )
         )
       )
     ),
@@ -239,7 +247,11 @@ object TestData {
           description = "example test",
           isEnabled = true,
           variants = List("contributionsepic"),
-          sections = List("culture")
+          author = Author(
+            id = "example.user@guardian.co.uk",
+            firstName = "Example",
+            lastName = "User"
+          )
         ),
         Test(
           id = "test4",
@@ -247,7 +259,11 @@ object TestData {
           description = "example test",
           isEnabled = true,
           variants = List("contributionsepic"),
-          sections = List("cricket")
+          author = Author(
+            id = "example.user@guardian.co.uk",
+            firstName = "Example",
+            lastName = "User"
+          )
         )
       )
     )

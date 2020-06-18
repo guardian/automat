@@ -1,0 +1,562 @@
+{
+  "Parameters": {
+    "Stack": {
+      "Type": "String",
+      "Default": "frontend"
+    },
+    "Stage": {
+      "Type": "String",
+      "Default": "PROD"
+    },
+    "App": {
+      "Type": "String",
+      "Default": "automat-api"
+    },
+    "VpcId": {
+      "Type": "AWS::EC2::VPC::Id",
+      "Description": "VPC in which instances will run"
+    },
+    "Subnets": {
+      "Type": "List<AWS::EC2::Subnet::Id>",
+      "Description": "Subnets where instances will run"
+    },
+    "AZs": {
+      "Type": "List<AWS::EC2::AvailabilityZone::Name>",
+      "Description": "List of AZs"
+    },
+    "AMI": {
+      "Type": "AWS::EC2::Image::Id",
+      "Default": "ami-07e05aef825d2078a",
+      "Description": "AMI ID to be provded by RiffRafff"
+    },
+    "ConfBucket": {
+      "Type": "String",
+      "Description": "Bucket containing PROD conf file for app"
+    }
+  },
+  "Resources": {
+    "automatelasticsearch": {
+      "Type": "AWS::Elasticsearch::Domain",
+      "Properties": {
+        "DomainName": "automat-elasticsearch-prod",
+        "EBSOptions": {
+          "EBSEnabled": true,
+          "VolumeSize": 60
+        },
+        "ElasticsearchClusterConfig": {
+          "InstanceCount": 1,
+          "InstanceType": "r5.large.elasticsearch"
+        },
+        "ElasticsearchVersion": "7.4",
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": {
+              "Ref": "App"
+            }
+          },
+          {
+            "Key": "Owner",
+            "Value": "automat"
+          },
+          {
+            "Key": "Stack",
+            "Value": {
+              "Ref": "Stack"
+            }
+          },
+          {
+            "Key": "Stage",
+            "Value": {
+              "Ref": "Stage"
+            }
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "automat-api/automat-elasticsearch"
+      }
+    },
+    "roll9AE24C80": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ec2.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "es:*",
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "automatelasticsearch",
+                      "Arn"
+                    ]
+                  }
+                },
+                {
+                  "Action": [
+                    "s3:GetObject",
+                    "s3:HeadObject",
+                    "s3:List*"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    "arn:aws:s3:::aws-frontend-artifacts/*",
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:aws:s3:::",
+                          {
+                            "Ref": "ConfBucket"
+                          },
+                          "/*"
+                        ]
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Action": [
+                    "ssmmessages:*",
+                    "ssm:*",
+                    "ec2messages:*",
+                    "logs:*"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": "*"
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "instancePolicy"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": {
+              "Ref": "App"
+            }
+          },
+          {
+            "Key": "Owner",
+            "Value": "automat"
+          },
+          {
+            "Key": "Stack",
+            "Value": {
+              "Ref": "Stack"
+            }
+          },
+          {
+            "Key": "Stage",
+            "Value": {
+              "Ref": "Stage"
+            }
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "automat-api/roll/Resource"
+      }
+    },
+    "ASGInstanceSecurityGroup0525485D": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "automat-api/ASG/InstanceSecurityGroup",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": {
+              "Ref": "App"
+            }
+          },
+          {
+            "Key": "Name",
+            "Value": "automat-api/ASG"
+          },
+          {
+            "Key": "Owner",
+            "Value": "automat"
+          },
+          {
+            "Key": "Stack",
+            "Value": {
+              "Ref": "Stack"
+            }
+          },
+          {
+            "Key": "Stage",
+            "Value": {
+              "Ref": "Stage"
+            }
+          }
+        ],
+        "VpcId": {
+          "Ref": "VpcId"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "automat-api/ASG/InstanceSecurityGroup/Resource"
+      }
+    },
+    "ASGInstanceSecurityGroupfromautomatapiLBSecurityGroup4548FB9E9000E3406B9C": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "IpProtocol": "tcp",
+        "Description": "Load balancer to target",
+        "FromPort": 9000,
+        "GroupId": {
+          "Fn::GetAtt": [
+            "ASGInstanceSecurityGroup0525485D",
+            "GroupId"
+          ]
+        },
+        "SourceSecurityGroupId": {
+          "Fn::GetAtt": [
+            "LBSecurityGroup8A41EA2B",
+            "GroupId"
+          ]
+        },
+        "ToPort": 9000
+      },
+      "Metadata": {
+        "aws:cdk:path": "automat-api/ASG/InstanceSecurityGroup/from automatapiLBSecurityGroup4548FB9E:9000"
+      }
+    },
+    "ASGInstanceProfile0A2834D7": {
+      "Type": "AWS::IAM::InstanceProfile",
+      "Properties": {
+        "Roles": [
+          {
+            "Ref": "roll9AE24C80"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "automat-api/ASG/InstanceProfile"
+      }
+    },
+    "ASGLaunchConfigC00AF12B": {
+      "Type": "AWS::AutoScaling::LaunchConfiguration",
+      "Properties": {
+        "ImageId": {
+          "Ref": "AMI"
+        },
+        "InstanceType": "t3a.small",
+        "AssociatePublicIpAddress": true,
+        "IamInstanceProfile": {
+          "Ref": "ASGInstanceProfile0A2834D7"
+        },
+        "SecurityGroups": [
+          {
+            "Fn::GetAtt": [
+              "ASGInstanceSecurityGroup0525485D",
+              "GroupId"
+            ]
+          }
+        ],
+        "UserData": {
+          "Fn::Base64": {
+            "Fn::Join": [
+              "",
+              [
+                "#!/bin/bash\nmkdir /etc/gu\naws s3 cp s3://",
+                {
+                  "Ref": "ConfBucket"
+                },
+                "/",
+                {
+                  "Ref": "Stage"
+                },
+                "/automat-api.private.conf /etc/gu\naws s3 cp s3://aws-frontend-artifacts/frontend/PROD/automat-api/automat-api_1.0-SNAPSHOT_all.deb /tmp\ndpkg -i /tmp/automat-api_1.0-SNAPSHOT_all.deb"
+              ]
+            ]
+          }
+        }
+      },
+      "DependsOn": [
+        "roll9AE24C80"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "automat-api/ASG/LaunchConfig"
+      }
+    },
+    "ASG46ED3070": {
+      "Type": "AWS::AutoScaling::AutoScalingGroup",
+      "Properties": {
+        "MaxSize": "2",
+        "MinSize": "1",
+        "LaunchConfigurationName": {
+          "Ref": "ASGLaunchConfigC00AF12B"
+        },
+        "Tags": [
+          {
+            "Key": "App",
+            "PropagateAtLaunch": true,
+            "Value": {
+              "Ref": "App"
+            }
+          },
+          {
+            "Key": "Name",
+            "PropagateAtLaunch": true,
+            "Value": "automat-api/ASG"
+          },
+          {
+            "Key": "Owner",
+            "PropagateAtLaunch": true,
+            "Value": "automat"
+          },
+          {
+            "Key": "Stack",
+            "PropagateAtLaunch": true,
+            "Value": {
+              "Ref": "Stack"
+            }
+          },
+          {
+            "Key": "Stage",
+            "PropagateAtLaunch": true,
+            "Value": {
+              "Ref": "Stage"
+            }
+          }
+        ],
+        "TargetGroupARNs": [
+          {
+            "Ref": "LBListenerTargetGroupF04FCF6D"
+          }
+        ],
+        "VPCZoneIdentifier": {
+          "Ref": "Subnets"
+        }
+      },
+      "UpdatePolicy": {
+        "AutoScalingScheduledAction": {
+          "IgnoreUnmodifiedGroupSizeProperties": true
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "automat-api/ASG/ASG"
+      }
+    },
+    "ASGScalingPolicyGT80CPUD8CC7169": {
+      "Type": "AWS::AutoScaling::ScalingPolicy",
+      "Properties": {
+        "AutoScalingGroupName": {
+          "Ref": "ASG46ED3070"
+        },
+        "PolicyType": "TargetTrackingScaling",
+        "TargetTrackingConfiguration": {
+          "PredefinedMetricSpecification": {
+            "PredefinedMetricType": "ASGAverageCPUUtilization"
+          },
+          "TargetValue": 80
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "automat-api/ASG/ScalingPolicyGT80CPU/Resource"
+      }
+    },
+    "LB8A12904C": {
+      "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+      "Properties": {
+        "Scheme": "internet-facing",
+        "SecurityGroups": [
+          {
+            "Fn::GetAtt": [
+              "LBSecurityGroup8A41EA2B",
+              "GroupId"
+            ]
+          }
+        ],
+        "Subnets": {
+          "Ref": "Subnets"
+        },
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": {
+              "Ref": "App"
+            }
+          },
+          {
+            "Key": "Owner",
+            "Value": "automat"
+          },
+          {
+            "Key": "Stack",
+            "Value": {
+              "Ref": "Stack"
+            }
+          },
+          {
+            "Key": "Stage",
+            "Value": {
+              "Ref": "Stage"
+            }
+          }
+        ],
+        "Type": "application"
+      },
+      "Metadata": {
+        "aws:cdk:path": "automat-api/LB/Resource"
+      }
+    },
+    "LBSecurityGroup8A41EA2B": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Automatically created Security Group for ELB automatapiLB5B22C249",
+        "SecurityGroupIngress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow from anyone on port 80",
+            "FromPort": 80,
+            "IpProtocol": "tcp",
+            "ToPort": 80
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": {
+              "Ref": "App"
+            }
+          },
+          {
+            "Key": "Owner",
+            "Value": "automat"
+          },
+          {
+            "Key": "Stack",
+            "Value": {
+              "Ref": "Stack"
+            }
+          },
+          {
+            "Key": "Stage",
+            "Value": {
+              "Ref": "Stage"
+            }
+          }
+        ],
+        "VpcId": {
+          "Ref": "VpcId"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "automat-api/LB/SecurityGroup/Resource"
+      }
+    },
+    "LBSecurityGrouptoautomatapiASGInstanceSecurityGroup9E12140D900086CBD9D1": {
+      "Type": "AWS::EC2::SecurityGroupEgress",
+      "Properties": {
+        "GroupId": {
+          "Fn::GetAtt": [
+            "LBSecurityGroup8A41EA2B",
+            "GroupId"
+          ]
+        },
+        "IpProtocol": "tcp",
+        "Description": "Load balancer to target",
+        "DestinationSecurityGroupId": {
+          "Fn::GetAtt": [
+            "ASGInstanceSecurityGroup0525485D",
+            "GroupId"
+          ]
+        },
+        "FromPort": 9000,
+        "ToPort": 9000
+      },
+      "Metadata": {
+        "aws:cdk:path": "automat-api/LB/SecurityGroup/to automatapiASGInstanceSecurityGroup9E12140D:9000"
+      }
+    },
+    "LBListener49E825B4": {
+      "Type": "AWS::ElasticLoadBalancingV2::Listener",
+      "Properties": {
+        "DefaultActions": [
+          {
+            "TargetGroupArn": {
+              "Ref": "LBListenerTargetGroupF04FCF6D"
+            },
+            "Type": "forward"
+          }
+        ],
+        "LoadBalancerArn": {
+          "Ref": "LB8A12904C"
+        },
+        "Port": 80,
+        "Protocol": "HTTP"
+      },
+      "Metadata": {
+        "aws:cdk:path": "automat-api/LB/Listener/Resource"
+      }
+    },
+    "LBListenerTargetGroupF04FCF6D": {
+      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+      "Properties": {
+        "HealthCheckIntervalSeconds": 30,
+        "HealthCheckPath": "/healthcheck",
+        "HealthCheckTimeoutSeconds": 10,
+        "HealthyThresholdCount": 2,
+        "Port": 9000,
+        "Protocol": "HTTP",
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": {
+              "Ref": "App"
+            }
+          },
+          {
+            "Key": "Owner",
+            "Value": "automat"
+          },
+          {
+            "Key": "Stack",
+            "Value": {
+              "Ref": "Stack"
+            }
+          },
+          {
+            "Key": "Stage",
+            "Value": {
+              "Ref": "Stage"
+            }
+          }
+        ],
+        "TargetType": "instance",
+        "UnhealthyThresholdCount": 5,
+        "VpcId": {
+          "Ref": "VpcId"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "automat-api/LB/Listener/TargetGroup/Resource"
+      }
+    }
+  }
+}
