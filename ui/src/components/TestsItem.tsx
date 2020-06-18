@@ -13,17 +13,26 @@ const rootStyles = css`
   text-decoration: none;
 `;
 
-const getCardStyles = (isSelected: boolean, isLastItem: boolean, isModified: boolean) => css`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  padding: 12px;
-  background-color: ${isSelected ? colors.lighterGrey : colors.white};
-  border: 2px solid ${isModified ? colors.yellow : colors.darkerGrey};
-  margin-bottom: ${isLastItem ? '0' : '16px'};
-`;
+const getCardStyles = (isSelected: boolean, isLastItem: boolean, isModified: boolean, isInvalid: boolean) => {
+  let borderColor = colors.darkerGrey;
+  if (isInvalid) {
+    borderColor = colors.red;
+  } else if (isModified) {
+    borderColor = colors.yellow;
+  }
+
+  return css`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 12px;
+    border: 2px solid ${borderColor};
+    background-color: ${isSelected ? colors.lighterGrey : colors.white};
+    margin-bottom: ${isLastItem ? '0' : '16px'};
+  `;
+};
 
 const getChipStyles = (color: string) => css`
   background-color: ${color};
@@ -58,16 +67,17 @@ type Props = {
   isSelected: boolean;
   isModified: boolean;
   isLastItem: boolean;
+  isInvalid: boolean;
 };
 
-export const TestsItem = ({ id, name, description, link, isEnabled, isSelected, isModified, isLastItem }: Props) => {
+export const TestsItem = ({ id, name, description, link, isEnabled, isSelected, isModified, isLastItem, isInvalid }: Props) => {
   const status = getTestStatus(isEnabled);
   const testName = truncate(name, 50);
   const testDescription = truncate(description, 80);
 
   return (
     <Link key={id} to={link} className={rootStyles}>
-      <Card className={cx(getCardStyles(isSelected, isLastItem, isModified))} elevation={0}>
+      <Card className={cx(getCardStyles(isSelected, isLastItem, isModified, isInvalid))} elevation={0}>
         <div className={headerStyles}>
           <Heading level={2} supressMargin>
             {isModified ? (

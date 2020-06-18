@@ -3,7 +3,7 @@ import { css } from 'emotion';
 import isEqual from 'lodash.isequal';
 import { TestsItem } from './TestsItem';
 import { TestsPlaceholder } from './TestsPlaceholder';
-import { Test } from '../types';
+import { Test, TestErrors } from '../types';
 
 const rootStyles = css`
   display: flex;
@@ -14,11 +14,12 @@ const rootStyles = css`
 type Props = {
   slotId: string;
   workingTests: Test[];
+  testErrors: TestErrors;
   savedTests: Test[];
   selectedTestId?: string;
 };
 
-export const TestsList = ({ workingTests, savedTests, slotId, selectedTestId }: Props): JSX.Element => {
+export const TestsList = ({ workingTests, testErrors, savedTests, slotId, selectedTestId }: Props): JSX.Element => {
   if (workingTests.length === 0) {
     return <TestsPlaceholder />;
   }
@@ -37,6 +38,7 @@ export const TestsList = ({ workingTests, savedTests, slotId, selectedTestId }: 
         const isModified = !isEqual(workingTest, savedTest);
         const isSelected = selectedTestId === workingTest.id;
         const isLastItem = index === workingTests.length - 1;
+        const isInvalid = !!testErrors[id];
 
         return (
           <TestsItem
@@ -49,6 +51,7 @@ export const TestsList = ({ workingTests, savedTests, slotId, selectedTestId }: 
             isSelected={isSelected}
             isModified={isModified}
             isLastItem={isLastItem}
+            isInvalid={isInvalid}
           />
         );
       })}

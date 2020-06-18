@@ -4,26 +4,11 @@ import clsx from 'clsx';
 import { css } from 'emotion';
 import { StylesProvider } from '@material-ui/core/styles';
 import { makeStyles, CssBaseline } from '@material-ui/core';
-import {
-  Drawer,
-  AppBar,
-  Toolbar,
-  List,
-  Typography,
-  Divider,
-  IconButton,
-  Badge,
-  Container,
-  Button,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-} from '@material-ui/core';
-import { Menu as MenuIcon, ChevronLeft as ChevronLeftIcon, Notifications as NotificationsIcon, ViewQuilt as ViewQuiltIcon } from '@material-ui/icons';
+import { Drawer, AppBar, Toolbar, List, Typography, Divider, IconButton, Container, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
+import { Menu as MenuIcon, ChevronLeft as ChevronLeftIcon, ViewQuilt as ViewQuiltIcon } from '@material-ui/icons';
 
 // TODO
 // Refactor styling to use JSS/Emotion for consistency
-
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -153,12 +138,6 @@ export const Shell = ({ children }: Props) => {
                   <img src="/automat-logo.png" alt="Automat logo" className={automatLogoStyles} />
                 </Link>
               </Typography>
-              {/* <IconButton color="inherit">
-                <Badge badgeContent={0} color="secondary">
-                  <NotificationsIcon />
-                </Badge>
-              </IconButton>
-              <Button variant="contained">Sign In</Button> */}
               <img src="/guardian-logo.png" alt="The Guardian logo" className={guLogoStyles} />
             </Toolbar>
           </AppBar>

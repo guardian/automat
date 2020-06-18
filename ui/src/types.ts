@@ -57,3 +57,10 @@ export interface Variant {
   thumbnailUrl?: string;
   isEditing?: boolean;
 }
+
+// Form validation - defines fields under validation rules
+export type TestErrors = { [key: string]: ValidatedFields };
+export type ValidatedFields = {
+  name?: string;
+  variants?: string;
+};
