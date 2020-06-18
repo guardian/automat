@@ -4,17 +4,15 @@ import { Grid } from '@material-ui/core';
 import { useApi } from './lib/useApi';
 import { Spinner } from './components/Spinner';
 import { Notification } from './components/Notification';
-import { Slot, Variant, Filter } from './types';
+import { Slot, Variant } from './types';
 import { Shell } from './Shell';
 import { SlotsScreen } from './screens/Slots';
 import { TestsScreen } from './screens/Tests';
+import { filters } from './data/filters';
 
 export const App = () => {
   const { data: dataSlots, loading: loadingSlots, error: errorSlots } = useApi<any>(`/admin/slots`);
   const { data: dataVariants, loading: loadingVariants, error: errorVariants } = useApi<any>(`/admin/variants`);
-
-  // TODO: fetch filters from API when available
-  const { data: dataFilters, loading: loadingFilters, error: errorFilters } = useApi<any>(`http://localhost:3004/filters`, undefined, false);
 
   const [slots, setSlots] = useState([] as Slot[]);
   useEffect(() => {
@@ -30,17 +28,10 @@ export const App = () => {
     }
   }, [dataVariants]);
 
-  const [filters, setFilters] = useState([] as Filter[]);
-  useEffect(() => {
-    if (dataFilters) {
-      setFilters(dataFilters);
-    }
-  }, [dataFilters]);
-
   return (
     <Shell>
       <Grid container spacing={3}>
-        {(loadingSlots || loadingVariants || loadingFilters) && <Spinner />}
+        {(loadingSlots || loadingVariants) && <Spinner />}
         {slots && (
           <Switch>
             <Route exact path="/">
@@ -54,7 +45,7 @@ export const App = () => {
             </Route>
           </Switch>
         )}
-        {(errorSlots || errorVariants || errorFilters) && <Notification severity="error" keep message="Error fetching data. Please check your connection." />}
+        {(errorSlots || errorVariants) && <Notification severity="error" keep message="Error fetching data. Please check your connection." />}
       </Grid>
     </Shell>
   );

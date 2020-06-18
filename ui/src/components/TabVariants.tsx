@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { css } from 'emotion';
 import { Button } from '@material-ui/core';
-import { AddCircleOutline as AddCircleOutlineIcon, Error as ErrorIcon } from '@material-ui/icons';
+import { AddCircleOutline as AddCircleOutlineIcon } from '@material-ui/icons';
 import { Test, Variant, TestErrors } from '../types';
 import { VariantSelector } from './VariantSelector';
 import { VariantsItem } from './VariantsItem';
