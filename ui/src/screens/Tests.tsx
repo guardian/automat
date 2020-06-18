@@ -13,10 +13,10 @@ import { Test, Slot, Variant, Filter, TestFilter } from '../types';
 import { TestEditor } from '../components/TestEditor';
 import { ModeToggler } from '../components/ModeToggler';
 import { Notification } from '../components/Notification';
-import { createTest } from '../utils/createTest';
+import { createNewTest } from '../utils/factories';
 import { goToTestByIndex } from '../utils/redirects';
 import { colors } from '../utils/theme';
-import { patchTestsBySlot } from '../utils/patchTests';
+import { patchTestsBySlot } from '../api/tests';
 
 const rootStyles = css`
   width: 100%;
@@ -110,7 +110,7 @@ export const TestsScreen = ({ slots, variants, filters }: Props) => {
 
   const handleCreateTest = () => {
     const testIndex = 0;
-    const newTest = createTest({});
+    const newTest = createNewTest({});
     const updatedTests = [newTest, ...workingTests];
     setWorkingTests(updatedTests);
     goToTestByIndex(updatedTests, testIndex, slotId, history);
@@ -189,7 +189,7 @@ export const TestsScreen = ({ slots, variants, filters }: Props) => {
           <Grid item xs>
             {slotName && workingTest && testId && (
               <TestEditor
-                testName={testName}
+                name={testName}
                 workingTest={workingTest}
                 variants={variants}
                 filters={filters}
