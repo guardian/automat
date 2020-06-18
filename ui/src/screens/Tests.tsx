@@ -9,14 +9,14 @@ import { Heading } from '../components/Heading';
 import { TestsList } from '../components/TestsList';
 import { useApi } from '../lib/useApi';
 import { Spinner } from '../components/Spinner';
-import { Test, Slot, Variant } from '../types';
+import { Test, Slot, Variant, Filter, TestFilter } from '../types';
 import { TestEditor } from '../components/TestEditor';
 import { ModeToggler } from '../components/ModeToggler';
 import { Notification } from '../components/Notification';
-import { createTest } from '../utils/createTest';
+import { createNewTest } from '../utils/factories';
 import { goToTestByIndex } from '../utils/redirects';
 import { colors } from '../utils/theme';
-import { patchTestsBySlot } from '../utils/patchTests';
+import { patchTestsBySlot } from '../api/tests';
 
 const rootStyles = css`
   width: 100%;
@@ -39,11 +39,12 @@ const getWorktopStyles = (isEditing: boolean) => css`
 type Props = {
   slots: Slot[];
   variants: Variant[];
+  filters: Filter[];
 };
 
 type SavingState = 'success' | 'failure' | 'loading' | undefined;
 
-export const TestsScreen = ({ slots, variants }: Props) => {
+export const TestsScreen = ({ slots, variants, filters }: Props) => {
   const history = useHistory();
   const { slotId, testId } = useParams();
   const { data, loading, error } = useApi<any>(`/admin/slots/${slotId}`);
@@ -64,8 +65,26 @@ export const TestsScreen = ({ slots, variants }: Props) => {
 
   useEffect(() => {
     if (data) {
-      setSavedTests(data.slot.tests);
-      setWorkingTests(data.slot.tests);
+      // TESTING ONLY - this adds a mock filters array to the test object
+      // TODO: remove this when filters supported by API.
+      const testsWithDummyFilters = data.slot.tests.map((test: TestFilter) => {
+        const extendedTest = {
+          ...test,
+          filters: [
+            {
+              filterId: 'authstatus',
+              selectedOptionIds: ['loggedin'],
+            },
+            {
+              filterId: 'subspropensity',
+              selectedOptionIds: ['hot', 'warm'],
+            },
+          ],
+        };
+        return extendedTest;
+      });
+      setSavedTests(testsWithDummyFilters);
+      setWorkingTests(testsWithDummyFilters);
     }
   }, [data]);
 
@@ -91,7 +110,7 @@ export const TestsScreen = ({ slots, variants }: Props) => {
 
   const handleCreateTest = () => {
     const testIndex = 0;
-    const newTest = createTest({});
+    const newTest = createNewTest({});
     const updatedTests = [newTest, ...workingTests];
     setWorkingTests(updatedTests);
     goToTestByIndex(updatedTests, testIndex, slotId, history);
@@ -170,9 +189,10 @@ export const TestsScreen = ({ slots, variants }: Props) => {
           <Grid item xs>
             {slotName && workingTest && testId && (
               <TestEditor
-                testName={testName}
+                name={testName}
                 workingTest={workingTest}
                 variants={variants}
+                filters={filters}
                 onTestUpdated={handleUpdateTest}
                 onTestDeleted={handleDeleteTest}
                 isEditing={isEditing}

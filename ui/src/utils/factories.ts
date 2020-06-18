@@ -1,19 +1,14 @@
 import { Test } from '../types';
+import { v4 as uuidv4 } from 'uuid';
 
-type ConfigurableTestProps = {
+interface ConfigurableTestProps {
   id?: string;
   name?: string;
   description?: string;
   isEnabled?: boolean;
-};
+}
 
-// TODO: agree a format for IDs generated client-side
-export const createTest = ({
-  id = new Date().getTime().toString(),
-  name = 'Untitled Test',
-  description = '',
-  isEnabled = false,
-}: ConfigurableTestProps): Test => ({
+export const createNewTest = ({ id = uuidv4(), name = 'Untitled Test', description = '', isEnabled = false }: ConfigurableTestProps): Test => ({
   id,
   name,
   description,

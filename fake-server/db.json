@@ -52,16 +52,12 @@
       "options": [
         {
           "value": "loggedin",
-          "label": "Logged In users only"
+          "label": "Logged In Users",
+          "selected": true
         },
         {
           "value": "notloggedin",
-          "label": "Not logged-in users only"
-        },
-        {
-          "value": "any",
-          "label": "Any (it doesn't matter)",
-          "selected": true
+          "label": "Not Logged-in Users"
         }
       ]
     },
@@ -83,8 +79,7 @@
         },
         {
           "value": "cold",
-          "label": "Cold (unlikely to subscribe)",
-          "selected": true
+          "label": "Cold (unlikely to subscribe)"
         }
       ]
     },

@@ -5,6 +5,7 @@ import { Card, Chip } from '@material-ui/core';
 import { Heading } from './Heading';
 import { getTestStatus } from '../utils/testStatus';
 import { colors } from '../utils/theme';
+import { truncate } from '../utils/truncate';
 
 const rootStyles = css`
   color: inherit;
@@ -61,6 +62,9 @@ type Props = {
 
 export const TestsItem = ({ id, name, description, link, isEnabled, isSelected, isModified, isLastItem }: Props) => {
   const status = getTestStatus(isEnabled);
+  const testName = truncate(name, 50);
+  const testDescription = truncate(description, 80);
+
   return (
     <Link key={id} to={link} className={rootStyles}>
       <Card className={cx(getCardStyles(isSelected, isLastItem, isModified))} elevation={0}>
@@ -68,16 +72,16 @@ export const TestsItem = ({ id, name, description, link, isEnabled, isSelected, 
           <Heading level={2} supressMargin>
             {isModified ? (
               <>
-                {name}
+                {testName}
                 <div className={subheadingStyles}>(Modified)</div>
               </>
             ) : (
-              name
+              testName
             )}
           </Heading>
           {status && <Chip label={status.label} className={cx(getChipStyles(status.color))} />}
         </div>
-        <p className={descriptionStyles}>{description}</p>
+        <p className={descriptionStyles}>{testDescription}</p>
       </Card>
     </Link>
   );

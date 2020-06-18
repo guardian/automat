@@ -153,12 +153,12 @@ export const Shell = ({ children }: Props) => {
                   <img src="/automat-logo.png" alt="Automat logo" className={automatLogoStyles} />
                 </Link>
               </Typography>
-              <IconButton color="inherit">
+              {/* <IconButton color="inherit">
                 <Badge badgeContent={0} color="secondary">
                   <NotificationsIcon />
                 </Badge>
               </IconButton>
-              <Button variant="contained">Sign In</Button>
+              <Button variant="contained">Sign In</Button> */}
               <img src="/guardian-logo.png" alt="The Guardian logo" className={guLogoStyles} />
             </Toolbar>
           </AppBar>
