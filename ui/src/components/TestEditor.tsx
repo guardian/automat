@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { css, cx } from 'emotion';
-import { Test, Variant } from '../types';
+import { Test, Variant, Filter } from '../types';
 import { Paper, Tabs, Tab, Grid, Card, Switch } from '@material-ui/core';
 import { Heading } from './Heading';
+import { TestContextMenu } from './TestContextMenu';
 import { TabBasic } from './TabBasic';
 import { TabVariants } from './TabVariants';
 import { TabFilters } from './TabFilters';
 import { colors } from '../utils/theme';
+import { truncate } from '../utils/truncate';
 
 const rootStyles = css`
   width: 100%;
@@ -25,7 +27,7 @@ const headerStyles = css`
   margin-bottom: 8px;
 `;
 
-const switchStyles = css`
+const noMargin = css`
   margin: 0;
 `;
 
@@ -33,7 +35,7 @@ const contentAreaStyles = css`
   flex-grow: 1;
 `;
 
-const tabButtonsStyles = css`
+const tabHeaderStyles = css`
   background-color: ${colors.lighterGrey};
   margin-bottom: 24px;
   overflow: hidden;
@@ -41,28 +43,28 @@ const tabButtonsStyles = css`
   border-top-right-radius: 4px;
 `;
 
-const tabContentStyles = css``;
-
 type Props = {
-  testName: string;
+  name: string;
   workingTest: Test;
   variants: Variant[];
+  filters: Filter[];
   isEditing: boolean;
   onTestUpdated: Function;
   onTestDeleted: Function;
 };
 
-export const TestEditor = ({ workingTest, testName, variants, onTestUpdated, onTestDeleted, isEditing }: Props) => {
+export const TestEditor = ({ workingTest, name, variants, filters, onTestUpdated, onTestDeleted, isEditing }: Props) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
+
+  const testName = truncate(name, 50);
 
   useEffect(() => {
     setActiveTabIndex(0);
   }, [workingTest.id]);
 
-  // TODO: TESTING ONLY
-  // workingTest.variants = ['subsmpu', 'contributionsepic'];
-
-  const onTabClick = (event: any, newTabIndex: any) => setActiveTabIndex(newTabIndex);
+  const onTabClick = (e: any, newTabIndex: number) => {
+    setActiveTabIndex(newTabIndex);
+  };
 
   return (
     <Card className={cx(rootStyles)}>
@@ -74,7 +76,7 @@ export const TestEditor = ({ workingTest, testName, variants, onTestUpdated, onT
             </Heading>
           </Grid>
           <Grid item>
-            <div className={switchStyles}>
+            <div className={noMargin}>
               Live on <b>theguardian.com</b>{' '}
               <Switch
                 checked={workingTest.isEnabled}
@@ -90,16 +92,22 @@ export const TestEditor = ({ workingTest, testName, variants, onTestUpdated, onT
         </Grid>
 
         <Paper elevation={0} className={cx(contentAreaStyles)}>
-          <Tabs value={activeTabIndex} onChange={onTabClick} indicatorColor="primary" textColor="primary" className={tabButtonsStyles}>
-            <Tab label="Basic" />
-            <Tab label="Variants" />
-            <Tab label="Filters" />
-          </Tabs>
-          <section className={tabContentStyles}>
-            {activeTabIndex === 0 && <TabBasic test={workingTest} isEditing={isEditing} onTestUpdated={onTestUpdated} onTestDeleted={onTestDeleted} />}
-            {activeTabIndex === 1 && <TabVariants test={workingTest} variants={variants} isEditing={isEditing} onTestUpdated={onTestUpdated} />}
-            {activeTabIndex === 2 && <TabFilters test={workingTest} isEditing={isEditing} onTestUpdated={onTestUpdated} />}
-          </section>
+          <Grid container spacing={0} justify="space-between" alignItems="center" className={cx(tabHeaderStyles)}>
+            <Grid item>
+              <Tabs value={activeTabIndex} onChange={onTabClick} indicatorColor="primary" textColor="primary">
+                <Tab label="Basic" />
+                <Tab label="Variants" />
+                <Tab label="Filters" />
+              </Tabs>
+            </Grid>
+            <Grid item>
+              <TestContextMenu test={workingTest} isEditing={isEditing} onTestDeleted={onTestDeleted} />
+            </Grid>
+          </Grid>
+
+          {activeTabIndex === 0 && <TabBasic test={workingTest} isEditing={isEditing} onTestUpdated={onTestUpdated} />}
+          {activeTabIndex === 1 && <TabVariants test={workingTest} variants={variants} isEditing={isEditing} onTestUpdated={onTestUpdated} />}
+          {activeTabIndex === 2 && <TabFilters test={workingTest} filters={filters} isEditing={isEditing} onTestUpdated={onTestUpdated} />}
         </Paper>
       </div>
     </Card>
