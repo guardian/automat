@@ -27,7 +27,7 @@ export interface Test {
   filters: TestFilter[];
 }
 
-interface TestFilter {
+export interface TestFilter {
   filterId: string;
   selectedOptionIds: string[]; // Allow one or multiple entries depending on allowMultiple boolean in Filter
 }
@@ -40,10 +40,12 @@ export interface Filter {
   helpText: string;
   options: FilterOption[];
   allowMultiple: boolean; // Default to false?
+  selectedOptionIds?: string[];
 }
-interface FilterOption {
+export interface FilterOption {
   value: string;
   label: string;
+  selected?: boolean;
 }
 
 // GET /admin/variants

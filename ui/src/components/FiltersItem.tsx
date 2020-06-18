@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { css, cx } from 'emotion';
 import { Card, Grid, Button, IconButton } from '@material-ui/core';
-import { Delete as DeleteIcon, Settings as SettingsIcon } from '@material-ui/icons';
+import { FilterList as FilterListIcon, Delete as DeleteIcon } from '@material-ui/icons';
 import { Heading } from './Heading';
 import { Confirmation } from './Confirmation';
-import { VariantSelector } from './VariantSelector';
-import { Variant } from '../types';
 import { colors } from '../utils/theme';
-import { alphabet } from '../utils/alphabet';
+import { Filter } from '../types';
+import { FilterConfig } from './FilterConfig';
 
 const rootStyles = css`
   width: 100%;
@@ -22,10 +21,9 @@ const gridStyles = css`
   width: 100%;
 `;
 
-const indexStyles = css`
-  font-size: 48px;
-  line-height: 48px;
-  padding: 0;
+const iconStyles = css`
+  font-size: 47px;
+  line-height: 47px;
   text-align: center;
   margin: 0;
 `;
@@ -40,39 +38,30 @@ const buttonStyles = css`
 
 type Props = {
   index: number;
-  variant: Variant;
-  variants: Variant[];
+  filter: Filter;
   isEditing: boolean;
-  onVariantDeleted: Function;
-  onVariantUpdated: Function;
+  onFilterUpdated: Function;
+  onFilterDeleted: Function;
 };
 
-export const VariantsItem = ({ index, variant, variants, isEditing, onVariantDeleted, onVariantUpdated }: Props) => {
-  const [isUpdating, setIsUpdating] = useState(false);
+export const FiltersItem = ({ index, filter, isEditing, onFilterUpdated, onFilterDeleted }: Props) => {
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
 
-  const handleUpdateVariant = (variantId: string) => {
-    onVariantUpdated(index, variantId);
-    setIsUpdating(false);
+  const handleUpdateFilter = (selectedOptionIds: string[]) => {
+    onFilterUpdated(index, selectedOptionIds);
   };
 
   return (
     <Card elevation={0} className={rootStyles}>
       <Grid container spacing={2} justify="flex-start" alignItems="center" className={cx(gridStyles)}>
         <Grid item xs={1}>
-          <p className={indexStyles}>{alphabet[index]}</p>
+          <FilterListIcon className={cx(iconStyles)} />
         </Grid>
-        <Grid item xs={9}>
+        <Grid item xs={10}>
           <Heading level={2} supressMargin>
-            {variant.name}
+            {filter.name}
           </Heading>
-          <p className={noMargin}>{variant.description}</p>
-        </Grid>
-        <Grid item xs={1}>
-          <IconButton disabled={!isEditing} onClick={() => setIsUpdating(true)} className={buttonStyles}>
-            <SettingsIcon />
-          </IconButton>
-          {isUpdating && <VariantSelector value={variant.id} variants={variants} onCancel={() => setIsUpdating(false)} onSelect={handleUpdateVariant} />}
+          <p className={noMargin}>{filter.helpText}</p>
         </Grid>
         <Grid item xs={1}>
           <IconButton disabled={!isEditing} onClick={() => setDeleteConfirmation(true)} className={buttonStyles}>
@@ -80,8 +69,8 @@ export const VariantsItem = ({ index, variant, variants, isEditing, onVariantDel
           </IconButton>
           {deleteConfirmation && (
             <Confirmation
-              title="Delete variant?"
-              message="Are you sure you want to delete this variant?"
+              title="Delete filter?"
+              message="Are you sure you want to delete this filter?"
               buttons={
                 <>
                   <Button onClick={() => setDeleteConfirmation(false)} variant="contained">
@@ -90,18 +79,28 @@ export const VariantsItem = ({ index, variant, variants, isEditing, onVariantDel
                   <Button
                     startIcon={<DeleteIcon />}
                     onClick={() => {
-                      onVariantDeleted(index);
+                      onFilterDeleted(index);
                       setDeleteConfirmation(false);
                     }}
                     variant="contained"
                     color="secondary"
                   >
-                    Delete Variant
+                    Delete Filter
                   </Button>
                 </>
               }
             />
           )}
+        </Grid>
+        <Grid item xs={12}>
+          <FilterConfig
+            selectedOptionIds={filter.selectedOptionIds || []}
+            filterName={filter.name}
+            options={filter.options}
+            allowMultipe={filter.allowMultiple}
+            isEditing={isEditing}
+            onFilterUpdated={handleUpdateFilter}
+          />
         </Grid>
       </Grid>
     </Card>
