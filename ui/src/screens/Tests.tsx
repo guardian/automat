@@ -79,16 +79,7 @@ export const TestsScreen = ({ slots, variants, filters }: Props) => {
       const testsWithDummyFilters = data.slot.tests.map((test: TestFilter) => {
         const extendedTest = {
           ...test,
-          filters: [
-            {
-              filterId: 'authstatus',
-              selectedOptionIds: ['loggedin'],
-            },
-            {
-              filterId: 'subspropensity',
-              selectedOptionIds: ['hot', 'warm'],
-            },
-          ],
+          filters: [],
         };
         return extendedTest;
       });
