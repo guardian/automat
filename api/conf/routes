@@ -1,4 +1,6 @@
-# Admin 
+GET     /healthcheck                       controllers.HealthcheckController.get
+
+# Admin
 GET     /admin/slots                       controllers.SlotsAdminController.index
 GET     /admin/slots/:slotId               controllers.SlotsAdminController.get(slotId)
 PATCH   /admin/slots/:slotId               controllers.SlotsAdminController.update(slotId)
