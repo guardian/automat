@@ -1,0 +1,92 @@
+{
+  "Parameters": {
+    "Stack": {
+      "Type": "String",
+      "Default": "frontend"
+    },
+    "Stage": {
+      "Type": "String",
+      "Default": "PROD"
+    },
+    "App": {
+      "Type": "String",
+      "Default": "automat-ui"
+    }
+  },
+  "Resources": {
+    "automatuiA0421C0E": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketName": "com-gu-automat-ui",
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": {
+              "Ref": "App"
+            }
+          },
+          {
+            "Key": "Owner",
+            "Value": "automat"
+          },
+          {
+            "Key": "Stack",
+            "Value": {
+              "Ref": "Stack"
+            }
+          },
+          {
+            "Key": "Stage",
+            "Value": {
+              "Ref": "Stage"
+            }
+          }
+        ],
+        "WebsiteConfiguration": {
+          "ErrorDocument": "index.html",
+          "IndexDocument": "index.html"
+        }
+      },
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain",
+      "Metadata": {
+        "aws:cdk:path": "automat-ui/automat-ui/Resource"
+      }
+    },
+    "automatuiPolicy6958CF04": {
+      "Type": "AWS::S3::BucketPolicy",
+      "Properties": {
+        "Bucket": {
+          "Ref": "automatuiA0421C0E"
+        },
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:GetObject",
+              "Effect": "Allow",
+              "Principal": "*",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    {
+                      "Fn::GetAtt": [
+                        "automatuiA0421C0E",
+                        "Arn"
+                      ]
+                    },
+                    "/*"
+                  ]
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "automat-ui/automat-ui/Policy/Resource"
+      }
+    }
+  }
+}
