@@ -27,9 +27,12 @@ class MyComponents(context: Context)
   val variantsAdminController =
     new VariantsAdminController(controllerComponents, store)
 
+  val healthcheckController = new HealthcheckController(controllerComponents)
+
   lazy val router =
     new Routes(
       httpErrorHandler,
+      healthcheckController,
       slotsAdminController,
       variantsAdminController,
       slotsController,
