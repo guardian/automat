@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { css, cx } from 'emotion';
 import { Grid, Chip, Paper, Button } from '@material-ui/core';
 import { LockOpen as LockOpenIcon, Backup as BackupIcon, SettingsBackupRestore as RevertIcon } from '@material-ui/icons';
+import { TestErrors } from '../types';
 import { Confirmation } from './Confirmation';
 import { colors } from '../utils/theme';
 
@@ -18,14 +19,16 @@ const statusStyles = css`
 type Props = {
   isEditing: boolean;
   hasChanges: boolean;
+  testErrors: TestErrors;
   onUnlock: Function;
   onSaveChanges: Function;
   onRevertChanges: Function;
 };
 
-export const ModeToggler = ({ isEditing = false, hasChanges, onUnlock, onSaveChanges, onRevertChanges }: Props) => {
+export const ModeToggler = ({ isEditing = false, hasChanges, testErrors, onUnlock, onSaveChanges, onRevertChanges }: Props) => {
   const [saveConfirmation, setSaveConfirmation] = useState(false);
   const [revertConfirmation, setRevertConfirmation] = useState(false);
+  const [invalidFormDialog, setInvalidFormDialog] = useState(false);
 
   const handleRevertConfirmation = () => {
     if (hasChanges) {
@@ -36,7 +39,10 @@ export const ModeToggler = ({ isEditing = false, hasChanges, onUnlock, onSaveCha
   };
 
   const handleSaveConfirmation = () => {
-    if (hasChanges) {
+    const isInvalid = Object.keys(testErrors).length > 0;
+    if (isInvalid) {
+      setInvalidFormDialog(true);
+    } else if (hasChanges) {
       setSaveConfirmation(true);
     } else {
       saveChanges();
@@ -60,6 +66,23 @@ export const ModeToggler = ({ isEditing = false, hasChanges, onUnlock, onSaveCha
           <Grid item>
             You're in <Chip className={statusStyles} label="Editing" /> mode. Make your changes and click <b>Save All</b> to publish.
           </Grid>
+
+          {invalidFormDialog && (
+            <Confirmation
+              title="Invalid test fields"
+              message={`Your changes cannot be saved because ${
+                Object.keys(testErrors).length
+              } of your tests have missing or invalid fields. Please review these before saving.`}
+              buttons={
+                <>
+                  <Button onClick={() => setInvalidFormDialog(false)} color="primary" variant="contained">
+                    OK
+                  </Button>
+                </>
+              }
+            />
+          )}
+
           <Grid item>
             <Grid container spacing={2}>
               <Grid item>

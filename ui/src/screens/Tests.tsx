@@ -9,7 +9,7 @@ import { Heading } from '../components/Heading';
 import { TestsList } from '../components/TestsList';
 import { useApi } from '../lib/useApi';
 import { Spinner } from '../components/Spinner';
-import { Test, Slot, Variant, Filter, TestFilter } from '../types';
+import { Test, Slot, Variant, Filter, TestFilter, TestErrors } from '../types';
 import { TestEditor } from '../components/TestEditor';
 import { ModeToggler } from '../components/ModeToggler';
 import { Notification } from '../components/Notification';
@@ -17,6 +17,7 @@ import { createNewTest } from '../utils/factories';
 import { goToTestByIndex } from '../utils/redirects';
 import { colors } from '../utils/theme';
 import { patchTestsBySlot } from '../api/tests';
+import { validateTests } from '../utils/validation';
 
 const rootStyles = css`
   width: 100%;
@@ -57,11 +58,19 @@ export const TestsScreen = ({ slots, variants, filters }: Props) => {
   const [testName, setTestName] = useState('');
   const [slotName, setSlotName] = useState('');
   const [hasChanges, setHasChanges] = useState(false);
+  const [testErrors, setTestErrors] = useState({} as TestErrors);
 
+  // Run comparison checks on every change
   useEffect(() => {
     const hasChanges = !isEqual(workingTests, savedTests);
     setHasChanges(hasChanges);
   }, [workingTests, savedTests]);
+
+  // Run validation checks on every change
+  useEffect(() => {
+    const testErrors = validateTests(workingTests);
+    setTestErrors(testErrors);
+  }, [workingTests]);
 
   useEffect(() => {
     if (data) {
@@ -163,6 +172,7 @@ export const TestsScreen = ({ slots, variants, filters }: Props) => {
         <ModeToggler
           isEditing={isEditing}
           hasChanges={hasChanges}
+          testErrors={testErrors}
           onUnlock={() => setIsEditing(true)}
           onSaveChanges={handleSaveChanges}
           onRevertChanges={handleRevertChanges}
@@ -184,12 +194,15 @@ export const TestsScreen = ({ slots, variants, filters }: Props) => {
             >
               Create Test
             </Button>
-            {slotName && workingTests && <TestsList workingTests={workingTests} savedTests={savedTests} slotId={slotId} selectedTestId={testId} />}
+            {slotName && workingTests && (
+              <TestsList workingTests={workingTests} savedTests={savedTests} slotId={slotId} selectedTestId={testId} testErrors={testErrors} />
+            )}
           </Grid>
           <Grid item xs>
             {slotName && workingTest && testId && (
               <TestEditor
                 name={testName}
+                testErrors={testErrors}
                 workingTest={workingTest}
                 variants={variants}
                 filters={filters}

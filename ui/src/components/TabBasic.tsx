@@ -1,7 +1,7 @@
 import React from 'react';
 import { css } from 'emotion';
 import { TextField } from '@material-ui/core';
-import { Test } from '../types';
+import { Test, TestErrors } from '../types';
 import { colors } from '../utils/theme';
 
 const rootStyles = css``;
@@ -21,16 +21,19 @@ type Props = {
   test: Test;
   isEditing: boolean;
   onTestUpdated: Function;
+  testErrors: TestErrors;
 };
 
-export const TabBasic = ({ test, isEditing, onTestUpdated }: Props) => {
-  const { created, author } = test;
+export const TabBasic = ({ test, isEditing, onTestUpdated, testErrors }: Props) => {
+  const { id, created, author } = test;
 
   const formattedDate = new Date(created).toLocaleString().replace(', ', ' at ');
   let createdSentence = `Test created on ${formattedDate}`;
   if (author && author.firstName && author.lastName) {
     createdSentence += ` by ${author.firstName} ${author.lastName}`;
   }
+
+  const errors = testErrors[id] || undefined;
 
   return (
     <div className={rootStyles}>
@@ -41,6 +44,8 @@ export const TabBasic = ({ test, isEditing, onTestUpdated }: Props) => {
         value={test.name}
         disabled={!isEditing}
         onChange={(e) => onTestUpdated({ ...test, name: e.currentTarget.value })}
+        error={Boolean(errors?.name)}
+        helperText={errors?.name}
       />
       <TextField
         label="Description"

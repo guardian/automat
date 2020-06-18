@@ -1,28 +1,15 @@
 import React, { useState } from 'react';
 import { css, cx } from 'emotion';
 import { Card, FormControl, FormControlLabel, RadioGroup, Radio, Checkbox } from '@material-ui/core';
-import { Warning as WarningIcon } from '@material-ui/icons';
 import { FilterOption } from '../types';
-import { colors } from '../utils/theme';
+import { FieldMessage } from './FieldMessage';
 
 const rootStyles = css`
   padding: 12px;
 `;
 
-const infoStyles = css`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  border-radius: 4px;
-  margin: 12px 0;
-  padding: 12px;
-  border: 1px solid ${colors.darkerGrey};
-  background-color: ${colors.yellow};
-`;
-
-const iconStyles = css`
-  margin-right: 12px;
+const fieldMessageWrapperStyles = css`
+  margin-bottom: 16px;
 `;
 
 type Props = {
@@ -82,14 +69,15 @@ export const FilterConfig = ({ selectedOptionIds, options, filterName, allowMult
         )}
       </FormControl>
       {isEditing && selectedOptions.length === 0 && (
-        <p className={infoStyles}>
-          <WarningIcon className={iconStyles} />
-          <span>
-            You must select at least one option in order to get some traffic on your test.
-            <br />
-            If you don't want to filter by <b>{filterName}</b>, you should remove this Filter.
-          </span>
-        </p>
+        <div className={fieldMessageWrapperStyles}>
+          <FieldMessage severity="warning">
+            <span>
+              You must select at least one option in order to get some traffic on your test.
+              <br />
+              If you don't want to filter by <b>{filterName}</b>, you should remove this Filter.
+            </span>
+          </FieldMessage>
+        </div>
       )}
     </Card>
   );

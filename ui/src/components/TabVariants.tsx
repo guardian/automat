@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { css } from 'emotion';
 import { Button } from '@material-ui/core';
-import { AddCircleOutline as AddCircleOutlineIcon } from '@material-ui/icons';
-import { Test, Variant } from '../types';
+import { AddCircleOutline as AddCircleOutlineIcon, Error as ErrorIcon } from '@material-ui/icons';
+import { Test, Variant, TestErrors } from '../types';
 import { VariantSelector } from './VariantSelector';
 import { VariantsItem } from './VariantsItem';
-import { VariantsPlaceholder } from './VariantsPlaceholder';
+import { FieldMessage } from './FieldMessage';
 
 const rootStyles = css``;
 
-const placeholderWrapperStyles = css`
+const fieldMessageWrapperStyles = css`
   margin-bottom: 16px;
 `;
 
@@ -18,9 +18,10 @@ type Props = {
   variants: Variant[];
   isEditing: boolean;
   onTestUpdated: Function;
+  testErrors: TestErrors;
 };
 
-export const TabVariants = ({ test, variants, isEditing, onTestUpdated }: Props) => {
+export const TabVariants = ({ test, variants, isEditing, onTestUpdated, testErrors }: Props) => {
   const [isAdding, setIsAdding] = useState(false);
   const [derivedVariants, setDerivedVariants] = useState([] as Variant[]);
 
@@ -46,11 +47,15 @@ export const TabVariants = ({ test, variants, isEditing, onTestUpdated }: Props)
     setIsAdding(false);
   };
 
+  const errors = testErrors[test.id] || undefined;
+
   return (
     <div className={rootStyles}>
-      {derivedVariants.length === 0 ? (
-        <div className={placeholderWrapperStyles}>
-          <VariantsPlaceholder />
+      {errors && errors.variants ? (
+        <div className={fieldMessageWrapperStyles}>
+          <FieldMessage severity="error">
+            <span>{errors.variants}</span>
+          </FieldMessage>
         </div>
       ) : (
         derivedVariants.map((derivedVariant, index) => (
