@@ -5,7 +5,7 @@ import * as autoscaling from "@aws-cdk/aws-autoscaling";
 import * as elbv2 from "@aws-cdk/aws-elasticloadbalancingv2";
 import * as elasticsearch from "@aws-cdk/aws-elasticsearch";
 import * as iam from "@aws-cdk/aws-iam";
-import { Tag } from "@aws-cdk/core";
+import { Tag, Duration } from "@aws-cdk/core";
 
 export class APIStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
@@ -148,6 +148,10 @@ export class APIStack extends cdk.Stack {
       targets: [asg],
       healthCheck: {
         path: "/healthcheck",
+        healthyThresholdCount: 2,
+        unhealthyThresholdCount: 5,
+        interval: Duration.seconds(30),
+        timeout: Duration.seconds(10),
       },
     });
 

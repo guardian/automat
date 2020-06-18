@@ -518,7 +518,10 @@
     "LBListenerTargetGroupF04FCF6D": {
       "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
       "Properties": {
+        "HealthCheckIntervalSeconds": 30,
         "HealthCheckPath": "/healthcheck",
+        "HealthCheckTimeoutSeconds": 10,
+        "HealthyThresholdCount": 2,
         "Port": 9000,
         "Protocol": "HTTP",
         "Tags": [
@@ -546,6 +549,7 @@
           }
         ],
         "TargetType": "instance",
+        "UnhealthyThresholdCount": 5,
         "VpcId": {
           "Ref": "VpcId"
         }
