@@ -20,11 +20,19 @@ publishArtifact in(Compile, packageDoc) := false
 
 enablePlugins(PlayScala, RiffRaffArtifact, JDebPackaging, SystemdPlugin)
 
+javaOptions in Universal ++= Seq(
+  "-Dpidfile.path=/dev/null",
+  "-J-XX:+PrintGCDetails",
+  "-J-XX:+PrintGCDateStamps",
+  "-J-Xloggc:/var/log/${packageName.value}/gc.log",
+)
+
 debianPackageDependencies := Seq("openjdk-8-jre-headless")
 maintainer := "Automat <automat.dev@theguardian.com>"
 packageSummary := "Automat API"
 packageDescription := """Automat API"""
 serverLoading in Debian := Some(Systemd)
+
 
 riffRaffPackageType := (packageBin in Debian).value
 riffRaffManifestProjectName := "dotcom:automat-api"
