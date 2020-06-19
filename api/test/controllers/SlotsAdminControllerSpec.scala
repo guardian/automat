@@ -7,8 +7,7 @@ import play.api.test._
 import play.api.test.Helpers._
 import akka.actor.ActorSystem
 import akka.stream.Materializer
-
-import models.{Slot, Test}
+import models.{Author, Slot, Test}
 import persistence.MemoryStore
 
 class SlotsAdminControllerSpec extends PlaySpec with ScalaFutures {
@@ -33,11 +32,13 @@ class SlotsAdminControllerSpec extends PlaySpec with ScalaFutures {
       slots mustBe List(
         SlimSlot(
           id = "mpu",
-          name = "MPU"
+          name = "MPU",
+          2
         ),
         SlimSlot(
           id = "bodyEnd",
-          name = "Body End"
+          name = "Body End",
+          2
         )
       )
     }
@@ -66,7 +67,7 @@ class SlotsAdminControllerSpec extends PlaySpec with ScalaFutures {
             description = "example test",
             isEnabled = true,
             variants = List("subsmpu"),
-            sections = List("culture")
+            author = Author(id = "example.user@guardian.co.uk", firstName = "Example", lastName = "User")
           ),
           Test(
             id = "test2",
@@ -74,7 +75,7 @@ class SlotsAdminControllerSpec extends PlaySpec with ScalaFutures {
             description = "example test",
             isEnabled = true,
             variants = List("subsmpu"),
-            sections = List("football")
+            author = Author(id = "example.user@guardian.co.uk", firstName = "Example", lastName = "User")
           )
         )
       )
@@ -105,7 +106,7 @@ class SlotsAdminControllerSpec extends PlaySpec with ScalaFutures {
         description = "example test",
         isEnabled = true,
         variants = List("subsmpu"),
-        sections = List("culture")
+        author = Author(id = "example.user@guardian.co.uk", firstName = "Example", lastName = "User")
       )
       val payload = SlotUpdateParams(tests = List(test))
       val request = FakeRequest(PATCH, "/admin/slots/mpu")
@@ -137,7 +138,7 @@ class SlotsAdminControllerSpec extends PlaySpec with ScalaFutures {
         description = "example test",
         isEnabled = true,
         variants = List(badVariantId),
-        sections = List("culture")
+        author = Author(id = "example.user@guardian.co.uk", firstName = "Example", lastName = "User")
       )
       val payload = SlotUpdateParams(tests = List(test))
       val request = FakeRequest(PATCH, "/admin/slots/mpu")
@@ -160,7 +161,7 @@ class SlotsAdminControllerSpec extends PlaySpec with ScalaFutures {
         description = "example test",
         isEnabled = true,
         variants = List("subsmpu"),
-        sections = List("culture")
+        author = Author(id = "example.user@guardian.co.uk", firstName = "Example", lastName = "User")
       )
       val payload = SlotUpdateParams(tests = List(test))
       val request = FakeRequest(PATCH, "/admin/slots/xxx")
