@@ -2,11 +2,17 @@ stacks: [frontend]
 regions: [eu-west-1]
 
 deployments:
+  cloudformation:
+    type: cloud-formation
+    parameters:
+      cloudFormationStackName: automat-ui
+      templatePath: cfn.yaml
+      cloudFormationStackByTags: false
   s3:
     type: aws-s3
-    app: automat-ui
+    dependencies: [cloudformation]
     parameters:
-      bucket: aws-frontend-automat-ui
+      bucket: com-gu-automat-ui
       cacheControl: no-cache
       prefixPackage: false
       prefixStack: false

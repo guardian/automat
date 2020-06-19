@@ -39,4 +39,4 @@ riffRaffManifestProjectName := "dotcom:automat-api"
 riffRaffPackageName := "automat-api"
 riffRaffUploadArtifactBucket := Option("riffraff-artifact")
 riffRaffUploadManifestBucket := Option("riffraff-builds")
-riffRaffArtifactResources += (file("cfn.json"), "cfn/cfn.yaml")
+riffRaffArtifactResources += (file("cfn.yaml"), "cfn/cfn.yaml")

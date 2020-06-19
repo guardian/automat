@@ -4,7 +4,7 @@
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
-    "cdk": "cdk synth && cp cdk.out/automat-api.template.json ../api/cfn.json && cp cdk.out/automat-ui.template.json ../ui/cfn.json"
+    "cdk": "cdk synth && cp cdk.out/automat-api.template.json ../api/cfn.yaml && cp cdk.out/automat-ui.template.json ../ui/cfn.yaml"
   },
   "devDependencies": {
     "@aws-cdk/assert": "1.45.0",
