@@ -25,7 +25,7 @@ class SlotSpec extends AsyncFlatSpec {
           description = "Example test",
           isEnabled = true,
           variants = List("subsmpu"),
-          sections = List("cricket")
+          author = Author(id = "example.user@guardian.co.uk", firstName = "Example", lastName = "User")
         )
       )
     )
@@ -47,7 +47,7 @@ class SlotSpec extends AsyncFlatSpec {
           description = "Example test",
           isEnabled = true,
           variants = List("badVariant"),
-          sections = List("cricket")
+          author = Author(id = "example.user@guardian.co.uk", firstName = "Example", lastName = "User")
         )
       )
     )
