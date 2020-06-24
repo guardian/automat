@@ -28,12 +28,22 @@ class VariantsAdminControllerSpec extends PlaySpec {
         Variant(
           id = "subsmpu",
           name = "Subscriptions MPU",
-          description = "A Guardian subscriptions advert in MPU format."
+          description = "A Guardian subscriptions advert in MPU format"
+        ),
+        Variant(
+          id = "subsbanner",
+          name = "Subscriptions Banner",
+          description = "A Guardian subscriptions advert in banner format"
         ),
         Variant(
           id = "contributionsepic",
           name = "Contributions Epic",
-          description = "A Guardian contributions ask."
+          description = "A Guardian contributions ask in epic format"
+        ),
+        Variant(
+          id = "contributionsbanner",
+          name = "Contributions Banner",
+          description = "A Guardian contributions ask in banner format"
         )
       )
     }

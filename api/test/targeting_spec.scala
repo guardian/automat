@@ -42,9 +42,9 @@ class TargetingSpec extends PlaySpec {
       isEnabled: Boolean = true,
       variants: List[String] = List("foo", "bar"),
       author: Author = Author(
-        id = "example.user@guardian.co.uk",
-        firstName = "Example",
-        lastName = "User"
+        id = "automat.dev@guardian.co.uk",
+        firstName = "Automat",
+        lastName = "Admin"
       )
   ): Test =
     Test(

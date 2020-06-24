@@ -33,12 +33,17 @@ class SlotsAdminControllerSpec extends PlaySpec with ScalaFutures {
         SlimSlot(
           id = "mpu",
           name = "MPU",
-          2
+          1
         ),
         SlimSlot(
           id = "bodyEnd",
           name = "Body End",
-          2
+          1
+        ),
+        SlimSlot(
+          id = "banner",
+          name = "Banner",
+          1
         )
       )
     }
@@ -67,15 +72,7 @@ class SlotsAdminControllerSpec extends PlaySpec with ScalaFutures {
             description = "example test",
             isEnabled = true,
             variants = List("subsmpu"),
-            author = Author(id = "example.user@guardian.co.uk", firstName = "Example", lastName = "User")
-          ),
-          Test(
-            id = "test2",
-            name = "Test 2",
-            description = "example test",
-            isEnabled = true,
-            variants = List("subsmpu"),
-            author = Author(id = "example.user@guardian.co.uk", firstName = "Example", lastName = "User")
+            author = Author(id = "automat.dev@guardian.co.uk", firstName = "Automat", lastName = "Admin")
           )
         )
       )
@@ -106,7 +103,7 @@ class SlotsAdminControllerSpec extends PlaySpec with ScalaFutures {
         description = "example test",
         isEnabled = true,
         variants = List("subsmpu"),
-        author = Author(id = "example.user@guardian.co.uk", firstName = "Example", lastName = "User")
+        author = Author(id = "automat.dev@guardian.co.uk", firstName = "Automat", lastName = "Admin")
       )
       val payload = SlotUpdateParams(tests = List(test))
       val request = FakeRequest(PATCH, "/admin/slots/mpu")
@@ -138,7 +135,7 @@ class SlotsAdminControllerSpec extends PlaySpec with ScalaFutures {
         description = "example test",
         isEnabled = true,
         variants = List(badVariantId),
-        author = Author(id = "example.user@guardian.co.uk", firstName = "Example", lastName = "User")
+        author = Author(id = "automat.dev@guardian.co.uk", firstName = "Automat", lastName = "Admin")
       )
       val payload = SlotUpdateParams(tests = List(test))
       val request = FakeRequest(PATCH, "/admin/slots/mpu")
@@ -161,7 +158,7 @@ class SlotsAdminControllerSpec extends PlaySpec with ScalaFutures {
         description = "example test",
         isEnabled = true,
         variants = List("subsmpu"),
-        author = Author(id = "example.user@guardian.co.uk", firstName = "Example", lastName = "User")
+        author = Author(id = "automat.dev@guardian.co.uk", firstName = "Automat", lastName = "Admin")
       )
       val payload = SlotUpdateParams(tests = List(test))
       val request = FakeRequest(PATCH, "/admin/slots/xxx")
