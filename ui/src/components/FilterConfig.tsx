@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { css, cx } from 'emotion';
 import { Card, Grid, FormControl, FormControlLabel, RadioGroup, Radio, Checkbox, Slider } from '@material-ui/core';
 import { FilterOption, FilterControl } from '../types';
-import { colors } from '../utils/theme';
 import { FieldMessage } from './FieldMessage';
 
 const rootStyles = css`
@@ -90,6 +89,7 @@ export const FilterConfig = ({ selectedOptionIds, options, filterName, allowMult
     if (selectedOptionIds.length === 0 && control === 'slider' && options.length === 2) {
       handleSliderChange(parseInt(options[1].value, 10));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedOptionIds]);
 
   return (
