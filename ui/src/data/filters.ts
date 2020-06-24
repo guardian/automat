@@ -4,16 +4,17 @@ export const filters: Filter[] = [
   {
     id: 'authstatus',
     name: 'Authentication Status',
-    helpText: 'Restrict the test audience to logged-in or not logged-in users',
+    helpText: 'Restrict the test audience to signed-in or signed-out users only',
+    control: 'options',
     allowMultiple: false,
     options: [
       {
         value: 'loggedin',
-        label: 'Logged In Users',
+        label: 'Signed-in users',
       },
       {
-        value: 'notloggedin',
-        label: 'Not Logged-in Users',
+        value: 'loggedout',
+        label: 'Signed-out users',
       },
     ],
   },
@@ -21,6 +22,7 @@ export const filters: Filter[] = [
     id: 'subspropensity',
     name: 'Propensity to Subscribe',
     helpText: 'Restrict the test audience to users who fit into a given propensity level',
+    control: 'options',
     allowMultiple: true,
     options: [
       {
@@ -39,37 +41,18 @@ export const filters: Filter[] = [
   },
   {
     id: 'samplerate',
-    name: 'Custom Sampling Rate',
-    helpText: 'Restrict the test audience to a percentage of users in the cohort',
+    name: 'Audience Sampling Rate',
+    helpText: 'Restrict the test audience to a percentage of its users',
+    control: 'slider',
     allowMultiple: false,
     options: [
       {
+        value: '0',
+        label: '0%',
+      },
+      {
         value: '100',
         label: '100%',
-      },
-      {
-        value: '50',
-        label: '50%',
-      },
-      {
-        value: '20',
-        label: '20%',
-      },
-      {
-        value: '10',
-        label: '10%',
-      },
-      {
-        value: '5',
-        label: '5%',
-      },
-      {
-        value: '2',
-        label: '2%',
-      },
-      {
-        value: '1',
-        label: '1%',
       },
     ],
   },

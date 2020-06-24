@@ -41,12 +41,14 @@ export interface Filter {
   options: FilterOption[];
   allowMultiple: boolean; // Default to false?
   selectedOptionIds?: string[];
+  control: FilterControl;
 }
 export interface FilterOption {
   value: string;
   label: string;
-  selected?: boolean;
 }
+
+export type FilterControl = 'options' | 'slider' | 'input';
 
 // GET /admin/variants
 type Variants = Variant[];

@@ -98,6 +98,7 @@ export const FiltersItem = ({ index, filter, isEditing, onFilterUpdated, onFilte
             filterName={filter.name}
             options={filter.options}
             allowMultipe={filter.allowMultiple}
+            control={filter.control}
             isEditing={isEditing}
             onFilterUpdated={handleUpdateFilter}
           />
