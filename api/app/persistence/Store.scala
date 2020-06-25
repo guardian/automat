@@ -264,6 +264,11 @@ object TestData {
   )
 
   val variants = Map(
+    "commercialmpu" -> Variant(
+      id = "commercialmpu",
+      name = "Commercial MPU",
+      description = "A Commercial MPU for article adverts"
+    ),
     "subsmpu" -> Variant(
       id = "subsmpu",
       name = "Subscriptions MPU",

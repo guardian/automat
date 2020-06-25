@@ -4,45 +4,79 @@ export const filters: Filter[] = [
   {
     id: 'authstatus',
     name: 'Authentication Status',
-    helpText: 'Restrict the test audience to signed-in or signed-out users only',
+    helpText: 'Narrow the test audience based on the authentication status of the user',
     control: 'options',
     allowMultiple: false,
     options: [
       {
-        value: 'loggedin',
-        label: 'Signed-in users',
+        value: 'signedin',
+        label: 'User must be Signed In',
       },
       {
-        value: 'loggedout',
-        label: 'Signed-out users',
+        value: 'signedout',
+        label: 'User must be Signed Out',
+      },
+    ],
+  },
+  {
+    id: 'currentcontributor',
+    name: 'Contributor Status',
+    helpText: 'Narrow the test audience based on the contributor status of the user',
+    control: 'options',
+    allowMultiple: false,
+    options: [
+      {
+        value: 'currentcontributor',
+        label: 'User must be a Current or Past Contributor',
+      },
+      {
+        value: 'pastcontributor',
+        label: 'User must have never been a Contributor',
+      },
+    ],
+  },
+  {
+    id: 'paidcontent',
+    name: 'Paid Content',
+    helpText: 'Narrow the test audience based on whether the content is paid or not',
+    control: 'options',
+    allowMultiple: false,
+    options: [
+      {
+        value: 'paid',
+        label: 'Article must be Paid Content',
+      },
+      {
+        value: 'notpaid',
+        label: 'Article must NOT be Paid Content',
       },
     ],
   },
   {
     id: 'subspropensity',
     name: 'Propensity to Subscribe',
-    helpText: 'Restrict the test audience to users who fit into a given propensity level',
+    helpText: 'Narrow the test audience based on the propensity of the user to subscribe',
     control: 'options',
     allowMultiple: true,
     options: [
       {
         value: 'hot',
-        label: 'Hot (very likely to subscribe)',
+        label: 'Very Likely (Hot)',
       },
       {
         value: 'warm',
-        label: 'Warm (likely to subscribe)',
+        label: 'Likely (Warm)',
       },
       {
         value: 'cold',
-        label: 'Cold (unlikely to subscribe)',
+        label: 'Unlikely (Cold)',
       },
     ],
   },
   {
     id: 'samplerate',
     name: 'Audience Sampling Rate',
-    helpText: 'Restrict the test audience to a percentage of its users',
+    helpText: 'Narrow the test audience to a percentage of the current cohort',
     control: 'slider',
     allowMultiple: false,
     options: [
