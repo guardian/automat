@@ -26,6 +26,11 @@ class VariantsAdminControllerSpec extends PlaySpec {
       val variants = parseVariants(contentAsJson(variantsIndex))
       variants mustBe List(
         Variant(
+          id = "commercialmpu",
+          name = "Commercial MPU",
+          description = "A Commercial MPU for article adverts"
+        ),
+        Variant(
           id = "subsmpu",
           name = "Subscriptions MPU",
           description = "A Guardian subscriptions advert in MPU format"
