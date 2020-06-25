@@ -23,15 +23,15 @@ export const filters: Filter[] = [
     name: 'Contributor Status',
     helpText: 'Narrow the test audience based on the contributor status of the user',
     control: 'options',
-    allowMultiple: true,
+    allowMultiple: false,
     options: [
       {
         value: 'currentcontributor',
-        label: 'User must be a Current Contributor',
+        label: 'User must be a Current or Past Contributor',
       },
       {
         value: 'pastcontributor',
-        label: 'User must be a Past Contributor',
+        label: 'User must have never been a Contributor',
       },
     ],
   },
