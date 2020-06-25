@@ -24,7 +24,7 @@ class VariantsAdminControllerSpec extends PlaySpec {
       status(variantsIndex) mustBe OK
       contentType(variantsIndex) mustBe Some("application/json")
       val variants = parseVariants(contentAsJson(variantsIndex))
-      variants mustBe List(
+      variants.toSet mustBe Set(
         Variant(
           id = "commercialmpu",
           name = "Commercial MPU",
