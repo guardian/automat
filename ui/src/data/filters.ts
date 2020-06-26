@@ -19,7 +19,7 @@ export const filters: Filter[] = [
     ],
   },
   {
-    id: 'currentcontributor',
+    id: 'contributorstatus',
     name: 'Contributor Status',
     helpText: 'Narrow the test audience based on the contributor status of the user',
     control: 'options',

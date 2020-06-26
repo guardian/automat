@@ -28,9 +28,9 @@ type Props = {
 };
 
 export const SlotsList = ({ slots }: Props): JSX.Element => (
-  <Grid container spacing={2}>
+  <Grid container spacing={2} role="list">
     {slots.map((slot) => (
-      <Grid key={slot.id} item>
+      <Grid key={slot.id} item role="listitem">
         <Link to={`/slots/${slot.id}`} className={cx(linkStyles)}>
           <Card className={cx(cardStyles)}>
             <Heading level={2} supressMargin>
