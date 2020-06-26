@@ -50,7 +50,7 @@ export const TabVariants = ({ test, variants, isEditing, onTestUpdated, testErro
   const errors = testErrors[test.id] || undefined;
 
   return (
-    <div className={rootStyles}>
+    <div className={rootStyles} role="list">
       {errors && errors.variants ? (
         <div className={fieldMessageWrapperStyles}>
           <FieldMessage severity="error">

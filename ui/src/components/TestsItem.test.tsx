@@ -2,7 +2,6 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { TestsItem } from '../components/TestsItem';
-import { mockTests } from '../fixtures/tests';
 
 const defaultProps = {
   id: 'test1',

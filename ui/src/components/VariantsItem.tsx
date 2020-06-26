@@ -57,7 +57,7 @@ export const VariantsItem = ({ index, variant, variants, isEditing, onVariantDel
   };
 
   return (
-    <Card elevation={0} className={rootStyles}>
+    <Card elevation={0} className={rootStyles} role="listitem">
       <Grid container spacing={2} justify="flex-start" alignItems="center" className={cx(gridStyles)}>
         <Grid item xs={1}>
           <p className={indexStyles}>{alphabet[index]}</p>
@@ -69,13 +69,13 @@ export const VariantsItem = ({ index, variant, variants, isEditing, onVariantDel
           <p className={noMargin}>{variant.description}</p>
         </Grid>
         <Grid item xs={1}>
-          <IconButton disabled={!isEditing} onClick={() => setIsUpdating(true)} className={buttonStyles}>
+          <IconButton disabled={!isEditing} onClick={() => setIsUpdating(true)} className={buttonStyles} aria-label="Update Variant">
             <SettingsIcon />
           </IconButton>
           {isUpdating && <VariantSelector value={variant.id} variants={variants} onCancel={() => setIsUpdating(false)} onSelect={handleUpdateVariant} />}
         </Grid>
         <Grid item xs={1}>
-          <IconButton disabled={!isEditing} onClick={() => setDeleteConfirmation(true)} className={buttonStyles}>
+          <IconButton disabled={!isEditing} onClick={() => setDeleteConfirmation(true)} className={buttonStyles} aria-label="Delete Variant">
             <DeleteIcon />
           </IconButton>
           {deleteConfirmation && (
