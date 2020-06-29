@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent, waitFor, cleanup } from '@testing-library/react';
+import { render, fireEvent } from '@testing-library/react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { TabVariants } from '../components/TabVariants';
 import { Test, Variant, TestErrors } from '../types';
@@ -14,7 +14,7 @@ const defaultProps = {
   testErrors: {} as TestErrors,
 };
 
-describe('TestsList', () => {
+describe('TabVariants', () => {
   it('should render a list of variants in the test', () => {
     const { getByRole } = render(
       <Router>

@@ -33,8 +33,8 @@ export const mockTests: Test[] = [
     variants: ['contributionsbanner'],
     filters: [
       {
-        filterId: 'contributorstatus',
-        selectedOptionIds: ['currentcontributor'],
+        filterId: 'authstatus',
+        selectedOptionIds: ['signedin'],
       },
       {
         filterId: 'samplerate',

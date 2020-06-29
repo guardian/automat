@@ -65,7 +65,14 @@ export const FilterSelector = ({ value = '', filters, onSelect, onCancel }: Prop
         <p className={helperStyles}>
           Filters can be used to narrow the <b>Audience</b> of your test. You can change these at any time, but doing so may affect the test results.
         </p>
-        <Select value={selectedFilterId} onChange={handleChange} className={selectStyles} variant="outlined">
+        <Select
+          value={selectedFilterId}
+          onChange={handleChange}
+          className={selectStyles}
+          variant="outlined"
+          role="listbox"
+          SelectDisplayProps={{ 'aria-label': 'Click to select filter' }}
+        >
           {filters.map((filter) => (
             <MenuItem key={filter.id} value={filter.id} className={itemRowStyles}>
               <div className={itemContentStyles}>
@@ -77,11 +84,18 @@ export const FilterSelector = ({ value = '', filters, onSelect, onCancel }: Prop
         </Select>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => onCancel()} variant="contained">
+        <Button onClick={() => onCancel()} variant="contained" aria-label="Cancel">
           Cancel
         </Button>
         {isUpdating ? (
-          <Button disabled={!selectedFilterId} startIcon={<CheckCircleIcon />} color="primary" variant="contained" onClick={() => onSelect(selectedFilterId)}>
+          <Button
+            disabled={!selectedFilterId}
+            startIcon={<CheckCircleIcon />}
+            color="primary"
+            variant="contained"
+            onClick={() => onSelect(selectedFilterId)}
+            aria-label="Select"
+          >
             Update Filter
           </Button>
         ) : (
@@ -91,6 +105,7 @@ export const FilterSelector = ({ value = '', filters, onSelect, onCancel }: Prop
             color="primary"
             variant="contained"
             onClick={() => onSelect(selectedFilterId)}
+            aria-label="Select"
           >
             Add Filter
           </Button>

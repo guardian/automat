@@ -52,14 +52,21 @@ export const TabFilters = ({ test, filters, isEditing, onTestUpdated }: Props) =
   };
 
   return (
-    <div className={rootStyles}>
+    <div className={rootStyles} role="list">
       {derivedFilters.length === 0 ? (
         <div className={placeholderWrapperStyles}>
           <FiltersPlaceholder />
         </div>
       ) : (
         derivedFilters.map((derivedFilter, index) => (
-          <FiltersItem index={index} filter={derivedFilter} isEditing={isEditing} onFilterUpdated={handleUpdateFilter} onFilterDeleted={handleDeleteFilter} />
+          <FiltersItem
+            key={`${derivedFilter.id}-${index}`}
+            index={index}
+            filter={derivedFilter}
+            isEditing={isEditing}
+            onFilterUpdated={handleUpdateFilter}
+            onFilterDeleted={handleDeleteFilter}
+          />
         ))
       )}
       {isAdding && <FilterSelector filters={filters} onCancel={() => setIsAdding(false)} onSelect={handleAddFilter} />}

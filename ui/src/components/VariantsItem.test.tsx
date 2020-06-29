@@ -2,22 +2,15 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { VariantsItem } from '../components/VariantsItem';
-import { Test, Variant, TestErrors } from '../types';
-import { mockTests } from '../fixtures/tests';
 import { mockVariants } from '../fixtures/variants';
-
-// useEffect(() => {
-//   const derivedVariants = test.variants.map((dV) => variants.find((v) => dV === v.id)).filter((dV) => dV);
-//   setDerivedVariants(derivedVariants as Variant[]);
-// }, [test, variants]);
 
 const defaultProps = {
   index: 0,
   variant: { ...mockVariants[0] },
   variants: [...mockVariants],
   isEditing: false,
-  onVariantDeleted: () => {},
-  onVariantUpdated: () => {},
+  onVariantDeleted: jest.fn(),
+  onVariantUpdated: jest.fn(),
 };
 
 describe('VariantsItem', () => {
@@ -46,7 +39,7 @@ describe('VariantsItem', () => {
     expect(buttons.length).toBe(2);
   });
 
-  it('should render a Confirmation dialog when Delete button is clicked', async () => {
+  it('should render a Confirmation dialog and call the appropriate handler', async () => {
     const { getByText, getByLabelText } = render(
       <Router>
         <VariantsItem {...defaultProps} isEditing={true} />
@@ -55,6 +48,9 @@ describe('VariantsItem', () => {
 
     fireEvent.click(getByLabelText('Delete Variant'));
     expect(getByText('Delete variant?')).toBeInTheDocument();
+
+    fireEvent.click(getByLabelText('Confirm delete Variant'));
+    expect(defaultProps.onVariantDeleted).toHaveBeenCalled();
   });
 
   it('should render a Variants dialog when Update button is clicked', async () => {

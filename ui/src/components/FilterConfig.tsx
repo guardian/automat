@@ -98,8 +98,9 @@ export const FilterConfig = ({ selectedOptionIds, options, filterName, allowMult
         <FormControl component="fieldset">
           {allowMultipe ? (
             <>
-              {options.map((option) => (
+              {options.map((option, index) => (
                 <FormControlLabel
+                  key={`${option.value}-${index}`}
                   control={
                     <Checkbox
                       checked={selectedOptions.includes(option.value)}
@@ -114,8 +115,13 @@ export const FilterConfig = ({ selectedOptionIds, options, filterName, allowMult
             </>
           ) : (
             <RadioGroup value={selectedOptions[0]} onChange={handleRadioChange}>
-              {options.map((option) => (
-                <FormControlLabel value={option.value} control={<Radio color="primary" disabled={!isEditing} />} label={option.label} />
+              {options.map((option, index) => (
+                <FormControlLabel
+                  key={`${option.value}-${index}`}
+                  value={option.value}
+                  control={<Radio color="primary" disabled={!isEditing} />}
+                  label={option.label}
+                />
               ))}
             </RadioGroup>
           )}

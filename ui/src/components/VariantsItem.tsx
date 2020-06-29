@@ -95,6 +95,7 @@ export const VariantsItem = ({ index, variant, variants, isEditing, onVariantDel
                     }}
                     variant="contained"
                     color="secondary"
+                    aria-label="Confirm delete Variant"
                   >
                     Delete Variant
                   </Button>

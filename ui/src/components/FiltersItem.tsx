@@ -52,7 +52,7 @@ export const FiltersItem = ({ index, filter, isEditing, onFilterUpdated, onFilte
   };
 
   return (
-    <Card elevation={0} className={rootStyles}>
+    <Card elevation={0} className={rootStyles} role="listitem">
       <Grid container spacing={2} justify="flex-start" alignItems="center" className={cx(gridStyles)}>
         <Grid item xs={1}>
           <FilterListIcon className={cx(iconStyles)} />
@@ -64,7 +64,7 @@ export const FiltersItem = ({ index, filter, isEditing, onFilterUpdated, onFilte
           <p className={noMargin}>{filter.helpText}</p>
         </Grid>
         <Grid item xs={1}>
-          <IconButton disabled={!isEditing} onClick={() => setDeleteConfirmation(true)} className={buttonStyles}>
+          <IconButton disabled={!isEditing} onClick={() => setDeleteConfirmation(true)} className={buttonStyles} aria-label="Delete Filter">
             <DeleteIcon />
           </IconButton>
           {deleteConfirmation && (
@@ -84,6 +84,7 @@ export const FiltersItem = ({ index, filter, isEditing, onFilterUpdated, onFilte
                     }}
                     variant="contained"
                     color="secondary"
+                    aria-label="Confirm delete Filter"
                   >
                     Delete Filter
                   </Button>
