@@ -4,9 +4,9 @@ import { Card, Grid, Button, IconButton } from '@material-ui/core';
 import { FilterList as FilterListIcon, Delete as DeleteIcon } from '@material-ui/icons';
 import { Heading } from './Heading';
 import { Confirmation } from './Confirmation';
+import { FilterField } from './FilterField';
 import { colors } from '../utils/theme';
 import { Filter } from '../types';
-import { FilterConfig } from './FilterConfig';
 
 const rootStyles = css`
   width: 100%;
@@ -94,9 +94,8 @@ export const FiltersItem = ({ index, filter, isEditing, onFilterUpdated, onFilte
           )}
         </Grid>
         <Grid item xs={12}>
-          <FilterConfig
+          <FilterField
             selectedOptionIds={filter.selectedOptionIds || []}
-            filterName={filter.name}
             options={filter.options}
             allowMultipe={filter.allowMultiple}
             control={filter.control}
