@@ -54,6 +54,7 @@ export const FieldSlider = ({ options, selectedOptions, isEditing, onFieldUpdate
   }, [selectedOptions]);
 
   const handleSliderChange = (value: number) => {
+    console.log('handleSliderChange');
     const stringifiedValue = String(value);
     const updatedOptions = [stringifiedValue];
     onFieldUpdated(updatedOptions);

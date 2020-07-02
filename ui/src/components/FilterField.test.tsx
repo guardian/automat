@@ -23,17 +23,6 @@ const defaultProps = {
 };
 
 describe('FilterConfig', () => {
-  it('should render all the options provided', () => {
-    const { getByText } = render(
-      <Router>
-        <FilterField {...defaultProps} />
-      </Router>,
-    );
-
-    expect(getByText('User must be Signed In')).toBeInTheDocument();
-    expect(getByText('User must be Signed Out')).toBeInTheDocument();
-  });
-
   it('should be able to render a checkbox controller', () => {
     const { container } = render(
       <Router>
