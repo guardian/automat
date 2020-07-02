@@ -8,7 +8,7 @@ describe('truncate', () => {
     expect(obtainedText).toBe('Who looks outside, dreams...');
   });
 
-  it(`should truncate a long string`, () => {
+  it(`does not truncate a string shorter than the specified length`, () => {
     const text = 'Who looks outside, dreams; who looks inside, awakes.';
     const obtainedText = truncate(text, 52);
 
