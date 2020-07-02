@@ -14,24 +14,24 @@ const rootStyles = css`
 type Props = {
   selectedOptionIds: string[];
   options: FilterOption[];
-  allowMultipe: boolean;
+  allowMultiple: boolean;
   control: FilterControl;
   isEditing: boolean;
   onFilterUpdated: Function;
 };
 
-export const FilterField = ({ selectedOptionIds, options, allowMultipe, control, isEditing, onFilterUpdated }: Props) => {
+export const FilterField = ({ selectedOptionIds, options, allowMultiple, control, isEditing, onFilterUpdated }: Props) => {
   const handleFieldUpdate = (updatedOptions: string[]) => {
     onFilterUpdated(updatedOptions);
   };
 
   return (
     <Card elevation={2} className={cx(rootStyles)}>
-      {control === 'options' && allowMultipe && (
+      {control === 'options' && allowMultiple && (
         <FieldCheckbox options={options} selectedOptions={selectedOptionIds} isEditing={isEditing} onFieldUpdated={handleFieldUpdate} />
       )}
 
-      {control === 'options' && !allowMultipe && (
+      {control === 'options' && !allowMultiple && (
         <FieldRadio options={options} selectedOptions={selectedOptionIds} isEditing={isEditing} onFieldUpdated={handleFieldUpdate} />
       )}
 

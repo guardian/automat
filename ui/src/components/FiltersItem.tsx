@@ -97,7 +97,7 @@ export const FiltersItem = ({ index, filter, isEditing, onFilterUpdated, onFilte
           <FilterField
             selectedOptionIds={filter.selectedOptionIds || []}
             options={filter.options}
-            allowMultipe={filter.allowMultiple}
+            allowMultiple={filter.allowMultiple}
             control={filter.control}
             isEditing={isEditing}
             onFilterUpdated={handleUpdateFilter}

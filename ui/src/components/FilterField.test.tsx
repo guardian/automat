@@ -16,14 +16,14 @@ const defaultProps = {
     },
   ] as FilterOption[],
   control: 'options' as FilterControl,
-  allowMultipe: false,
+  allowMultiple: false,
   isEditing: false,
   onFilterUpdated: jest.fn(),
 };
 
 describe('FilterConfig', () => {
   it('should be able to render a checkbox controller', () => {
-    const { container } = render(<FilterField {...defaultProps} allowMultipe={true} />);
+    const { container } = render(<FilterField {...defaultProps} allowMultiple={true} />);
 
     const checkboxes = container.querySelectorAll('[type="checkbox"]');
     expect(checkboxes.length).toBe(2);
