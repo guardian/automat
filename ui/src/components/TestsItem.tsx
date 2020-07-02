@@ -76,7 +76,7 @@ export const TestsItem = ({ id, name, description, link, isEnabled, isSelected, 
   const testDescription = truncate(description, 80);
 
   return (
-    <Link key={id} to={link} className={rootStyles}>
+    <Link key={id} to={link} className={rootStyles} role="listitem">
       <Card className={cx(getCardStyles(isSelected, isLastItem, isModified, isInvalid))} elevation={0}>
         <div className={headerStyles}>
           <Heading level={2} supressMargin>

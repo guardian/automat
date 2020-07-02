@@ -6,14 +6,21 @@ interface ConfigurableTestProps {
   name?: string;
   description?: string;
   isEnabled?: boolean;
+  created?: Date;
 }
 
-export const createNewTest = ({ id = uuidv4(), name = 'Untitled Test', description = '', isEnabled = false }: ConfigurableTestProps): Test => ({
+export const createNewTest = ({
+  id = uuidv4(),
+  name = 'Untitled Test',
+  description = '',
+  isEnabled = false,
+  created = new Date(),
+}: ConfigurableTestProps): Test => ({
   id,
   name,
   description,
   isEnabled,
-  created: new Date(),
+  created,
   author: {
     id: 'automat.dev@guardian.co.uk',
     firstName: 'Automat',

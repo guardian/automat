@@ -36,9 +36,11 @@ export const TabBasic = ({ test, isEditing, onTestUpdated, testErrors }: Props) 
   const errors = testErrors[id] || undefined;
 
   return (
-    <div className={rootStyles}>
+    <div className={rootStyles} role="tabpanel" aria-label="Basic tab">
       <TextField
         label="Test Name"
+        InputLabelProps={{ htmlFor: 'TestNameInput' }}
+        InputProps={{ id: 'TestNameInput' }}
         variant="outlined"
         className={inputStyles}
         value={test.name}
@@ -49,6 +51,8 @@ export const TabBasic = ({ test, isEditing, onTestUpdated, testErrors }: Props) 
       />
       <TextField
         label="Description"
+        InputLabelProps={{ htmlFor: 'DescriptionInput' }}
+        InputProps={{ id: 'DescriptionInput' }}
         variant="outlined"
         className={inputStyles}
         value={test.description}

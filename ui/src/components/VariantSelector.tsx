@@ -64,7 +64,14 @@ export const VariantSelector = ({ value = '', variants, onSelect, onCancel }: Pr
           Users seeing this variant will be presented the <b>Component</b> you select below. You can change this at any time, but doing so may affect the test
           results.
         </p>
-        <Select value={selectedVariantId} onChange={handleChange} className={selectStyles} variant="outlined">
+        <Select
+          value={selectedVariantId}
+          onChange={handleChange}
+          className={selectStyles}
+          variant="outlined"
+          role="listbox"
+          SelectDisplayProps={{ 'aria-label': 'Click to select component' }}
+        >
           {variants.map((variant) => (
             <MenuItem key={variant.id} value={variant.id} className={itemRowStyles}>
               <div className={itemContentStyles}>
@@ -76,11 +83,18 @@ export const VariantSelector = ({ value = '', variants, onSelect, onCancel }: Pr
         </Select>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => onCancel()} variant="contained">
+        <Button onClick={() => onCancel()} variant="contained" aria-label="Cancel">
           Cancel
         </Button>
         {isUpdating ? (
-          <Button disabled={!selectedVariantId} startIcon={<CheckCircleIcon />} color="primary" variant="contained" onClick={() => onSelect(selectedVariantId)}>
+          <Button
+            disabled={!selectedVariantId}
+            startIcon={<CheckCircleIcon />}
+            color="primary"
+            variant="contained"
+            onClick={() => onSelect(selectedVariantId)}
+            aria-label="Select"
+          >
             Update Variant
           </Button>
         ) : (
@@ -90,6 +104,7 @@ export const VariantSelector = ({ value = '', variants, onSelect, onCancel }: Pr
             color="primary"
             variant="contained"
             onClick={() => onSelect(selectedVariantId)}
+            aria-label="Select"
           >
             Add Variant
           </Button>
