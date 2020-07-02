@@ -18,14 +18,14 @@ describe('VariantSelector', () => {
     expect(list).toBeInTheDocument();
   });
 
-  it('should render a MUI select to choose variants', async () => {
+  it('should render a MUI select to choose variants', () => {
     const { getByLabelText } = render(<FilterSelector {...defaultProps} />);
 
     const button = getByLabelText('Click to select filter');
     expect(button).toBeInTheDocument();
   });
 
-  it('should pre-select the current value', async () => {
+  it('should pre-select the current value', () => {
     const { getByText } = render(<FilterSelector {...defaultProps} value="subspropensity" />);
 
     const name = getByText('Propensity to Subscribe');
@@ -34,14 +34,14 @@ describe('VariantSelector', () => {
     expect(description).toBeInTheDocument();
   });
 
-  it('should call the success handler correctly', async () => {
+  it('should call the success handler correctly', () => {
     const { getByLabelText } = render(<FilterSelector {...defaultProps} />);
 
     fireEvent.click(getByLabelText('Select'));
     expect(defaultProps.onSelect).toHaveBeenCalled();
   });
 
-  it('should call the error handler correctly', async () => {
+  it('should call the error handler correctly', () => {
     const { getByLabelText } = render(<FilterSelector {...defaultProps} />);
 
     fireEvent.click(getByLabelText('Cancel'));
