@@ -86,7 +86,7 @@ export const ModeToggler = ({ isEditing = false, hasChanges, testErrors, onUnloc
           <Grid item>
             <Grid container spacing={2}>
               <Grid item>
-                <Button startIcon={<RevertIcon />} color="primary" variant="contained" onClick={handleRevertConfirmation}>
+                <Button startIcon={<RevertIcon />} color="primary" variant="contained" onClick={handleRevertConfirmation} aria-label="Revert changes">
                   Revert
                 </Button>
                 {revertConfirmation && (
@@ -107,7 +107,7 @@ export const ModeToggler = ({ isEditing = false, hasChanges, testErrors, onUnloc
                 )}
               </Grid>
               <Grid item>
-                <Button startIcon={<BackupIcon />} color="primary" variant="contained" onClick={handleSaveConfirmation}>
+                <Button startIcon={<BackupIcon />} color="primary" variant="contained" onClick={handleSaveConfirmation} aria-label="Save changes">
                   Save All
                 </Button>
                 {saveConfirmation && (
@@ -136,7 +136,7 @@ export const ModeToggler = ({ isEditing = false, hasChanges, testErrors, onUnloc
             You're in <Chip className={statusStyles} label="Read Only" /> mode. Click the <b>Unlock Editing Mode</b> button to make changes.
           </Grid>
           <Grid item>
-            <Button startIcon={<LockOpenIcon />} color="primary" variant="contained" onClick={() => onUnlock()}>
+            <Button startIcon={<LockOpenIcon />} color="primary" variant="contained" onClick={() => onUnlock()} aria-label="Unlock editing mode">
               Unlock Editing Mode
             </Button>
           </Grid>
