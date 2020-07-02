@@ -1,6 +1,5 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { render } from '@testing-library/react';
 import { FieldCheckbox } from './FieldCheckbox';
 import { FilterOption } from '../types';
 
@@ -22,11 +21,7 @@ const defaultProps = {
 
 describe('FieldCheckbox', () => {
   it('should render all options provided', () => {
-    const { getByText } = render(
-      <Router>
-        <FieldCheckbox {...defaultProps} />
-      </Router>,
-    );
+    const { getByText } = render(<FieldCheckbox {...defaultProps} />);
 
     expect(getByText('Option 1')).toBeInTheDocument();
     expect(getByText('Option 2')).toBeInTheDocument();
@@ -35,11 +30,7 @@ describe('FieldCheckbox', () => {
   it('should show a warning when no option selected in editing mode', () => {
     const selectedOptions: string[] = [];
 
-    const { getByRole } = render(
-      <Router>
-        <FieldCheckbox {...defaultProps} isEditing={true} selectedOptions={selectedOptions} />
-      </Router>,
-    );
+    const { getByRole } = render(<FieldCheckbox {...defaultProps} isEditing={true} selectedOptions={selectedOptions} />);
 
     const message = getByRole('alert');
     expect(message).toBeInTheDocument();

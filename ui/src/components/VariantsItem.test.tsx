@@ -15,11 +15,7 @@ const defaultProps = {
 
 describe('VariantsItem', () => {
   it('should render a variant name and description', () => {
-    const { getByText } = render(
-      <Router>
-        <VariantsItem {...defaultProps} />
-      </Router>,
-    );
+    const { getByText } = render(<VariantsItem {...defaultProps} />);
 
     const name = getByText('Subscriptions Banner');
     expect(name).toBeInTheDocument();
@@ -29,22 +25,14 @@ describe('VariantsItem', () => {
   });
 
   it('should render two buttons', () => {
-    const { getAllByRole } = render(
-      <Router>
-        <VariantsItem {...defaultProps} />
-      </Router>,
-    );
+    const { getAllByRole } = render(<VariantsItem {...defaultProps} />);
 
     const buttons = getAllByRole('button');
     expect(buttons.length).toBe(2);
   });
 
   it('should render a Confirmation dialog and call the appropriate handler', async () => {
-    const { getByText, getByLabelText } = render(
-      <Router>
-        <VariantsItem {...defaultProps} isEditing={true} />
-      </Router>,
-    );
+    const { getByText, getByLabelText } = render(<VariantsItem {...defaultProps} isEditing={true} />);
 
     fireEvent.click(getByLabelText('Delete Variant'));
     expect(getByText('Delete variant?')).toBeInTheDocument();
@@ -54,11 +42,7 @@ describe('VariantsItem', () => {
   });
 
   it('should render a Variants dialog when Update button is clicked', async () => {
-    const { getByText, getByLabelText } = render(
-      <Router>
-        <VariantsItem {...defaultProps} isEditing={true} />
-      </Router>,
-    );
+    const { getByText, getByLabelText } = render(<VariantsItem {...defaultProps} isEditing={true} />);
 
     fireEvent.click(getByLabelText('Update Variant'));
     expect(getByText('Select Component')).toBeInTheDocument();

@@ -16,22 +16,14 @@ const defaultProps = {
 
 describe('TabVariants', () => {
   it('should render a list of variants in the test', () => {
-    const { getByRole } = render(
-      <Router>
-        <TabVariants {...defaultProps} />
-      </Router>,
-    );
+    const { getByRole } = render(<TabVariants {...defaultProps} />);
 
     const list = getByRole('list');
     expect(list).toBeInTheDocument();
   });
 
   it('should render the correct number of items', () => {
-    const { getAllByRole } = render(
-      <Router>
-        <TabVariants {...defaultProps} />
-      </Router>,
-    );
+    const { getAllByRole } = render(<TabVariants {...defaultProps} />);
 
     const items = getAllByRole('listitem');
     expect(items.length).toBe(2);
@@ -40,22 +32,14 @@ describe('TabVariants', () => {
   it('should render an error message when provided', () => {
     const testErrors: TestErrors = { [defaultProps.test.id]: { variants: 'You need one at least one variant' } };
 
-    const { getByText } = render(
-      <Router>
-        <TabVariants {...defaultProps} testErrors={testErrors} />
-      </Router>,
-    );
+    const { getByText } = render(<TabVariants {...defaultProps} testErrors={testErrors} />);
 
     const error = getByText('You need one at least one variant');
     expect(error).toBeInTheDocument();
   });
 
   it('should render a Variants dialog when button Add Variant is clicked', async () => {
-    const { getByText } = render(
-      <Router>
-        <TabVariants {...defaultProps} isEditing={true} />
-      </Router>,
-    );
+    const { getByText } = render(<TabVariants {...defaultProps} isEditing={true} />);
 
     fireEvent.click(getByText('Add Variant'));
     expect(getByText('Select Component')).toBeInTheDocument();

@@ -1,6 +1,5 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import { BrowserRouter as Router } from 'react-router-dom';
 import { FilterField } from '../components/FilterField';
 import { FilterOption, FilterControl } from '../types';
 
@@ -24,22 +23,14 @@ const defaultProps = {
 
 describe('FilterConfig', () => {
   it('should be able to render a checkbox controller', () => {
-    const { container } = render(
-      <Router>
-        <FilterField {...defaultProps} allowMultipe={true} />
-      </Router>,
-    );
+    const { container } = render(<FilterField {...defaultProps} allowMultipe={true} />);
 
     const checkboxes = container.querySelectorAll('[type="checkbox"]');
     expect(checkboxes.length).toBe(2);
   });
 
   it('should be able to render a radio controller', () => {
-    const { container } = render(
-      <Router>
-        <FilterField {...defaultProps} />
-      </Router>,
-    );
+    const { container } = render(<FilterField {...defaultProps} />);
 
     const radios = container.querySelectorAll('[type="radio"]');
     expect(radios.length).toBe(2);
@@ -57,11 +48,7 @@ describe('FilterConfig', () => {
       },
     ];
 
-    const { getByRole } = render(
-      <Router>
-        <FilterField {...defaultProps} options={sliderOptions} control="slider" />
-      </Router>,
-    );
+    const { getByRole } = render(<FilterField {...defaultProps} options={sliderOptions} control="slider" />);
 
     const slider = getByRole('slider');
     expect(slider).toBeInTheDocument();

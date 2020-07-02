@@ -1,6 +1,5 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
-import { BrowserRouter as Router } from 'react-router-dom';
 import { TestEditor } from './TestEditor';
 import { TestErrors } from '../types';
 import { mockTests } from '../fixtures/tests';
@@ -20,22 +19,14 @@ const defaultProps = {
 
 describe('TestEditor', () => {
   it('should render Basic tab as default', () => {
-    const { getByLabelText } = render(
-      <Router>
-        <TestEditor {...defaultProps} />
-      </Router>,
-    );
+    const { getByLabelText } = render(<TestEditor {...defaultProps} />);
 
     const tab = getByLabelText('Basic tab');
     expect(tab).toBeInTheDocument();
   });
 
   it('should be able to switch to Variants tab', () => {
-    const { getByLabelText, getByText } = render(
-      <Router>
-        <TestEditor {...defaultProps} />
-      </Router>,
-    );
+    const { getByLabelText, getByText } = render(<TestEditor {...defaultProps} />);
 
     const variantsButton = getByText('Variants');
     fireEvent.click(variantsButton, { bubbles: true });
@@ -43,11 +34,7 @@ describe('TestEditor', () => {
   });
 
   it('should be able to switch to Filters tab', () => {
-    const { getByLabelText, getByText } = render(
-      <Router>
-        <TestEditor {...defaultProps} />
-      </Router>,
-    );
+    const { getByLabelText, getByText } = render(<TestEditor {...defaultProps} />);
 
     const variantsButton = getByText('Filters');
     fireEvent.click(variantsButton, { bubbles: true });

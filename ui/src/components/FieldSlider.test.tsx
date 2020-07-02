@@ -1,6 +1,5 @@
 import React from 'react';
-import { render, fireEvent, waitFor } from '@testing-library/react';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { render } from '@testing-library/react';
 import { FieldSlider } from './FieldSlider';
 import { FilterOption } from '../types';
 
@@ -22,11 +21,7 @@ const defaultProps = {
 
 describe('FieldCheckbox', () => {
   it('should render min and max values provided', () => {
-    const { getByText } = render(
-      <Router>
-        <FieldSlider {...defaultProps} />
-      </Router>,
-    );
+    const { getByText } = render(<FieldSlider {...defaultProps} />);
 
     expect(getByText('0%')).toBeInTheDocument();
     expect(getByText('100%')).toBeInTheDocument();

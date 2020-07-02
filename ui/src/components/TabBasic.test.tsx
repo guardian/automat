@@ -14,11 +14,7 @@ const defaultProps = {
 
 describe('TabVariants', () => {
   it('should render Name input with current values', () => {
-    const { container, getByLabelText } = render(
-      <Router>
-        <TabBasic {...defaultProps} />
-      </Router>,
-    );
+    const { container, getByLabelText } = render(<TabBasic {...defaultProps} />);
 
     const nameLabel = getByLabelText('Test Name');
     expect(nameLabel).toBeInTheDocument();
@@ -28,11 +24,7 @@ describe('TabVariants', () => {
   });
 
   it('should render Description input with current values', () => {
-    const { container, getByLabelText } = render(
-      <Router>
-        <TabBasic {...defaultProps} />
-      </Router>,
-    );
+    const { container, getByLabelText } = render(<TabBasic {...defaultProps} />);
 
     const descriptionLabel = getByLabelText('Description');
     expect(descriptionLabel).toBeInTheDocument();
@@ -44,11 +36,7 @@ describe('TabVariants', () => {
   it('should render a Name error message if provided', () => {
     const testErrors: TestErrors = { [defaultProps.test.id]: { name: 'Validation error message' } };
 
-    const { getByText } = render(
-      <Router>
-        <TabBasic {...defaultProps} isEditing={true} testErrors={testErrors} />
-      </Router>,
-    );
+    const { getByText } = render(<TabBasic {...defaultProps} isEditing={true} testErrors={testErrors} />);
 
     const message = getByText('Validation error message');
     expect(message).toBeInTheDocument();

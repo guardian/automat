@@ -1,6 +1,5 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
-import { BrowserRouter as Router } from 'react-router-dom';
 import { VariantSelector } from '../components/VariantSelector';
 import { mockVariants } from '../fixtures/variants';
 
@@ -13,33 +12,21 @@ const defaultProps = {
 
 describe('VariantSelector', () => {
   it('should render a list of variants in the test', () => {
-    const { getByRole } = render(
-      <Router>
-        <VariantSelector {...defaultProps} />
-      </Router>,
-    );
+    const { getByRole } = render(<VariantSelector {...defaultProps} />);
 
     const list = getByRole('listbox');
     expect(list).toBeInTheDocument();
   });
 
   it('should render a MUI select to choose variants', async () => {
-    const { getByLabelText } = render(
-      <Router>
-        <VariantSelector {...defaultProps} />
-      </Router>,
-    );
+    const { getByLabelText } = render(<VariantSelector {...defaultProps} />);
 
     const button = getByLabelText('Click to select component');
     expect(button).toBeInTheDocument();
   });
 
   it('should pre-select the current value', async () => {
-    const { getByText } = render(
-      <Router>
-        <VariantSelector {...defaultProps} value="contributionsepic" />
-      </Router>,
-    );
+    const { getByText } = render(<VariantSelector {...defaultProps} value="contributionsepic" />);
 
     const name = getByText('Contributions Epic');
     expect(name).toBeInTheDocument();
@@ -48,22 +35,14 @@ describe('VariantSelector', () => {
   });
 
   it('should call the success handler correctly', async () => {
-    const { getByLabelText } = render(
-      <Router>
-        <VariantSelector {...defaultProps} />
-      </Router>,
-    );
+    const { getByLabelText } = render(<VariantSelector {...defaultProps} />);
 
     fireEvent.click(getByLabelText('Select'));
     expect(defaultProps.onSelect).toHaveBeenCalled();
   });
 
   it('should call the error handler correctly', async () => {
-    const { getByLabelText } = render(
-      <Router>
-        <VariantSelector {...defaultProps} />
-      </Router>,
-    );
+    const { getByLabelText } = render(<VariantSelector {...defaultProps} />);
 
     fireEvent.click(getByLabelText('Cancel'));
     expect(defaultProps.onCancel).toHaveBeenCalled();

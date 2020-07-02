@@ -1,6 +1,5 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
-import { BrowserRouter as Router } from 'react-router-dom';
 import { TabFilters } from '../components/TabFilters';
 import { Test, Filter } from '../types';
 import { mockTests } from '../fixtures/tests';
@@ -15,33 +14,21 @@ const defaultProps = {
 
 describe('TabFilters', () => {
   it('should render a list of filters in the test', () => {
-    const { getByRole } = render(
-      <Router>
-        <TabFilters {...defaultProps} />
-      </Router>,
-    );
+    const { getByRole } = render(<TabFilters {...defaultProps} />);
 
     const list = getByRole('list');
     expect(list).toBeInTheDocument();
   });
 
   it('should render the correct number of items', () => {
-    const { getAllByRole } = render(
-      <Router>
-        <TabFilters {...defaultProps} />
-      </Router>,
-    );
+    const { getAllByRole } = render(<TabFilters {...defaultProps} />);
 
     const items = getAllByRole('listitem');
     expect(items.length).toBe(2);
   });
 
   it('should render a Filters dialog when button Add Filter is clicked', async () => {
-    const { getByText } = render(
-      <Router>
-        <TabFilters {...defaultProps} isEditing={true} />
-      </Router>,
-    );
+    const { getByText } = render(<TabFilters {...defaultProps} isEditing={true} />);
 
     fireEvent.click(getByText('Add Filter'));
     expect(getByText('Select Filter')).toBeInTheDocument();
