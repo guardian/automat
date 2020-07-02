@@ -1,6 +1,6 @@
 import { Filter } from '../types';
 
-export const filters: Filter[] = [
+export const mockFilters: Filter[] = [
   {
     id: 'authstatus',
     name: 'Authentication Status',
@@ -15,40 +15,6 @@ export const filters: Filter[] = [
       {
         value: 'signedout',
         label: 'User must be Signed Out',
-      },
-    ],
-  },
-  {
-    id: 'contributorstatus',
-    name: 'Contributor Status',
-    helpText: 'Narrow the test audience based on the contributor status of the user',
-    control: 'options',
-    allowMultiple: false,
-    options: [
-      {
-        value: 'currentcontributor',
-        label: 'User must be a Current or Past Contributor',
-      },
-      {
-        value: 'pastcontributor',
-        label: 'User must have never been a Contributor',
-      },
-    ],
-  },
-  {
-    id: 'paidcontent',
-    name: 'Paid Content',
-    helpText: 'Narrow the test audience based on whether the content is paid or not',
-    control: 'options',
-    allowMultiple: false,
-    options: [
-      {
-        value: 'paid',
-        label: 'Article must be Paid Content',
-      },
-      {
-        value: 'notpaid',
-        label: 'Article must NOT be Paid Content',
       },
     ],
   },

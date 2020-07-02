@@ -218,21 +218,9 @@ object TestData {
           isEnabled = true,
           variants = List("subsmpu"),
           author = Author(
-            id = "example.user@guardian.co.uk",
-            firstName = "Example",
-            lastName = "User"
-          )
-        ),
-        Test(
-          id = "test2",
-          name = "Test 2",
-          description = "example test",
-          isEnabled = true,
-          variants = List("subsmpu"),
-          author = Author(
-            id = "example.user@guardian.co.uk",
-            firstName = "Example",
-            lastName = "User"
+            id = "automat.dev@guardian.co.uk",
+            firstName = "Automat",
+            lastName = "Admin"
           )
         )
       )
@@ -242,43 +230,64 @@ object TestData {
       name = "Body End",
       tests = List(
         Test(
+          id = "test2",
+          name = "Test 2",
+          description = "example test",
+          isEnabled = true,
+          variants = List("contributionsepic"),
+          author = Author(
+            id = "automat.dev@guardian.co.uk",
+            firstName = "Automat",
+            lastName = "Admin"
+          )
+        )
+      )
+    ),
+    "banner" -> Slot(
+      id = "banner",
+      name = "Banner",
+      tests = List(
+        Test(
           id = "test3",
           name = "Test 3",
           description = "example test",
           isEnabled = true,
-          variants = List("contributionsepic"),
+          variants = List("contributionsbanner"),
           author = Author(
-            id = "example.user@guardian.co.uk",
-            firstName = "Example",
-            lastName = "User"
+            id = "automat.dev@guardian.co.uk",
+            firstName = "Automat",
+            lastName = "Admin"
           )
         ),
-        Test(
-          id = "test4",
-          name = "Test 4",
-          description = "example test",
-          isEnabled = true,
-          variants = List("contributionsepic"),
-          author = Author(
-            id = "example.user@guardian.co.uk",
-            firstName = "Example",
-            lastName = "User"
-          )
-        )
       )
     )
   )
 
   val variants = Map(
+    "commercialmpu" -> Variant(
+      id = "commercialmpu",
+      name = "Commercial MPU",
+      description = "A Commercial MPU for article adverts"
+    ),
     "subsmpu" -> Variant(
       id = "subsmpu",
       name = "Subscriptions MPU",
-      description = "A Guardian subscriptions advert in MPU format."
+      description = "A Guardian subscriptions advert in MPU format"
+    ),
+    "subsbanner" -> Variant(
+      id = "subsbanner",
+      name = "Subscriptions Banner",
+      description = "A Guardian subscriptions advert in banner format"
     ),
     "contributionsepic" -> Variant(
       id = "contributionsepic",
       name = "Contributions Epic",
-      description = "A Guardian contributions ask."
+      description = "A Guardian contributions ask in epic format"
+    ),
+    "contributionsbanner" -> Variant(
+      id = "contributionsbanner",
+      name = "Contributions Banner",
+      description = "A Guardian contributions ask in banner format"
     )
   )
 }
