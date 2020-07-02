@@ -98,7 +98,7 @@ export const ModeToggler = ({ isEditing = false, hasChanges, testErrors, onUnloc
                         <Button onClick={() => setRevertConfirmation(false)} variant="contained">
                           Cancel
                         </Button>
-                        <Button startIcon={<RevertIcon />} onClick={revertChanges} color="primary" variant="contained">
+                        <Button startIcon={<RevertIcon />} onClick={revertChanges} color="primary" variant="contained" aria-label="Confirm revert changes">
                           Revert
                         </Button>
                       </>
@@ -119,7 +119,7 @@ export const ModeToggler = ({ isEditing = false, hasChanges, testErrors, onUnloc
                         <Button onClick={() => setSaveConfirmation(false)} variant="contained">
                           Cancel
                         </Button>
-                        <Button startIcon={<BackupIcon />} onClick={saveChanges} color="primary" variant="contained">
+                        <Button startIcon={<BackupIcon />} onClick={saveChanges} color="primary" variant="contained" aria-label="Confirm save changes">
                           Save All
                         </Button>
                       </>

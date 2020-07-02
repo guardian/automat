@@ -63,18 +63,22 @@ describe('TestEditor', () => {
     expect(defaultProps.onSaveChanges).toHaveBeenCalled();
   });
 
-  it('should render a confirmation when saving with changes', () => {
+  it('should call the Save handler after confirmation with saving with changes', () => {
     const { getByText, getByLabelText } = render(
       <Router>
         <ModeToggler {...defaultProps} isEditing={true} hasChanges={true} />
       </Router>,
     );
 
-    const button = getByLabelText('Save changes');
-    fireEvent.click(button);
+    const saveButton = getByLabelText('Save changes');
+    fireEvent.click(saveButton);
 
     const confirmation = getByText('Save changes?');
     expect(confirmation).toBeInTheDocument();
+
+    const confirmSaveButton = getByLabelText('Confirm save changes');
+    fireEvent.click(confirmSaveButton);
+    expect(defaultProps.onSaveChanges).toHaveBeenCalled();
   });
 
   it('should call the Revert handler when saving without changes', () => {
@@ -89,17 +93,21 @@ describe('TestEditor', () => {
     expect(defaultProps.onRevertChanges).toHaveBeenCalled();
   });
 
-  it('should render a confirmation when reverting with changes', () => {
+  it('should call the Revert handler after confirmation with reverting with changes', () => {
     const { getByText, getByLabelText } = render(
       <Router>
         <ModeToggler {...defaultProps} isEditing={true} hasChanges={true} />
       </Router>,
     );
 
-    const button = getByLabelText('Revert changes');
-    fireEvent.click(button);
+    const revertButton = getByLabelText('Revert changes');
+    fireEvent.click(revertButton);
 
     const confirmation = getByText('Revert changes?');
     expect(confirmation).toBeInTheDocument();
+
+    const confirmRevertButton = getByLabelText('Confirm revert changes');
+    fireEvent.click(confirmRevertButton);
+    expect(defaultProps.onRevertChanges).toHaveBeenCalled();
   });
 });
