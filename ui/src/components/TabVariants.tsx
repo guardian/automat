@@ -50,30 +50,32 @@ export const TabVariants = ({ test, variants, isEditing, onTestUpdated, testErro
   const errors = testErrors[test.id] || undefined;
 
   return (
-    <div className={rootStyles} role="list">
-      {errors && errors.variants ? (
-        <div className={fieldMessageWrapperStyles}>
-          <FieldMessage severity="error">
-            <span>{errors.variants}</span>
-          </FieldMessage>
-        </div>
-      ) : (
-        derivedVariants.map((derivedVariant, index) => (
-          <VariantsItem
-            key={`${derivedVariant.id}-${index}`}
-            index={index}
-            variant={derivedVariant}
-            variants={variants}
-            onVariantDeleted={handleDeleteVariant}
-            onVariantUpdated={handleUpdateVariant}
-            isEditing={isEditing}
-          />
-        ))
-      )}
-      {isAdding && <VariantSelector variants={variants} onCancel={() => setIsAdding(false)} onSelect={handleAddVariant} />}
-      <Button disabled={!isEditing} startIcon={<AddCircleOutlineIcon />} color="primary" variant="contained" onClick={() => setIsAdding(true)}>
-        Add Variant
-      </Button>
+    <div className={rootStyles} role="tabpanel" aria-label="Variants tab">
+      <div role="list">
+        {errors && errors.variants ? (
+          <div className={fieldMessageWrapperStyles}>
+            <FieldMessage severity="error">
+              <span>{errors.variants}</span>
+            </FieldMessage>
+          </div>
+        ) : (
+          derivedVariants.map((derivedVariant, index) => (
+            <VariantsItem
+              key={`${derivedVariant.id}-${index}`}
+              index={index}
+              variant={derivedVariant}
+              variants={variants}
+              onVariantDeleted={handleDeleteVariant}
+              onVariantUpdated={handleUpdateVariant}
+              isEditing={isEditing}
+            />
+          ))
+        )}
+        {isAdding && <VariantSelector variants={variants} onCancel={() => setIsAdding(false)} onSelect={handleAddVariant} />}
+        <Button disabled={!isEditing} startIcon={<AddCircleOutlineIcon />} color="primary" variant="contained" onClick={() => setIsAdding(true)}>
+          Add Variant
+        </Button>
+      </div>
     </div>
   );
 };

@@ -52,27 +52,29 @@ export const TabFilters = ({ test, filters, isEditing, onTestUpdated }: Props) =
   };
 
   return (
-    <div className={rootStyles} role="list">
-      {derivedFilters.length === 0 ? (
-        <div className={placeholderWrapperStyles}>
-          <FiltersPlaceholder />
-        </div>
-      ) : (
-        derivedFilters.map((derivedFilter, index) => (
-          <FiltersItem
-            key={`${derivedFilter.id}-${index}`}
-            index={index}
-            filter={derivedFilter}
-            isEditing={isEditing}
-            onFilterUpdated={handleUpdateFilter}
-            onFilterDeleted={handleDeleteFilter}
-          />
-        ))
-      )}
-      {isAdding && <FilterSelector filters={filters} onCancel={() => setIsAdding(false)} onSelect={handleAddFilter} />}
-      <Button disabled={!isEditing} startIcon={<AddCircleOutlineIcon />} color="primary" variant="contained" onClick={() => setIsAdding(true)}>
-        Add Filter
-      </Button>
+    <div className={rootStyles} role="tabpanel" aria-label="Filters tab">
+      <div role="list">
+        {derivedFilters.length === 0 ? (
+          <div className={placeholderWrapperStyles}>
+            <FiltersPlaceholder />
+          </div>
+        ) : (
+          derivedFilters.map((derivedFilter, index) => (
+            <FiltersItem
+              key={`${derivedFilter.id}-${index}`}
+              index={index}
+              filter={derivedFilter}
+              isEditing={isEditing}
+              onFilterUpdated={handleUpdateFilter}
+              onFilterDeleted={handleDeleteFilter}
+            />
+          ))
+        )}
+        {isAdding && <FilterSelector filters={filters} onCancel={() => setIsAdding(false)} onSelect={handleAddFilter} />}
+        <Button disabled={!isEditing} startIcon={<AddCircleOutlineIcon />} color="primary" variant="contained" onClick={() => setIsAdding(true)}>
+          Add Filter
+        </Button>
+      </div>
     </div>
   );
 };
