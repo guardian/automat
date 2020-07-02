@@ -25,7 +25,7 @@ export const TestsList = ({ workingTests, testErrors, savedTests, slotId, select
   }
 
   return (
-    <div className={rootStyles}>
+    <div className={rootStyles} role="list">
       {workingTests.map((workingTest: Test, index: number) => {
         const savedTest = savedTests.find((savedTest: Test) => savedTest.id === workingTest.id);
 

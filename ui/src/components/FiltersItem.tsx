@@ -4,9 +4,9 @@ import { Card, Grid, Button, IconButton } from '@material-ui/core';
 import { FilterList as FilterListIcon, Delete as DeleteIcon } from '@material-ui/icons';
 import { Heading } from './Heading';
 import { Confirmation } from './Confirmation';
+import { FilterField } from './FilterField';
 import { colors } from '../utils/theme';
 import { Filter } from '../types';
-import { FilterConfig } from './FilterConfig';
 
 const rootStyles = css`
   width: 100%;
@@ -52,7 +52,7 @@ export const FiltersItem = ({ index, filter, isEditing, onFilterUpdated, onFilte
   };
 
   return (
-    <Card elevation={0} className={rootStyles}>
+    <Card elevation={0} className={rootStyles} role="listitem">
       <Grid container spacing={2} justify="flex-start" alignItems="center" className={cx(gridStyles)}>
         <Grid item xs={1}>
           <FilterListIcon className={cx(iconStyles)} />
@@ -64,7 +64,7 @@ export const FiltersItem = ({ index, filter, isEditing, onFilterUpdated, onFilte
           <p className={noMargin}>{filter.helpText}</p>
         </Grid>
         <Grid item xs={1}>
-          <IconButton disabled={!isEditing} onClick={() => setDeleteConfirmation(true)} className={buttonStyles}>
+          <IconButton disabled={!isEditing} onClick={() => setDeleteConfirmation(true)} className={buttonStyles} aria-label="Delete Filter">
             <DeleteIcon />
           </IconButton>
           {deleteConfirmation && (
@@ -84,6 +84,7 @@ export const FiltersItem = ({ index, filter, isEditing, onFilterUpdated, onFilte
                     }}
                     variant="contained"
                     color="secondary"
+                    aria-label="Confirm delete Filter"
                   >
                     Delete Filter
                   </Button>
@@ -93,11 +94,10 @@ export const FiltersItem = ({ index, filter, isEditing, onFilterUpdated, onFilte
           )}
         </Grid>
         <Grid item xs={12}>
-          <FilterConfig
+          <FilterField
             selectedOptionIds={filter.selectedOptionIds || []}
-            filterName={filter.name}
             options={filter.options}
-            allowMultipe={filter.allowMultiple}
+            allowMultiple={filter.allowMultiple}
             control={filter.control}
             isEditing={isEditing}
             onFilterUpdated={handleUpdateFilter}

@@ -33,7 +33,7 @@ type Props = {
 
 export const FieldMessage = ({ children, severity = 'warning' }: Props) => {
   return (
-    <div className={getRootStyles(severity)}>
+    <div className={getRootStyles(severity)} role="alert">
       {severity === 'error' ? <ErrorIcon className={iconStyles} /> : <WarningIcon className={iconStyles} />}
       {children}
     </div>

@@ -4,6 +4,7 @@ type Slots = Slot[];
 export interface Slot {
   id: string;
   name: string;
+  testCount?: number;
 }
 
 // GET /admin/slots/:slotId/tests
@@ -15,7 +16,7 @@ export interface Test {
   name: string;
   description: string;
   isEnabled: boolean;
-  created: Date;
+  created: Date | string;
   startDate?: Date;
   expiryDate?: Date;
   author: {

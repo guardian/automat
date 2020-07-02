@@ -95,10 +95,10 @@ export const TestEditor = ({ workingTest, testErrors, name, variants, filters, o
         <Paper elevation={0} className={cx(contentAreaStyles)}>
           <Grid container spacing={0} justify="space-between" alignItems="center" className={cx(tabHeaderStyles)}>
             <Grid item>
-              <Tabs value={activeTabIndex} onChange={onTabClick} indicatorColor="primary" textColor="primary">
-                <Tab label="Basic" />
-                <Tab label="Variants" />
-                <Tab label="Filters" />
+              <Tabs value={activeTabIndex} onChange={onTabClick} indicatorColor="primary" textColor="primary" role="tablist">
+                <Tab label="Basic" role="tab" />
+                <Tab label="Variants" role="tab" />
+                <Tab label="Filters" role="tab" />
               </Tabs>
             </Grid>
             <Grid item>
