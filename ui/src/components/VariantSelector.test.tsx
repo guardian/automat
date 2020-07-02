@@ -18,14 +18,14 @@ describe('VariantSelector', () => {
     expect(list).toBeInTheDocument();
   });
 
-  it('should render a MUI select to choose variants', async () => {
+  it('should render a MUI select to choose variants', () => {
     const { getByLabelText } = render(<VariantSelector {...defaultProps} />);
 
     const button = getByLabelText('Click to select component');
     expect(button).toBeInTheDocument();
   });
 
-  it('should pre-select the current value', async () => {
+  it('should pre-select the current value', () => {
     const { getByText } = render(<VariantSelector {...defaultProps} value="contributionsepic" />);
 
     const name = getByText('Contributions Epic');
@@ -34,17 +34,21 @@ describe('VariantSelector', () => {
     expect(description).toBeInTheDocument();
   });
 
-  it('should call the success handler correctly', async () => {
-    const { getByLabelText } = render(<VariantSelector {...defaultProps} />);
+  it('should call the success handler correctly', () => {
+    const onSelect = jest.fn();
+
+    const { getByLabelText } = render(<VariantSelector {...defaultProps} onSelect={onSelect} />);
 
     fireEvent.click(getByLabelText('Select'));
-    expect(defaultProps.onSelect).toHaveBeenCalled();
+    expect(onSelect).toHaveBeenCalled();
   });
 
-  it('should call the error handler correctly', async () => {
-    const { getByLabelText } = render(<VariantSelector {...defaultProps} />);
+  it('should call the error handler correctly', () => {
+    const onCancel = jest.fn();
+
+    const { getByLabelText } = render(<VariantSelector {...defaultProps} onCancel={onCancel} />);
 
     fireEvent.click(getByLabelText('Cancel'));
-    expect(defaultProps.onCancel).toHaveBeenCalled();
+    expect(onCancel).toHaveBeenCalled();
   });
 });

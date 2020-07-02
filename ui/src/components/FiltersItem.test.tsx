@@ -29,13 +29,15 @@ describe('FiltersItem', () => {
     expect(buttons.length).toBe(1);
   });
 
-  it('should render a Confirmation dialog and call the appropriate handler', async () => {
-    const { getByText, getByLabelText } = render(<FiltersItem {...defaultProps} isEditing={true} />);
+  it('should render a Confirmation dialog and call the appropriate handler', () => {
+    const onFilterDeleted = jest.fn();
+
+    const { getByText, getByLabelText } = render(<FiltersItem {...defaultProps} isEditing={true} onFilterDeleted={onFilterDeleted} />);
 
     fireEvent.click(getByLabelText('Delete Filter'));
     expect(getByText('Delete filter?')).toBeInTheDocument();
 
     fireEvent.click(getByLabelText('Confirm delete Filter'));
-    expect(defaultProps.onFilterDeleted).toHaveBeenCalled();
+    expect(onFilterDeleted).toHaveBeenCalled();
   });
 });

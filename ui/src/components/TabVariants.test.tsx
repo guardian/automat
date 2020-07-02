@@ -38,7 +38,7 @@ describe('TabVariants', () => {
     expect(error).toBeInTheDocument();
   });
 
-  it('should render a Variants dialog when button Add Variant is clicked', async () => {
+  it('should render a Variants dialog when button Add Variant is clicked', () => {
     const { getByText } = render(<TabVariants {...defaultProps} isEditing={true} />);
 
     fireEvent.click(getByText('Add Variant'));

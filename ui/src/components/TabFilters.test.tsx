@@ -27,7 +27,7 @@ describe('TabFilters', () => {
     expect(items.length).toBe(2);
   });
 
-  it('should render a Filters dialog when button Add Filter is clicked', async () => {
+  it('should render a Filters dialog when button Add Filter is clicked', () => {
     const { getByText } = render(<TabFilters {...defaultProps} isEditing={true} />);
 
     fireEvent.click(getByText('Add Filter'));

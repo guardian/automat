@@ -26,19 +26,4 @@ describe('FieldCheckbox', () => {
     expect(getByText('0%')).toBeInTheDocument();
     expect(getByText('100%')).toBeInTheDocument();
   });
-
-  // it('should call the change handler when option clicked', () => {
-  //   const { getByRole } = render(
-  //     <Router>
-  //       <FieldSlider {...defaultProps} isEditing={true} />
-  //     </Router>,
-  //   );
-
-  //   const slider = getByRole('slider');
-  //   fireEvent.click(slider);
-
-  //   waitFor(() => {
-  //     expect(defaultProps.onFieldUpdated).toHaveBeenCalled();
-  //   });
-  // });
 });

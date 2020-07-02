@@ -35,16 +35,20 @@ describe('VariantSelector', () => {
   });
 
   it('should call the success handler correctly', () => {
-    const { getByLabelText } = render(<FilterSelector {...defaultProps} />);
+    const onSelect = jest.fn();
+
+    const { getByLabelText } = render(<FilterSelector {...defaultProps} onSelect={onSelect} />);
 
     fireEvent.click(getByLabelText('Select'));
-    expect(defaultProps.onSelect).toHaveBeenCalled();
+    expect(onSelect).toHaveBeenCalled();
   });
 
   it('should call the error handler correctly', () => {
-    const { getByLabelText } = render(<FilterSelector {...defaultProps} />);
+    const onCancel = jest.fn();
+
+    const { getByLabelText } = render(<FilterSelector {...defaultProps} onCancel={onCancel} />);
 
     fireEvent.click(getByLabelText('Cancel'));
-    expect(defaultProps.onCancel).toHaveBeenCalled();
+    expect(onCancel).toHaveBeenCalled();
   });
 });

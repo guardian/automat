@@ -28,23 +28,29 @@ describe('TestEditor', () => {
   });
 
   it('should call the Unlock handler when unlocking', () => {
-    const { getByLabelText } = render(<ModeToggler {...defaultProps} />);
+    const onUnlock = jest.fn();
+
+    const { getByLabelText } = render(<ModeToggler {...defaultProps} onUnlock={onUnlock} />);
 
     const button = getByLabelText('Unlock editing mode');
     fireEvent.click(button);
-    expect(defaultProps.onUnlock).toHaveBeenCalled();
+    expect(onUnlock).toHaveBeenCalled();
   });
 
   it('should call the Save handler when saving without changes', () => {
-    const { getByLabelText } = render(<ModeToggler {...defaultProps} isEditing={true} hasChanges={false} />);
+    const onSaveChanges = jest.fn();
+
+    const { getByLabelText } = render(<ModeToggler {...defaultProps} isEditing={true} hasChanges={false} onSaveChanges={onSaveChanges} />);
 
     const button = getByLabelText('Save changes');
     fireEvent.click(button);
-    expect(defaultProps.onSaveChanges).toHaveBeenCalled();
+    expect(onSaveChanges).toHaveBeenCalled();
   });
 
   it('should call the Save handler after confirmation with saving with changes', () => {
-    const { getByText, getByLabelText } = render(<ModeToggler {...defaultProps} isEditing={true} hasChanges={true} />);
+    const onSaveChanges = jest.fn();
+
+    const { getByText, getByLabelText } = render(<ModeToggler {...defaultProps} isEditing={true} hasChanges={true} onSaveChanges={onSaveChanges} />);
 
     const saveButton = getByLabelText('Save changes');
     fireEvent.click(saveButton);
@@ -54,19 +60,22 @@ describe('TestEditor', () => {
 
     const confirmSaveButton = getByLabelText('Confirm save changes');
     fireEvent.click(confirmSaveButton);
-    expect(defaultProps.onSaveChanges).toHaveBeenCalled();
+    expect(onSaveChanges).toHaveBeenCalled();
   });
 
   it('should call the Revert handler when saving without changes', () => {
-    const { getByLabelText } = render(<ModeToggler {...defaultProps} isEditing={true} hasChanges={false} />);
+    const onRevertChanges = jest.fn();
+    const { getByLabelText } = render(<ModeToggler {...defaultProps} isEditing={true} hasChanges={false} onRevertChanges={onRevertChanges} />);
 
     const button = getByLabelText('Revert changes');
     fireEvent.click(button);
-    expect(defaultProps.onRevertChanges).toHaveBeenCalled();
+    expect(onRevertChanges).toHaveBeenCalled();
   });
 
   it('should call the Revert handler after confirmation with reverting with changes', () => {
-    const { getByText, getByLabelText } = render(<ModeToggler {...defaultProps} isEditing={true} hasChanges={true} />);
+    const onRevertChanges = jest.fn();
+
+    const { getByText, getByLabelText } = render(<ModeToggler {...defaultProps} isEditing={true} hasChanges={true} onRevertChanges={onRevertChanges} />);
 
     const revertButton = getByLabelText('Revert changes');
     fireEvent.click(revertButton);
@@ -76,6 +85,6 @@ describe('TestEditor', () => {
 
     const confirmRevertButton = getByLabelText('Confirm revert changes');
     fireEvent.click(confirmRevertButton);
-    expect(defaultProps.onRevertChanges).toHaveBeenCalled();
+    expect(onRevertChanges).toHaveBeenCalled();
   });
 });

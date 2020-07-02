@@ -31,17 +31,19 @@ describe('VariantsItem', () => {
     expect(buttons.length).toBe(2);
   });
 
-  it('should render a Confirmation dialog and call the appropriate handler', async () => {
-    const { getByText, getByLabelText } = render(<VariantsItem {...defaultProps} isEditing={true} />);
+  it('should render a Confirmation dialog and call the appropriate handler', () => {
+    const onVariantDeleted = jest.fn();
+
+    const { getByText, getByLabelText } = render(<VariantsItem {...defaultProps} isEditing={true} onVariantDeleted={onVariantDeleted} />);
 
     fireEvent.click(getByLabelText('Delete Variant'));
     expect(getByText('Delete variant?')).toBeInTheDocument();
 
     fireEvent.click(getByLabelText('Confirm delete Variant'));
-    expect(defaultProps.onVariantDeleted).toHaveBeenCalled();
+    expect(onVariantDeleted).toHaveBeenCalled();
   });
 
-  it('should render a Variants dialog when Update button is clicked', async () => {
+  it('should render a Variants dialog when Update button is clicked', () => {
     const { getByText, getByLabelText } = render(<VariantsItem {...defaultProps} isEditing={true} />);
 
     fireEvent.click(getByLabelText('Update Variant'));

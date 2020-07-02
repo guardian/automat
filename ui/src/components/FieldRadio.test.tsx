@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, fireEvent } from '@testing-library/react';
 import { FieldRadio } from './FieldRadio';
 import { FilterOption } from '../types';
 
@@ -36,16 +36,13 @@ describe('FieldCheckbox', () => {
     expect(message).toBeInTheDocument();
   });
 
-  // it('should call the change handler when option clicked', () => {
-  //   cleanup();
-  //   const { getByText } = render(
-  //     <Router>
-  //       <FieldRadio {...defaultProps} isEditing={true} />
-  //     </Router>,
-  //   );
+  it('should call the change handler when option clicked', () => {
+    const onFieldUpdated = jest.fn();
 
-  //   const option = getByText('Option 2');
-  //   fireEvent.click(option);
-  //   expect(defaultProps.onFieldUpdated).toHaveBeenCalled();
-  // });
+    const { getByText } = render(<FieldRadio {...defaultProps} isEditing={true} onFieldUpdated={onFieldUpdated} />);
+
+    const option = getByText('Option 2');
+    fireEvent.click(option);
+    expect(onFieldUpdated).toHaveBeenCalled();
+  });
 });
