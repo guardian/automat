@@ -25,19 +25,20 @@ export const FilterField = ({ selectedOptionIds, options, allowMultiple, control
     onFilterUpdated(updatedOptions);
   };
 
+  const renderFieldControl = () => {
+    if (control === 'options') {
+      if (allowMultiple) {
+        return <FieldCheckbox options={options} selectedOptions={selectedOptionIds} isEditing={isEditing} onFieldUpdated={handleFieldUpdate} />;
+      }
+      return <FieldRadio options={options} selectedOptions={selectedOptionIds} isEditing={isEditing} onFieldUpdated={handleFieldUpdate} />;
+    } else if (control === 'slider' && options.length === 2) {
+      return <FieldSlider options={options} selectedOptions={selectedOptionIds} isEditing={isEditing} onFieldUpdated={handleFieldUpdate} />;
+    }
+  };
+
   return (
     <Card elevation={2} className={cx(rootStyles)}>
-      {control === 'options' && allowMultiple && (
-        <FieldCheckbox options={options} selectedOptions={selectedOptionIds} isEditing={isEditing} onFieldUpdated={handleFieldUpdate} />
-      )}
-
-      {control === 'options' && !allowMultiple && (
-        <FieldRadio options={options} selectedOptions={selectedOptionIds} isEditing={isEditing} onFieldUpdated={handleFieldUpdate} />
-      )}
-
-      {control === 'slider' && options.length === 2 && (
-        <FieldSlider options={options} selectedOptions={selectedOptionIds} isEditing={isEditing} onFieldUpdated={handleFieldUpdate} />
-      )}
+      {renderFieldControl()}
     </Card>
   );
 };
