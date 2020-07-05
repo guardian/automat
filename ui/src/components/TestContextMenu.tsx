@@ -19,7 +19,7 @@ export const TestContextMenu = ({ test, isEditing, onTestDeleted }: Props) => {
   const { id, name } = test;
   return (
     <>
-      <IconButton onClick={(e) => setMenuAnchor(e.currentTarget)}>
+      <IconButton onClick={(e) => setMenuAnchor(e.currentTarget)} aria-label="Test context menu">
         <MenuIcon />
       </IconButton>
       <Popover
@@ -69,6 +69,7 @@ export const TestContextMenu = ({ test, isEditing, onTestDeleted }: Props) => {
                 }}
                 variant="contained"
                 color="secondary"
+                aria-label="Confirm delete test"
               >
                 Delete Test
               </Button>
