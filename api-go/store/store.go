@@ -44,6 +44,7 @@ type Slot struct {
 type SlotStore interface {
 	GetSlots() ([]Slot, error)
 	GetSlot(ID string) (Slot, error)
+	UpdateSlot(ID string, update Slot) error
 }
 
 // MemoryStore is an in-memory store for local dev/testing
@@ -66,6 +67,17 @@ func (s MemoryStore) GetSlot(ID string) (Slot, error) {
 	}
 
 	return Slot{}, fmt.Errorf("slot %s not found", ID)
+}
+
+// UpdateSlot updates a slot
+func (s *MemoryStore) UpdateSlot(ID string, update Slot) error {
+	for i, slot := range s.slots {
+		if slot.ID == ID {
+			s.slots[i] = update
+		}
+	}
+
+	return nil
 }
 
 // GetVariants variants

@@ -18,11 +18,11 @@ func main() {
 	e.Use(middleware.Recover())
 	e.Use(middleware.Gzip())
 
-	e.GET("/admin/slots", getSlots(s))
-	e.GET("/admin/slots/:id", getSlot(s))
-	e.PATCH("/admin/slots/:id", hello)
+	e.GET("/admin/slots", getSlots(&s))
+	e.GET("/admin/slots/:id", getSlot(&s))
+	e.PATCH("/admin/slots/:id", updateSlot(&s))
 	e.GET("/admin/variants", getVariants(s))
-	e.POST("/slots", getSlotMap(s))
+	e.POST("/slots", getSlotMap(&s))
 
 	e.Logger.Fatal(e.Start(":3030"))
 }
@@ -59,6 +59,34 @@ func getSlot(s store.SlotStore) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		id := c.Param("id")
 		slot, err := s.GetSlot(id)
+		if err != nil {
+			return err
+		}
+
+		return c.JSON(http.StatusOK, slot)
+	}
+}
+
+type slotPatch struct {
+	Tests []store.Test `json:"tests"`
+}
+
+func updateSlot(s store.SlotStore) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		patch := slotPatch{}
+		id := c.Param("id")
+
+		if err := c.Bind(patch); err != nil {
+			return err
+		}
+
+		slot, err := s.GetSlot(id)
+		if err != nil {
+			return err
+		}
+
+		slot.Tests = patch.Tests
+		err = s.UpdateSlot(id, slot)
 		if err != nil {
 			return err
 		}
