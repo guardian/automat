@@ -62,11 +62,11 @@ func getSlot(s store.SlotStore) echo.HandlerFunc {
 	}
 }
 
-type slotPatch struct {
-	Tests []store.Test `json:"tests"`
-}
-
 func updateSlot(s store.SlotStore) echo.HandlerFunc {
+	type slotPatch struct {
+		Tests []store.Test `json:"tests"`
+	}
+
 	return func(c echo.Context) error {
 		patch := slotPatch{}
 		id := c.Param("id")
