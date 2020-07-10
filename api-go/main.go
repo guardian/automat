@@ -19,8 +19,8 @@ func main() {
 	e.Use(middleware.Gzip())
 
 	e.GET("/admin/slots", getSlots(store))
-	e.GET("/admin/slots/:slotID", hello)
-	e.PATCH("/admin/slots/:slotID", hello)
+	e.GET("/admin/slots/:id", getSlot(store))
+	e.PATCH("/admin/slots/:id", hello)
 	e.GET("/admin/variants", getVariants(store))
 	e.POST("/slots", hello)
 
@@ -52,5 +52,17 @@ func getSlots(store store.SlotStore) echo.HandlerFunc {
 		}
 
 		return c.JSON(http.StatusOK, slots)
+	}
+}
+
+func getSlot(store store.SlotStore) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		id := c.Param("id")
+		slot, err := store.GetSlot(id)
+		if err != nil {
+			return err
+		}
+
+		return c.JSON(http.StatusOK, slot)
 	}
 }

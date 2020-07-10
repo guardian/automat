@@ -1,5 +1,9 @@
 package store
 
+import (
+	"fmt"
+)
+
 // Variant is a component really (TODO rename)
 type Variant struct {
 	ID          string `json:"id"`
@@ -39,6 +43,7 @@ type Slot struct {
 // SlotStore defines access patterns for slots
 type SlotStore interface {
 	GetSlots() ([]Slot, error)
+	GetSlot(ID string) (Slot, error)
 }
 
 // MemoryStore is an in-memory store for local dev/testing
@@ -50,6 +55,17 @@ type MemoryStore struct {
 // GetSlots slots
 func (s MemoryStore) GetSlots() ([]Slot, error) {
 	return s.slots, nil
+}
+
+// GetSlot slot by ID
+func (s MemoryStore) GetSlot(ID string) (Slot, error) {
+	for _, slot := range s.slots {
+		if slot.ID == ID {
+			return slot, nil
+		}
+	}
+
+	return Slot{}, fmt.Errorf("slot %s not found", ID)
 }
 
 // GetVariants variants
