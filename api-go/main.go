@@ -11,18 +11,18 @@ import (
 func main() {
 	e := echo.New()
 
-	store := store.MemoryStore{}
-	store.Init()
+	s := store.MemoryStore{}
+	s.Init()
 
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 	e.Use(middleware.Gzip())
 
-	e.GET("/admin/slots", getSlots(store))
-	e.GET("/admin/slots/:id", getSlot(store))
+	e.GET("/admin/slots", getSlots(s))
+	e.GET("/admin/slots/:id", getSlot(s))
 	e.PATCH("/admin/slots/:id", hello)
-	e.GET("/admin/variants", getVariants(store))
-	e.POST("/slots", hello)
+	e.GET("/admin/variants", getVariants(s))
+	e.POST("/slots", getSlotMap(s))
 
 	e.Logger.Fatal(e.Start(":3030"))
 }
@@ -44,9 +44,9 @@ func getVariants(store store.VariantStore) echo.HandlerFunc {
 		return c.JSON(http.StatusOK, variants)
 	}
 }
-func getSlots(store store.SlotStore) echo.HandlerFunc {
+func getSlots(s store.SlotStore) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		slots, err := store.GetSlots()
+		slots, err := s.GetSlots()
 		if err != nil {
 			return err
 		}
@@ -55,14 +55,29 @@ func getSlots(store store.SlotStore) echo.HandlerFunc {
 	}
 }
 
-func getSlot(store store.SlotStore) echo.HandlerFunc {
+func getSlot(s store.SlotStore) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		id := c.Param("id")
-		slot, err := store.GetSlot(id)
+		slot, err := s.GetSlot(id)
 		if err != nil {
 			return err
 		}
 
 		return c.JSON(http.StatusOK, slot)
+	}
+}
+
+func getSlotMap(s store.SlotStore) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		slots, err := s.GetSlots()
+		if err != nil {
+			return err
+		}
+
+		// TODO (obviously) select test properly
+		slot := slots[0]
+		configuration := map[string]store.Test{slot.ID: slot.Tests[0]}
+
+		return c.JSON(http.StatusOK, configuration)
 	}
 }
