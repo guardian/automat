@@ -18,7 +18,7 @@ func main() {
 	e.Use(middleware.Recover())
 	e.Use(middleware.Gzip())
 
-	e.GET("/admin/slots", hello)
+	e.GET("/admin/slots", getSlots(store))
 	e.GET("/admin/slots/:slotID", hello)
 	e.PATCH("/admin/slots/:slotID", hello)
 	e.GET("/admin/variants", getVariants(store))
@@ -42,5 +42,15 @@ func getVariants(store store.VariantStore) echo.HandlerFunc {
 		}
 
 		return c.JSON(http.StatusOK, variants)
+	}
+}
+func getSlots(store store.SlotStore) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		slots, err := store.GetSlots()
+		if err != nil {
+			return err
+		}
+
+		return c.JSON(http.StatusOK, slots)
 	}
 }
