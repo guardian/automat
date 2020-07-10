@@ -27,11 +27,6 @@ func main() {
 	e.Logger.Fatal(e.Start(":3030"))
 }
 
-// Handler
-func hello(c echo.Context) error {
-	return c.String(http.StatusOK, "Hello, World!")
-}
-
 // TODO with errors: log them, return something useful
 
 func getVariants(store store.VariantStore) echo.HandlerFunc {
