@@ -1,7 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/guardian/automat/store"
 	"github.com/labstack/echo/v4"
@@ -18,16 +20,31 @@ func main() {
 	e.Use(middleware.Recover())
 	e.Use(middleware.Gzip())
 
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{}))
+
 	e.GET("/admin/slots", getSlots(&s))
 	e.GET("/admin/slots/:id", getSlot(&s))
 	e.PATCH("/admin/slots/:id", updateSlot(&s))
 	e.GET("/admin/variants", getVariants(s))
 	e.POST("/slots", getSlotMap(&s))
 
-	e.Logger.Fatal(e.Start(":3030"))
+	e.Logger.Fatal(e.Start(fmt.Sprintf(":%s", getPort())))
 }
 
 // TODO with errors: log them, return something useful
+
+func getPort() string {
+	port, ok := os.LookupEnv("PORT")
+	if !ok {
+		port = "3030"
+	}
+
+	return port
+}
+
+type variantsWrapper struct {
+	Variants []store.Variant `json:"variants"`
+}
 
 func getVariants(store store.VariantStore) echo.HandlerFunc {
 	return func(c echo.Context) error {
@@ -36,9 +53,14 @@ func getVariants(store store.VariantStore) echo.HandlerFunc {
 			return err
 		}
 
-		return c.JSON(http.StatusOK, variants)
+		return c.JSON(http.StatusOK, variantsWrapper{variants})
 	}
 }
+
+type slotsWrapper struct {
+	Slots []store.Slot `json:"slots"`
+}
+
 func getSlots(s store.SlotStore) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		slots, err := s.GetSlots()
@@ -46,8 +68,12 @@ func getSlots(s store.SlotStore) echo.HandlerFunc {
 			return err
 		}
 
-		return c.JSON(http.StatusOK, slots)
+		return c.JSON(http.StatusOK, slotsWrapper{slots})
 	}
+}
+
+type slotWrapper struct {
+	Slot store.Slot `json:"slot"`
 }
 
 func getSlot(s store.SlotStore) echo.HandlerFunc {
@@ -58,7 +84,7 @@ func getSlot(s store.SlotStore) echo.HandlerFunc {
 			return err
 		}
 
-		return c.JSON(http.StatusOK, slot)
+		return c.JSON(http.StatusOK, slotWrapper{slot})
 	}
 }
 
