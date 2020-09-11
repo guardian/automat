@@ -1,11 +1,1 @@
-logs
-target
-/.idea
-/.idea_modules
-/.classpath
-/.project
-/.settings
-/.metals
-/.g8
-/.bloop
-/RUNNING_PID
+gin-bin
