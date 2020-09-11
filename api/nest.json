@@ -1,0 +1,8 @@
+{
+    "app": "automat-api",
+    "stack": "frontend",
+    "vcsURL": "https://github.com/guardian/automat",
+    "deploymentType": "alb-ec2-service",
+    "artifactBucket": "aws-frontend-artifacts",
+    "cloudformationStackName": ""
+}
