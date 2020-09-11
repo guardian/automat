@@ -26,3 +26,5 @@ target
 project/target
 
 .metals/
+
+.vscode
