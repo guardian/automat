@@ -4,6 +4,36 @@ import (
 	"fmt"
 )
 
+var ExampleVariants = []Variant{
+	{
+		ID:          "commercialmpu",
+		Name:        "Commercial MPU",
+		Description: "A Commercial MPU for article adverts",
+	},
+	{
+		ID:          "contributionsbanner",
+		Name:        "Contributions Banner",
+		Description: "Banner format contributions ask",
+	},
+}
+
+var ExampleSlots = []Slot{
+	{
+		ID:   "bodyEnd",
+		Name: "Body End",
+		Tests: []Test{
+			{
+				ID:          "test1",
+				Name:        "Test 1",
+				Description: "example test",
+				IsEnabled:   true,
+				Variants:    []string{"contributionsbanner"},
+				Author:      Author{ID: "automat.dev@guardian.co.uk", FirstName: "Automat", LastName: "Admin"},
+			},
+		},
+	},
+}
+
 // Variant is a component really (TODO rename)
 type Variant struct {
 	ID          string `json:"id"`
@@ -99,6 +129,7 @@ func (s *MemoryStore) Init() {
 			Description: "Banner format contributions ask",
 		},
 	}
+
 	s.variants = variants
 
 	slots := []Slot{
