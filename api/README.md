@@ -1,5 +1,20 @@
 # Automat API
 
+## Terminology
+
+Slot: zone on the page and also one or more tests associated with it.
+
+Test: an MVT test or configuration belonging to a slot. Tests contain filters
+and variants as well as other metadata. An example test might be: 'Show welcome
+message to new users and an onwards component for other users for the Body End
+slot.'
+
+Filter: a boolean function that is used to narrow page views for a test. E.g.
+representing rules like 'only use this test for signed in usere', or 'run this
+test against pages with a football tag only'.
+
+Variant: a
+
 ## Local development
 
 For initial run of Elasticsearch:
