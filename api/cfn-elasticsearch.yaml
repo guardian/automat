@@ -1,0 +1,34 @@
+Parameters:
+    Stack:
+        Type: String
+        Default: frontend
+    Stage:
+        Type: String
+        Default: PROD
+    App:
+        Type: String
+        Default: automat-api
+    Resources:
+        Elasticsearch:
+            Type: AWS::Elasticsearch::Domain
+            Properties:
+            DomainName: automat-elasticsearch-prod
+            EBSOptions:
+                EBSEnabled: true
+                VolumeSize: 60
+            ElasticsearchClusterConfig:
+                InstanceCount: 1
+                InstanceType: r5.large.elasticsearch
+            ElasticsearchVersion: '7.4'
+            Tags:
+            - Key: App
+                Value:
+                Ref: App
+            - Key: Owner
+                Value: automat
+            - Key: Stack
+                Value:
+                Ref: Stack
+            - Key: Stage
+                Value:
+                Ref: Stage
