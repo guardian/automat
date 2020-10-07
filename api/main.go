@@ -13,17 +13,9 @@ import (
 func main() {
 	e := echo.New()
 
-	// TODO support memory store if desired through flag
-	s, err := store.NewElasticsearchStore("http://localhost:9200")
-	if err != nil {
-		e.Logger.Fatal(err)
-	}
-
-	// TODO make this optional through flag
-	err = s.InitTestData(store.ExampleSlots, store.ExampleVariants)
-	if err != nil {
-		e.Logger.Fatal(err)
-	}
+	// TODO connect to ES if requested or PROD
+	s := store.MemoryStore{}
+	s.Init()
 
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
