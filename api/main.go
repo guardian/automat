@@ -15,6 +15,9 @@ func main() {
 
 	// TODO support memory store if desired through flag
 	s, err := store.NewElasticsearchStore("http://localhost:9200")
+	if err != nil {
+		e.Logger.Fatal(err)
+	}
 
 	// TODO make this optional through flag
 	err = s.InitTestData(store.ExampleSlots, store.ExampleVariants)
