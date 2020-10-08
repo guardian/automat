@@ -77,6 +77,14 @@ type SlotStore interface {
 	UpdateSlot(ID string, update Slot) error
 }
 
+// Store is the catchall all-in-one store interface. Prefer the narrow
+// interfaces where possible in your function signatures.
+type Store interface {
+	VariantStore
+	SlotStore
+	Init(slots []Slot, variants []Variant) error
+}
+
 // MemoryStore is an in-memory store for local dev/testing
 type MemoryStore struct {
 	variants []Variant
@@ -84,12 +92,12 @@ type MemoryStore struct {
 }
 
 // GetSlots slots
-func (s MemoryStore) GetSlots() ([]Slot, error) {
+func (s *MemoryStore) GetSlots() ([]Slot, error) {
 	return s.slots, nil
 }
 
 // GetSlot slot by ID
-func (s MemoryStore) GetSlot(ID string) (Slot, error) {
+func (s *MemoryStore) GetSlot(ID string) (Slot, error) {
 	for _, slot := range s.slots {
 		if slot.ID == ID {
 			return slot, nil
@@ -111,43 +119,13 @@ func (s *MemoryStore) UpdateSlot(ID string, update Slot) error {
 }
 
 // GetVariants variants
-func (s MemoryStore) GetVariants() ([]Variant, error) {
+func (s *MemoryStore) GetVariants() ([]Variant, error) {
 	return s.variants, nil
 }
 
 // Init populates the store with some test data
-func (s *MemoryStore) Init() {
-	variants := []Variant{
-		{
-			ID:          "commercialmpu",
-			Name:        "Commercial MPU",
-			Description: "A Commercial MPU for article adverts",
-		},
-		{
-			ID:          "contributionsbanner",
-			Name:        "Contributions Banner",
-			Description: "Banner format contributions ask",
-		},
-	}
-
+func (s *MemoryStore) Init(slots []Slot, variants []Variant) error {
 	s.variants = variants
-
-	slots := []Slot{
-		{
-			ID:   "bodyEnd",
-			Name: "Body End",
-			Tests: []Test{
-				{
-					ID:          "test1",
-					Name:        "Test 1",
-					Description: "example test",
-					IsEnabled:   true,
-					Variants:    []string{"contributionsbanner"},
-					Author:      Author{ID: "automat.dev@guardian.co.uk", FirstName: "Automat", LastName: "Admin"},
-				},
-			},
-		},
-	}
-
 	s.slots = slots
+	return nil
 }
