@@ -63,7 +63,8 @@ type getResult struct {
 
 // ElasticsearchStore implements the various *Store interfaces
 type ElasticsearchStore struct {
-	client *elasticsearch.Client
+	client   *elasticsearch.Client
+	variants []Variant
 }
 
 // NewElasticsearchStore returns a store with a default client
@@ -79,9 +80,9 @@ func NewElasticsearchStore(URL string) (ElasticsearchStore, error) {
 	return s, nil
 }
 
-// InitTestData populates the store will some dummy data. Note, this is not
+// Init populates the store will some dummy data. Note, this is not
 // threadsafe.
-func (s ElasticsearchStore) InitTestData(slots []Slot, testVariants []Variant) error {
+func (s *ElasticsearchStore) Init(slots []Slot, variants []Variant) error {
 	for _, slot := range slots {
 		err := s.UpdateSlot(slot.ID, slot)
 		if err != nil {
@@ -89,12 +90,12 @@ func (s ElasticsearchStore) InitTestData(slots []Slot, testVariants []Variant) e
 		}
 	}
 
-	variants = testVariants
+	s.variants = variants
 	return nil
 }
 
 // GetSlot returns a single slot by ID
-func (s ElasticsearchStore) GetSlot(ID string) (Slot, error) {
+func (s *ElasticsearchStore) GetSlot(ID string) (Slot, error) {
 	var slot Slot
 	res, err := s.client.Get(slotIndex, ID)
 	defer res.Body.Close()
@@ -110,7 +111,7 @@ func (s ElasticsearchStore) GetSlot(ID string) (Slot, error) {
 }
 
 // GetSlots returns all slots (unpaginated).
-func (s ElasticsearchStore) GetSlots() ([]Slot, error) {
+func (s *ElasticsearchStore) GetSlots() ([]Slot, error) {
 	var slots []Slot
 
 	matchAll := q{
@@ -149,12 +150,12 @@ func (s ElasticsearchStore) GetSlots() ([]Slot, error) {
 }
 
 // GetVariants variants
-func (s ElasticsearchStore) GetVariants() ([]Variant, error) {
-	return variants, nil
+func (s *ElasticsearchStore) GetVariants() ([]Variant, error) {
+	return s.variants, nil
 }
 
 // UpdateSlot updates a slot
-func (s ElasticsearchStore) UpdateSlot(ID string, update Slot) error {
+func (s *ElasticsearchStore) UpdateSlot(ID string, update Slot) error {
 	asJSON, err := json.Marshal(update)
 	if err != nil {
 		return err

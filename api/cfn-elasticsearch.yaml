@@ -1,0 +1,42 @@
+Parameters:
+  Stack:
+    Type: String
+    Default: frontend
+  Stage:
+    Type: String
+    Default: PROD
+  App:
+    Type: String
+    Default: automat-elasticsearch
+  SubnetId:
+    Type: AWS::EC2::Subnet::Id
+    Description: Subnet where Elasticsearch will run
+  AccessSecurityGroups:
+    Type: List<String>
+    Description: IDs of security groups to be attached to Elasticearch. Instances sharing the security group will have full ES access.
+
+Resources:
+  Elasticsearch:
+    Type: AWS::Elasticsearch::Domain
+    Properties:
+      DomainName: automat-elasticsearch-prod
+      EBSOptions:
+        EBSEnabled: true
+        VolumeSize: 60
+      ElasticsearchClusterConfig:
+        InstanceCount: 1
+        InstanceType: r5.large.elasticsearch
+      ElasticsearchVersion: "7.4"
+      VPCOptions:
+        SecurityGroupIds: !Ref AccessSecurityGroups
+        SubnetIds:
+          - !Ref SubnetId
+      Tags:
+        - Key: App
+          Value: !Ref App
+        - Key: Owner
+          Value: automat
+        - Key: Stack
+          Value: !Ref Stack
+        - Key: Stage
+          Value: !Ref Stage

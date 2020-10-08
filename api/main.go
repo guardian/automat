@@ -8,19 +8,29 @@ import (
 	"github.com/guardian/automat/store"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"github.com/labstack/gommon/log"
 )
 
 func main() {
 	e := echo.New()
+	e.Logger.SetLevel(log.INFO)
 
-	// TODO support memory store if desired through flag
-	s, err := store.NewElasticsearchStore("http://localhost:9200")
-
-	// TODO make this optional through flag
-	err = s.InitTestData(store.ExampleSlots, store.ExampleVariants)
-	if err != nil {
-		e.Logger.Fatal(err)
+	// Use ES if ES_HOST env var set, else use memory store
+	var s store.Store
+	host, _ := os.LookupEnv("ES_HOST")
+	if host != "" {
+		es, err := store.NewElasticsearchStore(host)
+		if err != nil {
+			e.Logger.Fatal(err.Error(), fmt.Sprintf("Unable to connect to ES HOST %s", host))
+		}
+		s = &es
+		e.Logger.Info(fmt.Sprintf("Connected to Elasticsearch host: %s.", host))
+	} else {
+		s = &store.MemoryStore{}
+		e.Logger.Info("Connected to in-memory store. Set ES_HOST env var to connect to Elasticsearch.")
 	}
+
+	s.Init(store.ExampleSlots, store.ExampleVariants) // Ensure dummy data if empty
 
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
@@ -28,11 +38,12 @@ func main() {
 
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{}))
 
-	e.GET("/admin/slots", getSlots(&s))
-	e.GET("/admin/slots/:id", getSlot(&s))
-	e.PATCH("/admin/slots/:id", updateSlot(&s))
+	e.GET("/admin/slots", getSlots(s))
+	e.GET("/admin/slots/:id", getSlot(s))
+	e.PATCH("/admin/slots/:id", updateSlot(s))
 	e.GET("/admin/variants", getVariants(s))
-	e.POST("/slots", getSlotMap(&s))
+	e.POST("/slots", getSlotMap(s))
+	e.GET("/healthcheck", isOkay)
 
 	e.Logger.Fatal(e.Start(fmt.Sprintf(":%s", getPort())))
 }
@@ -46,6 +57,10 @@ func getPort() string {
 	}
 
 	return port
+}
+
+func isOkay(c echo.Context) error {
+	return c.JSON(http.StatusOK, map[string]string{"status": "okay"})
 }
 
 type variantsWrapper struct {
