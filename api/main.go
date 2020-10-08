@@ -43,6 +43,7 @@ func main() {
 	e.PATCH("/admin/slots/:id", updateSlot(s))
 	e.GET("/admin/variants", getVariants(s))
 	e.POST("/slots", getSlotMap(s))
+	e.GET("/healthcheck", isOkay)
 
 	e.Logger.Fatal(e.Start(fmt.Sprintf(":%s", getPort())))
 }
@@ -56,6 +57,10 @@ func getPort() string {
 	}
 
 	return port
+}
+
+func isOkay(c echo.Context) error {
+	return c.JSON(http.StatusOK, map[string]string{"status": "okay"})
 }
 
 type variantsWrapper struct {
