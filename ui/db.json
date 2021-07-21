@@ -2,37 +2,37 @@
   "slots": [
     {
       "id": "mpu",
-      "name": "Article MPU"
-    }
-  ],
-  "tests": [
-    {
-      "id": "abcde123",
-      "name": "Subscriptions A/B Test",
-      "description": "Testing different messages for a subset of users likely to subscribe.",
-      "isEnabled": true,
-      "created": "2020-02-14T16:30:00",
-      "updated": "2020-06-01T09:15:00",
-      "author": {
-        "id": "andre.silva.freelancer@guarian.co.uk",
-        "firstName": "Andre",
-        "lastName": "Silva"
-      },
-      "variants": ["subsmpu"],
-      "filters": [
+      "name": "Article MPU",
+      "tests": [
         {
-          "filterId": "authstatus",
-          "selectedOptionIds": ["loggedin"]
-        },
-        {
-          "filterId": "subspropensity",
-          "selectedOptionIds": ["hot", "warm"]
-        },
-        {
-          "filterId": "samplerate",
-          "selectedOptionIds": ["25"]
+          "id": "abcde123",
+          "name": "Subscriptions A/B Test",
+          "description": "Testing different messages for a subset of users likely to subscribe.",
+          "isEnabled": true,
+          "created": "2020-02-14T16:30:00",
+          "updated": "2020-06-01T09:15:00",
+          "author": {
+            "id": "andre.silva.freelancer@guarian.co.uk",
+            "firstName": "Andre",
+            "lastName": "Silva"
+          },
+          "variants": ["subsmpu"],
+          "filters": [
+            {
+              "filterId": "authstatus",
+              "selectedOptionIds": ["loggedin"]
+            },
+            {
+              "filterId": "subspropensity",
+              "selectedOptionIds": ["hot", "warm"]
+            },
+            {
+              "filterId": "samplerate",
+              "selectedOptionIds": ["25"]
+            }
+          ]
         }
-      ]
+      ]      
     }
   ],
   "variants": [

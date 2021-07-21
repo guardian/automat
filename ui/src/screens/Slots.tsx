@@ -14,6 +14,8 @@ type Props = {
 };
 
 export const SlotsScreen = ({ slots }: Props) => {
+  console.log(slots);
+
   return (
     <div className={rootStyles}>
       <Helmet>

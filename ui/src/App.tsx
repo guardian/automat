@@ -11,20 +11,20 @@ import { TestsScreen } from './screens/Tests';
 import { filters } from './data/filters';
 
 export const App = () => {
-  const { data: dataSlots, loading: loadingSlots, error: errorSlots } = useApi<any>(`/admin/slots`);
-  const { data: dataVariants, loading: loadingVariants, error: errorVariants } = useApi<any>(`/admin/variants`);
+  const { data: dataSlots, loading: loadingSlots, error: errorSlots } = useApi<any>(`/slots`);
+  const { data: dataVariants, loading: loadingVariants, error: errorVariants } = useApi<any>(`/variants`);
 
   const [slots, setSlots] = useState([] as Slot[]);
   useEffect(() => {
     if (dataSlots) {
-      setSlots(dataSlots.slots);
+      setSlots(dataSlots);
     }
   }, [dataSlots]);
 
   const [variants, setVariants] = useState([] as Variant[]);
   useEffect(() => {
     if (dataVariants) {
-      setVariants(dataVariants.variants);
+      setVariants(dataVariants);
     }
   }, [dataVariants]);
 

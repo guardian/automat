@@ -48,7 +48,7 @@ type SavingState = 'success' | 'failure' | 'loading' | undefined;
 export const TestsScreen = ({ slots, variants, filters }: Props) => {
   const history = useHistory();
   const { slotId, testId } = useParams();
-  const { data, loading, error } = useApi<any>(`/admin/slots/${slotId}`);
+  const { data, loading, error } = useApi<any>(`/slots/${slotId}`);
 
   const [saveStatus, setSaveStatus] = useState(undefined as SavingState);
   const [isEditing, setIsEditing] = useState(false);
@@ -76,7 +76,7 @@ export const TestsScreen = ({ slots, variants, filters }: Props) => {
     if (data) {
       // TESTING ONLY - this adds a mock filters array to the test object
       // TODO: remove this when filters supported by API.
-      const testsWithDummyFilters = data.slot.tests.map((test: TestFilter) => {
+      const testsWithDummyFilters = data.tests.map((test: TestFilter) => {
         const extendedTest = {
           ...test,
           filters: [],
