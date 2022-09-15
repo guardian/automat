@@ -5,11 +5,13 @@ on: push
 
 jobs:
   security:
-    uses: guardian/.github/.github/workflows/sbt-node-snyk.yml@main
+    uses: guardian/.github/.github/workflows/sbt-node-snyk.yml@js/go-support
     with:
       DEBUG: true
       ORG: guardian-test
       SKIP_NODE: false
+      SKIP_GO: false
+      GO_VERSION_FILE: api/go.mod
       NODE_VERSION_FILE: ui/.nvmrc
     secrets:
        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
