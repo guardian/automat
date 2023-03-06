@@ -13,6 +13,7 @@ jobs:
       ORG: guardian-dotcom-n2y
       SKIP_NODE: false
       SKIP_GO: false
+      SKIP_SBT: true
       GO_VERSION_FILE: api/go.mod
       NODE_VERSION_FILE: ui/.nvmrc
     secrets:
